@@ -1,6 +1,17 @@
 \documentclass[11pt, a4paper]{book}
 \usepackage{amsmath}
 
+\usepackage{geometry}
+\savegeometry{origin}
+\geometry{rmargin=2cm,lmargin=2cm,vmargin={5cm, 2cm}}% for the title page
+
+\usepackage{svg}
+\usepackage{graphicx}
+\graphicspath{{./images/}}
+
+
 \begin{document}
 \include{chapters/0_cover/cover.tex}
+\loadgeometry{origin}
+\include{chapters/0_abstract/abstract.tex}
 \end{document}
