@@ -5,3 +5,7 @@ main.fls
 main.log
 main.synctex.gz
 main.toc
+main.bbl
+main.bcf
+main.blg
+main.run.xml

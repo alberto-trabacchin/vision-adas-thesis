@@ -26,7 +26,7 @@
 
 \geometry{
     hmargin={1in, 1in},
-    vmargin={1in, 1in}
+    vmargin={1.1in, 1.1in}
 } 
 \setlength{\headsep}{0.3in}
 \savegeometry{origin}
@@ -35,6 +35,9 @@
     hmargin={2cm, 2cm},
     vmargin={5cm, 2cm}
 } \savegeometry{coverpage}
+
+\usepackage{biblatex}
+\addbibresource{bibliography/bibliography.bib}
 
 
 \begin{document}
@@ -59,5 +62,7 @@
 % \include{chapters/6_discussion/discussion.tex}
 
 % \include{chapters/7_conclusion/conclusion.tex}
+
+\printbibliography
 
 \end{document}
