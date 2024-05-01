@@ -1,0 +1,184 @@
+\chapter{Related Work}
+We review recent work in behavioral intention prediction through standard 
+methods, including object detection and tracking, and more advanced deep learning 
+techniques. Moreover, we introduce advantages and limitations of some methods 
+that are capable to improve scene understanding.
+
+\section{Available Datasets}
+Pedestrian detection and tracking are fundamental tasks in the field of computer 
+vision applied to advanced driving assistance systems. If this task is innate 
+to humans, it is still a challenging problem for machines. In addition to the 
+complexity of the task many applications require real-time processing 
+constraints which can affect accuracy of results. 
+
+In the computer vision field object detection can be approached through two f
+different perspectives. The former is to make predictions on general datasets 
+that are used as benchmarks for the community, such as COCO \cite{coco}.
+In this case the goal is to develop a vision model capable to detect a wide 
+range of objects, in many different scenarios.
+The latter is task-specific oriented, where the goal is to detect a relative 
+small subset of objects in a specific context. This is the case of pedestrian 
+detection in driving scenarios.
+
+Nowadays, in the field of intelligent transportation systems, many datasets 
+have been released to accomplish detection of some common objects, including 
+pedestrians, cyclists, and different types of vehicles.
+The most common used for benchmarking state of the art algorithms are KITTI 
+\cite{kitti}, Berkeley DeepDrive \cite{bdd100k}, Waymo Open Dataset 
+\cite{waymo} and nuScenes \cite{nuscenes}. Moreover, each of these datasets 
+has its own peculiarity, such as the quantity of video recordings, the variety 
+of scenarios, the number of annotated objects, and the quality of ground-truth 
+targets, that can be manually annotated or automatically generated.
+
+Despite semi-autonomous driving is getting a lot of attention in the last years 
+and it is expected to continue to grow, the state of the art algorithms are far 
+away from the robustness and reliability that industry requires. Moreover, it 
+has been shown that the performance can drastically drop when models are tested 
+on different datasets, and some customized evaluation metrics could be required 
+depending on the accomplished task \cite{uricar2019challenges}.
+Therefore it is fundamental to deserve as much attention to the quantity and quality of the data 
+as to model design process.
+
+\section {Multi-Object Tracking}
+Multi-object tracking (MOT) aims to estimate bounding boxes of objects and 
+associate them an unique ID across multiple time frames. This task is 
+fundamental in perception of the environment because human behaviors are often 
+time-dependent. For example it is important to predict pedestrians' trajectories 
+to avoid collisions or to understand their intentions. Tracking is performed by 
+estimating the future position of objects based on their past spatial and 
+temporal information.
+
+Object detection and tracking are distinct tasks, yet both are essential for 
+the tracking process. Within tracking, there are two main aims: 
+\textit{"tracking by detection"} and \textit{"detection by tracking"}. 
+The former leverages powerful modern object detectors to increase tracking 
+accuracy. Usually only bounding boxes' features are considered for the task.
+The latter, on the other hand, aims to imporve tracking accuracy with the help 
+of tracking information. After the detection phase, most MOT methods discard 
+some bounding boxes depending on a detection threshold 
+\cite{retinatrack,transtrack}; 
+therefore all objects related to these boxes are lost for the considered time 
+frame. There are also other methods, like ByteTrack \cite{bytetrack}, that are 
+able to track partially-occluded objects in real-world scenarios with 
+real-time performance. 
+
+For example, ByteTrack does not discard all bounding 
+boxes below a certain confidence threshold, but it keeps almost every detection 
+dividing them into high score ones and low score ones. At first high score 
+detection boxes are matched with corresponding tracklets. Then, due to 
+occlusions, resizes and motion blur, remaining unmatched tracklets are 
+combined with low score detection boxes. 
+
+\section{Image Classification}
+Image classification is a fundamental task in computer vision, as it is also 
+used in the detection pipeline. In the last years, many models based on 
+convolutional neural networks (CNNs) have been proposed, but nowadays research 
+is moving towards more complex classfication tasks using different 
+architectures.
+The most succesful CNN-based models are, in a chronological order, 
+AlexNet \cite{alexnet}, 
+VGG \cite{vggnet}, Inception \cite{inception}, ResNet \cite{resnet}, and 
+EfficientNet \cite{efficientnet}.
+
+AlexNet \cite{alexnet} was among the pioneering models to incorporate deep convolutional 
+layers, stacking five layers that increased the parameter count to 60 million. 
+Additionally, it implemented several strategies to mitigate overfitting, 
+including the application of dropout. 
+Then VGG \cite{vggnet} still increased the number of 
+convolutional layers to 16, reaching the state of the art in the ImageNet 
+dataset \cite{imagenet}. However, its 138 million parameters made it 
+computationally expensive.
+Inception \cite{inception}, on the other hand, was able to increase 
+the accuracy reducing the model size through multi-scale convolution transforms 
+with filters of varying sizes. Transformations were applied to input features 
+in parallel, and then concatenated to form the output.
+Therefore, it was able to capture diverse spatial information reducing the 
+model size to 4 million parameters.
+Then ResNet \cite{resnet} brought a revolutional change of CNN architectures, introducing 
+the concept of \textit{residual learning}. In particular it addressed the 
+problem of vanishing and exploding gradients in very deep models by introducing 
+skip connections between layers. This allowed to train a 152-layer CNN model 
+that outperformed shallower models.
+After ResNet, DenseNet \cite{densenet} introduced another novel aspect by fully connecting 
+all convolutional layers with each other in a forward way. 
+Unlike traditional CNN architectures where layers are connected in a sequential 
+manner, DenseNet establishes direct connections between all layers in a 
+feed-forward manner. This dense connectivity enhances feature reuse and 
+facilitates gradient flow throughout the network, leading to improved 
+parameter efficiency and feature propagation. As a result, DenseNet has shown 
+significant improvements in performance and efficiency compared to earlier 
+architectures.
+Finally, EfficientNet \cite{efficientnet} proposed a new scaling method that uniformly scales 
+depth, width, and resolution leading to a better performance. It was able to 
+achieve state of the art results on ImageNet as well as on CIFAR-100 while 
+being 8.4 times smaller and 6.1 times faster on inference than the best models.
+
+Through this section it was possible to compare main improvements between 
+different CNN architectures, and to understand how they evolved over time.
+However, by their nature, CNNs are design to extract features from images that 
+can be associated to specific object patterns. Throug some hyperparameters, 
+kernel size, downsampling, and number of layers, they can be adapted to extract 
+features at different scales and with different resolutions. Considering scene 
+understanding in driving scenarios, it is fundamental to caputre relative and 
+absolute spatial relations of sub-areas in the main scene. 
+Therefore, to address this problem, it is necessary to mode towards models 
+designed with different architectures, capable to include these kind of 
+information. One possible solution is using a vision transformer model (ViT)
+\cite{vit}, that is based on the transformer architecture. It consists of a 
+self-attention mechanism that allows to tokenize sub areas of the image and 
+capture their spatial relations. This implies that relations are not just 
+limited as local features, like with CNNs, but can be extended to all locations 
+in the image through tokens.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{l|c|c|c|c|c|c}
+        \hline
+        \textbf{Model} & \textbf{top-1 [\%]} & \textbf{top-5 [\%]} & 
+        \textbf{Params.} & \textbf{GFLOPS} & \textbf{Size [MB]} & 
+        \textbf{Year} \\
+        \hline
+        AlexNet & 56.522 & 79.066 & 61.1M & 0.71 & 233.1 & 2012 \\
+        \hline
+        VGG11 & 69.020 & 88.628 & 132.9M & 7.61 & 506.8 & 2014 \\
+        VGG13 & 69.928 & 89.246 & 133.1M & 11.31 & 507.5 & \\
+        VGG16 & 71.592 & 90.382 & 138.4M & 15.47 & 527.8 & \\
+        VGG19 & 72.376 & 90.876 & 143.7M & 19.63 & 548.1 & \\
+        \hline
+        Inception\_v3 & 77.294 & 93.45 & 27.2M & 5.71 & 103.9 & 2014 \\
+        \hline
+        ResNet18 & 69.758 & 89.078 & 11.7M & 1.81 & 44.7 & 2015 \\
+        ResNet34 & 73.314 & 91.420 & 21.8M & 3.66 & 83.3 & \\
+        ResNet50 & 76.130 & 92.862 & 25.6M & 4.09 & 97.8 & \\
+        ResNet101 & 77.374 & 93.546 & 44.6M & 7.8 & 170.5 & \\
+        ResNet152 & 78.312 & 94.046 & 60.2M & 11.51 & 230.4 & \\
+        \hline
+        DenseNet121 & 74.434 & 91.972 & 7.9M & 2.83 & 30.8 & 2016 \\
+        DenseNet161 & 77.138 & 93.560 & 28.7M & 7.73 & 110.4 & \\
+        DenseNet169 & 75.600 & 92.806 & 14.2M & 3.36 & 54.7 & \\
+        DenseNet201 & 76.896 & 93.370 & 20.1M & 4.29 & 77.4 & \\
+        \hline
+        Effic.Net\_b0 & 77.692 & 93.532 & 5.3M & 0.39 & 20.5 & 2019 \\
+        Effic.Net\_b1 & 78.642 & 94.186 & 7.8M & 0.69 & 30.1 & \\
+        Effic.Net\_b2 & 80.608 & 95.310 & 9.2M & 1.09 & 35.2 & \\
+        Effic.Net\_b3 & 82.008 & 96.054 & 12.3M & 1.83 & 47.2 & \\
+        Effic.Net\_b4 & 83.384 & 96.594 & 19.4M & 4.39 & 74.5 & \\
+        Effic.Net\_b5 & 83.444 & 96.628 & 30.4M & 10.27 & 116.9 & \\
+        Effic.Net\_b6 & 84.008 & 96.916 & 43.1M & 19.07 & 165.4 & \\
+        Effic.Net\_b7 & 84.122 & 96.908 & 66.3M & 37.75 & 254.7 & \\
+        \hline
+        ViT-b\_16 & 81.072 & 95.318 & 86.6M & 17.56 & 330.3 & 2020 \\
+        ViT-b\_32 & 75.912 & 92.466 & 88.3M & 4.41 & 336.6 & \\
+        ViT-l\_16 & 79.662 & 94.638 & 304.4M & 61.55 & 1161.0 & \\
+        ViT-l\_32 & 76.972 & 93.070 & 306.6M & 15.38 & 1169.4 & \\
+        ViT-h\_14 & 88.552 & 98.694 & 633.5M & 1016.72 & 2416.6 & \\
+        \hline
+    \end{tabular}
+    \caption{Comparison of the different vision models on ImageNet}
+    \label{tab:cnn_comparison}
+\end{table}
+
+
+\section{Video Classification}
+
+\section{Semi-Supervised Learning}
