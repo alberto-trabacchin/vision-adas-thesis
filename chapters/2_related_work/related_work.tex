@@ -77,7 +77,8 @@ is moving towards more complex classfication tasks using different
 architectures.
 The most succesful CNN-based models are, in a chronological order, 
 AlexNet \cite{alexnet}, 
-VGG \cite{vggnet}, Inception \cite{inception}, ResNet \cite{resnet}, and 
+VGG \cite{vggnet}, Inception \cite{inception}, ResNet \cite{resnet}, 
+DenseNet \cite{densenet} and 
 EfficientNet \cite{efficientnet}.
 
 AlexNet \cite{alexnet} was among the pioneering models to incorporate deep convolutional 
@@ -116,19 +117,28 @@ being 8.4 times smaller and 6.1 times faster on inference than the best models.
 Through this section it was possible to compare main improvements between 
 different CNN architectures, and to understand how they evolved over time.
 However, by their nature, CNNs are design to extract features from images that 
-can be associated to specific object patterns. Throug some hyperparameters, 
-kernel size, downsampling, and number of layers, they can be adapted to extract 
+can be associated to specific object patterns. Through some hyperparameters, 
+like kernel size, downsampling, and number of layers, they can be adapted to extract 
 features at different scales and with different resolutions. Considering scene 
 understanding in driving scenarios, it is fundamental to caputre relative and 
 absolute spatial relations of sub-areas in the main scene. 
 Therefore, to address this problem, it is necessary to mode towards models 
 designed with different architectures, capable to include these kind of 
 information. One possible solution is using a vision transformer model (ViT)
-\cite{vit}, that is based on the transformer architecture. It consists of a 
-self-attention mechanism that allows to tokenize sub areas of the image and 
+\cite{vit}, that is based on the transformer architecture 
+\cite{vaswani2023attention}. It consists of a 
+self-attention mechanism that allows to tokenize sub-areas of the image and 
 capture their spatial relations. This implies that relations are not just 
 limited as local features, like with CNNs, but can be extended to all locations 
-in the image through tokens.
+in the image through the tokens.
+
+In Table \ref{tab:cnn_comparison} a comparison of the discussed models is 
+reported. It is possible to see the trending increase of parameters and 
+performance over time, but also how since Inception model size has been reduced 
+thanks to the introduction of new techniques. It is also possible to notice 
+how vision transformer achieves state of the art results with a large model 
+size and computational cost, due to the connections between all tokens for 
+the self-attention mechanism.
 
 \begin{table}[h]
     \centering
@@ -174,11 +184,64 @@ in the image through tokens.
         ViT-h\_14 & 88.552 & 98.694 & 633.5M & 1016.72 & 2416.6 & \\
         \hline
     \end{tabular}
-    \caption{Comparison of the different vision models on ImageNet}
+    \caption{Comparison of the models for image classification on ImageNet}
     \label{tab:cnn_comparison}
 \end{table}
 
 
 \section{Video Classification}
+Along with image classification, time-series analysis started gaining attention. 
+The initial focus was on univariate and multi-variate input 
+data not directly related to images. 
+The introduction of Recurrent Neural Networks (RNNs) \cite{rnn} marked a 
+significant improvement in analyzing this kind of data. Recurrent neural 
+network represents the simplest sequential architecture, and its main 
+peculiarity is the presence of a feedback loop that allows to save an internal 
+state based on information from previous time steps. Then for each current time 
+step the input is combined with the internal state.
+Despite the potential of RNNs, they are not able to capture long-term 
+information from data sequences. This is due to the vanishing and exploding 
+gradient problem, when there are many feedback loops in the network, and it is 
+similar to the problem described for deep CNNs.
+
+To address this issue, Long Short-Term Memory (LSTM) \cite{lstm} was introduced. 
+LSTM is a modified version of RNN capable to capture both long and short-term 
+dependencies in data sequences through specific internal gates. 
+A further improvement was introduced with Gated Recurrent Units (GRUs) 
+\cite{gru}, that are a simplified version of LSTM with fewer gates and 
+parameters.
+
+However, with the advent of image classification in computer vision, 
+the interest in video analysis rose. Considering the previous work on RNNs, 
+it was natural to extend the concept of time-series analysis to video time 
+frames combining RNNs with CNNs. This led to the introduction of 3D CNNs that 
+are capable to extract spatio-temporal features from video sequences through 
+3D convolutional kernels.
+
+As for image classification, recent developments in the field focused on 
+transformer-based models. In particular, the recent ViViT model \cite{vivit} 
+utilizes a similar concept of 3D CNNs, but applied to the vision transformer. 
+The model stacks images of the video sequence and then applies the transformer 
+architecture to capture spatio-temporal relations between them. 
+While this approach outperforms 3D CNNs in terms of effectiveness, it comes with 
+increased computational costs for training. Additionally, it is required to 
+tune numerous hyperparameters.
 
 \section{Semi-Supervised Learning}
+Semi-supervised learning (SSL) is a category of machine learning techniques 
+that aims to train models using both labeled and unlabeled data. This approach 
+is particularly useful when labeled data is scarce and there is a consistent 
+amount of unlabeled data available. Large models usually tend to overfit on 
+small labeled datasets, and semi-supervised learning can help to mitigate this 
+issue by leveraging the information contained in the unlabeled data.
+However, to apply semi-supervised learning methods in practice, unlabeled data 
+needs to carry useful information that is not already contained in the labeled 
+dataset. It has proven to be difficult to find a pratical and sistematic 
+approach to address this problem.
+
+To keep the focus on the main topic of this work, we will overview only most 
+important self-trianing methods. On the other hand, Engelen et al. 
+\cite{ssl_survey} 
+provided an up-to-date overview of the field, proposing a complete 
+scheme for categorizing semi-supervised learning methods with a complete 
+taxonomy.
