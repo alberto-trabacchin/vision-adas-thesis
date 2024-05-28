@@ -231,17 +231,20 @@ tune numerous hyperparameters.
 Semi-supervised learning (SSL) is a category of machine learning techniques 
 that aims to train models using both labeled and unlabeled data. This approach 
 is particularly useful when labeled data is scarce and there is a consistent 
-amount of unlabeled data available. Large models usually tend to overfit on 
-small labeled datasets, and semi-supervised learning can help to mitigate this 
-issue by leveraging the information contained in the unlabeled data.
-However, to apply semi-supervised learning methods in practice, unlabeled data 
-needs to carry useful information that is not already contained in the labeled 
-dataset. It has proven to be difficult to find a pratical and sistematic 
-approach to address this problem.
-
+amount of unlabeled data available.
 To keep the focus on the main topic of this work, we will overview only most 
 important self-trianing methods. On the other hand, Engelen et al. 
 \cite{ssl_survey} 
 provided an up-to-date overview of the field, proposing a complete 
 scheme for categorizing semi-supervised learning methods with a complete 
 taxonomy.
+
+Self-training is an effective semi-supervised learning method where a model is 
+trained to extend labels on unlabeled data, depending on the prior knowledge on 
+the labeled dataset. The basic idea is to train a model on the labeled dataset, 
+then use it to predict labels on the unlabeled dataset. The predicted labels with 
+high confidence are then added to the labeled dataset, and the model is retrained 
+on the extended dataset. This process is repeated iteratively until the model 
+converges.
+
+
