@@ -9,4 +9,4 @@ main.bbl
 main.bcf
 main.blg
 main.run.xml
-chapters/*.aux
+chapters/*/*.aux
