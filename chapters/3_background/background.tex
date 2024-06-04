@@ -330,6 +330,7 @@ be rewritten as follows:
     \boldsymbol{v_j} = \boldsymbol{W_v x_j} \\
     \boldsymbol{X} = (\boldsymbol{x_1}, ..., \boldsymbol{x_t})
 \end{cases}
+\label{eq:self_attention_qkv}
 \end{equation}
 It is worthwile ntoicing that it is easier to consider the queries and values 
 vectors, and the keys matrix. That is because the query is referred a specific 
@@ -344,6 +345,58 @@ the importance of all the sub-areas of the input image, depending on the bias we
 use to label the dataset. Then it is possible to use the attention mask, to 
 highlight the importance of some specific areas of the image.
 
+Finally, dot products between rows of $\boldsymbol{K^T}$ and 
+$\boldsymbol{q_i}$ typically grow with the dimension of the embedding, 
+and it can lead to instabilities in terms of gradients during the learning 
+process. Therefore it is common to normalize the dot product by the square root 
+of the embedding dimension $\sqrt{d_k}$, considering that it is also the 
+grow rate of the Euclidean distance of the input vectors.
+
+In a more general matrix form, Equation (\ref{eq:self_attention_qkv}) with the 
+normalization can be 
+described as follows:
+\begin{equation}
+Y = \boldsymbol{\sigma}\left(\boldsymbol{\frac{K^T Q}{\sqrt{d_k}}}\right) V\\
+\qquad
+\text{where}
+\quad
+\begin{cases}
+    \boldsymbol{Q} = \boldsymbol{W_q X} \\
+    \boldsymbol{K} = \boldsymbol{W_k X} \\
+    \boldsymbol{V} = \boldsymbol{W_v X} \\
+    \boldsymbol{X} = (\boldsymbol{x_1}, ..., \boldsymbol{x_t})
+\end{cases}
+\label{eq:self_attention_qkv_matrix}
+\end{equation}
+In Equation (\ref{eq:self_attention_qkv_matrix}) the softmax function 
+$\boldsymbol{\sigma}$ is applied to the rows of its argument.
+
+
 \subsubsection{The Multi-Head Self-Attention Layer}
+In an image each patch can have different relations with the others, depending 
+on the context. Therefore, using only one self-attention mechanism would sum all 
+the information together, limiting the ability to capture the scene context. 
+To overcome this issue, the multi-head self-attention mechanism is introduced.
+It is a parallel operation based on the single self-attention mechanism, which 
+introduces multiple weight matrices $\boldsymbol{W_q^r, W_k^r, W_v^r}$, also 
+called \emph{attention heads}.
+
+It is also possible to keep the same number of parameters of the single 
+self-attention mechanism in an efficient way. The main idea is to project queries, 
+keys and values to a lower-dimensional space according to the number of heads.
+In particular, given $h$ the number of attention heads, $d_k$ the embedding 
+dimension of the patches, we can use a transformation matrix 
+$\boldsymbol{T^r}$ of dimension $\left(d_k, d_k/h\right)$.
+Therefore, the total number of parameters for
+the single-head and multi-head self-attentions will be:
+\begin{align*}
+    \text{\#params SHA} &= 3 \cdot d_k^2 \\
+    \text{\#params MHA} &= 3 \cdot h \cdot d_k \cdot\frac{d_k}{h} = 3 \cdot d_k^2
+\end{align*}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/vit/multi_head_attention_scheme.png}
+    \caption{svg image}
+\end{figure}
 
 \subsubsection{Classification Transformer}
