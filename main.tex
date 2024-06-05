@@ -47,8 +47,18 @@
 \addbibresource{bibliography/bibliography.bib}
 
 \usepackage{amsmath}
+\usepackage{acronym}
+\usepackage{xcolor}
 
+% Define a new command let Stefano insert his comments
+\newcommand{\stext}[1]{\color{teal}\rule{\linewidth}{1mm}
+{#1}\\
+\rule{\linewidth}{1mm}
+\color{black}}
 
+% list of acronyms
+\acrodef{adas}[ADAS]{Advanced Driver Assistance Systems}
+\acrodef{who}[WHO]{World Health Organization}
 
 
 \begin{document}
@@ -61,19 +71,19 @@
 \tableofcontents
 % \listoffigures
 \include{chapters/1_introduction/introduction.tex}
-
+%
 \include{chapters/2_related_work/related_work.tex}
-
+%
 % \include{chapters/3_background/background.tex}
-
+%
 \include{chapters/4_methods/methods.tex}
-
+%
 \include{chapters/5_experiments/experiments.tex}
-
+%
 \include{chapters/6_discussion/discussion.tex}
-
+%
 \include{chapters/7_conclusion/conclusion.tex}
-
+%
 \printbibliography
-
+%
 \end{document}

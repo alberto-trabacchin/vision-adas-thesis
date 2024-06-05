@@ -1,45 +1,106 @@
 \chapter{Introduction}
 \pagenumbering{arabic}
-
+%
+\stext{Provo ad inserire i commenti in questo modo. Se non ci capiamo cambiamo metodo.}
+\stext{Forse hai visto anche che in main.tex ho aggiunto un pacchetto per gestire gli acronimi. L'ho usato per ADAS.
+Prova a guardarlo, dovrebbe aiutarti a tenere traccia dell'uso degli acronimi e a mantenere la notazione coerente.}
+\stext{Qui inserirei una sezione all'interno del capitolo che racconti qualcosa degli ADAS.
+Ti ho incollato qualcosa da ChatGPT, non è completo e ci sono diversi errori, ma credo renda l'idea.
+Oltre a questo forse inserirei un preambolo e cercherei di introdurre il problema specifico a cui ti sei approcciato.
+Al momento la descrizione del problema è molto generica, ma serve entrare nel dettaglio, soprattutto per dare l'idea
+di quali siano i tuoi contributi.\\
+Forse avevi già in mente di farlo, ma non hai ancora avuto tempo di scrivere.
+Volendo potresti inserire in ogni capitolo un commento (o già una specie di scaletta usando le sessioni, o un mix) 
+per chiarire il più possibile il filo logico che vuoi andare a seguire.}
+\section{\acl{adas}}
+%
+\ac{adas} are electronic systems in vehicles that use advanced technologies to assist the driver in the driving process. 
+These systems enhance vehicle safety and facilitate safer and more efficient driving by providing real-time information, automation, and alerts. 
+Here's an overview of the key components and functionalities of \ac{adas}:
+%
+\subsection*{Key Components of \ac{adas}}
+\begin{itemize}
+    \item \textbf{Sensors and Cameras}:
+    \begin{itemize}
+        \item \textit{Radar Sensors}: Measure the distance and speed of objects around the vehicle.
+        \item \textit{Cameras}: Provide visual data for object recognition, lane detection, and traffic sign recognition.
+        \item \textit{Ultrasonic Sensors}: Used for close-range detection, primarily in parking assistance.
+        \item \textit{Lidar}: Uses laser pulses to create a 3D map of the vehicle's surroundings.
+    \end{itemize}
+    
+    \item \textbf{Control Units}:
+    \begin{itemize}
+        \item \textit{Electronic Control Units (ECUs)}: Process data from sensors and cameras, making real-time decisions and sending commands to actuators.
+    \end{itemize}
+    
+    \item \textbf{Actuators}:
+    \begin{itemize}
+        \item Control the vehicle's braking, steering, and acceleration systems based on commands from the control units.
+    \end{itemize}
+\end{itemize}
+%
+\subsection*{Common \ac{adas} Features}
+\begin{itemize}
+    \item \textbf{Adaptive Cruise Control (ACC)}:
+    Maintains a set speed and adjusts it to keep a safe distance from the vehicle ahead.
+    \item \textbf{Lane Departure Warning (LDW) and Lane Keeping Assist (LKA)}:
+    \begin{itemize}
+        \item \textit{LDW}: Alerts the driver if the vehicle begins to drift out of its lane.
+        \item \textit{LKA}: Gently steers the vehicle back into its lane if it starts to drift.
+    \end{itemize}
+    \item \textbf{Blind Spot Detection (BSD)}:
+    Warns the driver of vehicles in the blind spot during lane changes.
+    \item \textbf{Automatic Emergency Braking (AEB)}:
+    Detects imminent collisions and applies the brakes automatically if the driver does not respond in time.
+    \item \textbf{Traffic Sign Recognition (TSR)}:
+    Identifies traffic signs and displays them on the dashboard or head-up display.
+    \item \textbf{Driver Monitoring Systems (DMS)}:
+    Monitors the driver’s attention and alertness, providing warnings or taking action if signs of drowsiness or distraction are detected.
+    \item \textbf{Parking Assistance}:
+    Includes features like rearview cameras, parking sensors, and automatic parking systems that assist with parking maneuvers.
+    \item \textbf{Night Vision Enhancement}:
+    Uses infrared sensors to detect objects and pedestrians in low-light conditions, displaying this information to the driver.
+\end{itemize}
+%
+\subsection*{Benefits of \ac{adas}}
+\begin{itemize}
+    \item \textbf{Safety}: Reduces the likelihood of accidents by providing warnings and taking proactive actions.
+    \item \textbf{Comfort}: Reduces driver workload by automating repetitive tasks like cruising and parking.
+    \item \textbf{Efficiency}: Helps in maintaining optimal driving patterns, potentially reducing fuel consumption.
+    \item \textbf{Regulatory Compliance}: Meets safety standards and regulations imposed by automotive safety authorities.
+\end{itemize}
+%
+\subsection*{Future of \ac{adas}}
+As technology advances, \ac{adas} is expected to evolve toward higher levels of automation, ultimately contributing to fully autonomous driving. Enhanced connectivity, improved sensor technology, and advanced artificial intelligence will continue to drive innovations in this field.
+%
 \section{Focus of this work}
+%
+In the field of modern automotive technology, \ac{adas} are playing a keyrole at augmenting driver safety, comfort, and overall driving experience.
+These systems, leveraging advancements in computer vision, sensor technologies, and artificial intelligence, are reshaping the automotive industry introducing semi-autonomous and autonomous driving capabilities.
 
-In the field of modern automotive technology, Advanced Driver Assistance 
-Systems (ADAS) are playing a keyrole at augmenting driver safety, comfort, and 
-overall driving experience. 
-These systems, leveraging advancements in computer vision, sensor technologies, 
-and artificial intelligence, are reshaping the automotive industry introducing 
-semi-autonomous and autonomous driving capabilities.
-
-According to the World Health organization (WHO) road traffic injuries are among the leading causes
-of death worldwide, with an estimated 1.19 million fatalities annually.
+According to the \ac{who} road traffic injuries are among the leading causes of death worldwide, with an estimated 1.19 million fatalities annually.
 
 \cite{key}
-With the aim of contributing to this transformative field, in this thesis 
-various computer vision algorithms are implemented and evaluated, analyzing 
-their strengths and weaknesses in addressing specific driving tasks.
-From tracking of vulnerable users, such as pedestrians and cyclists, to the 
-comprehension of dynamic driving environments, this research highlights 
-advantages and limitations of each approach in real-world scenarios.
-Further considerations are made on the trade-offs between complexity of the 
-tasks and available data to train the models. 
+With the aim of contributing to this transformative field, in this thesis various computer vision algorithms are implemented and evaluated, analyzing their strengths and weaknesses in addressing specific driving tasks.
+From tracking of vulnerable users, such as pedestrians and cyclists, to the comprehension of dynamic driving environments, this research highlights advantages and limitations of each approach in real-world scenarios.
+Further considerations are made on the trade-offs between complexity of the tasks and available data to train the models. 
 
-By scrutinizing the performance of these algorithms in real-world scenarios 
-and carefully assessing their respective advantages and limitations, this 
-thesis aims to provide valuable insights into their applicability and efficacy 
-within the domain of advanced driver assistance systems (ADAS). 
-Through this rigorous evaluation process, a nuanced understanding of the 
-suitability of different computer vision techniques for specific driving tasks 
-is achieved, paving the way for informed decision-making and future 
-advancements in automotive safety and technology.
+By scrutinizing the performance of these algorithms in real-world scenarios and carefully assessing their respective advantages and limitations, this thesis aims to provide valuable insights into their applicability and efficacy within the domain of \ac{adas}. 
+Through this rigorous evaluation process, a nuanced understanding of the suitability of different computer vision techniques for specific driving tasks is achieved, paving the way for informed decision-making and future advancements in automotive safety and technology.
 
-In the pursuit of contributing to this transformative field, this thesis endeavors to explore and implement a computer vision-based approach for ADAS systems. Specifically, the focus is on devising methodologies to enhance perception and decision-making capabilities within the realm of ADAS through the lens of computer vision.
+In the pursuit of contributing to this transformative field, this thesis endeavors to explore and implement a computer vision-based approach for \ac{adas} systems. 
+Specifically, the focus is on devising methodologies to enhance perception and decision-making capabilities within the realm of \ac{adas} through the lens of computer vision.
 
-This thesis is divided into two main approaches, each addressing distinct facets of ADAS functionality. The first approach revolves around a traditional computer vision methodology, leveraging principles of multiple view geometry and object tracking. By harnessing the fundamentals of geometric and visual analysis, this approach aims to provide robust and reliable solutions for tasks such as lane detection, object recognition, and tracking within the ADAS framework.
+This thesis is divided into two main approaches, each addressing distinct facets of \ac{adas} functionality.
+The first approach revolves around a traditional computer vision methodology, leveraging principles of multiple view geometry and object tracking. 
+By harnessing the fundamentals of geometric and visual analysis, this approach aims to provide robust and reliable solutions for tasks such as lane detection, object recognition, and tracking within the \ac{adas} framework.
 
-The second approach represents a departure from conventional techniques, delving into the realm of deep learning and vision transformers. Here, the emphasis shifts towards a more generalized approach to video-frame classification, leveraging the power of deep neural networks and semi-supervised learning techniques. By harnessing the capacity of vision transformers to capture intricate spatial and temporal features from raw video data, this approach seeks to push the boundaries of ADAS capabilities, particularly in scenarios involving complex and dynamic environments.
+The second approach represents a departure from conventional techniques, delving into the realm of deep learning and vision transformers. 
+Here, the emphasis shifts towards a more generalized approach to video-frame classification, leveraging the power of deep neural networks and semi-supervised learning techniques. 
+By harnessing the capacity of vision transformers to capture intricate spatial and temporal features from raw video data, this approach seeks to push the boundaries of \ac{adas} capabilities, particularly in scenarios involving complex and dynamic environments.
 
-Through the amalgamation of these two distinct approaches, this thesis endeavors to contribute to the ongoing evolution of ADAS systems, striving towards the realization of safer, more efficient, and ultimately autonomous driving experiences. By exploring the synergy between traditional computer vision methodologies and cutting-edge deep learning techniques, this work aims to unlock new avenues for innovation and advancement within the realm of automotive technology.
-
+Through the amalgamation of these two distinct approaches, this thesis endeavors to contribute to the ongoing evolution of \ac{adas} systems, striving towards the realization of safer, more efficient, and ultimately autonomous driving experiences. 
+By exploring the synergy between traditional computer vision methodologies and cutting-edge deep learning techniques, this work aims to unlock new directions for innovation and advancement within the realm of automotive technology.
 
 \section{Thesis Organization}
 \lipsum[1-2]
