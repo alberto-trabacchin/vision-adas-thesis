@@ -372,7 +372,7 @@ In Equation (\ref{eq:self_attention_qkv_matrix}) the softmax function
 $\boldsymbol{\sigma}$ is applied to the rows of its argument.
 
 
-\subsubsection{The Multi-Head Self-Attention Layer}
+\subsubsection{Multi-Head Self-Attention Mechanism}
 In an image each patch can have different relations with the others, depending 
 on the context. Therefore, using only one self-attention mechanism would sum all 
 the information together, limiting the ability to capture the scene context. 
@@ -401,5 +401,30 @@ the single-head and multi-head self-attentions will be:
     data concatenation, and final linear transformation.}
     \label{fig:multi_head_attention}
 \end{figure}
+In Figure \ref{fig:multi_head_attention} the multi-head self-attention mechanism 
+is schematically represented, and data flow is from the bottom to the top. 
+The input patches are first embedded and projected to a lower-dimensional space. 
+Therefore we get queries, keys and values for each attention head. 
+The self-attention mechanism is applied to each head, and the outputs are 
+concatenated together. In this way we augment the information of the spatial 
+relation of each patch. Finally, a linear transformation is applied to get 
+the final output of the multi-head self-attention mechanism, which describe the 
+attention of each patch with respect to all the others.
+
+To avoid any misunderstanding on the generation of the queries, keys, values and 
+on the concatenation, data is represented through channels, where each channel is 
+related to a specific attention head and it is independent from the others.
+
+It is also worth noticing that the transformer architecture leverages on residual 
+connections and layer normalization to stabilize the training process, avoiding 
+the vanishing gradient problem. The residual connections are used to sum the 
+output of the multi-head self-attention mechanism with the embedded patches, 
+and the layer normalization is applied to the sum.
 
 \subsubsection{Classification Transformer}
+If the final task is a classification of the input image, it is necessary 
+to have a feed-forward layer on the top of the transformer encoder, as shown in 
+Figure \ref{fig:vit_architecture}.
+
+
+\section{Managing Unbalanced Data}
