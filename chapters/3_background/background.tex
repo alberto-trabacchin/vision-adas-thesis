@@ -19,7 +19,7 @@ the case, semi-supervised learning does not provide any additional benefit to
 the inference of the model, and it could even deteriorate the performance 
 \cite{chapelle2010semi}.
 
-\subsection{The Smoothness Assumption}
+\subsection{Smoothness Assumption}
 \textbf{Assumption}: If two examples are close in the input space, then they 
 have similar outputs (labels).
 
@@ -33,7 +33,7 @@ illustrated with an example on the moon dataset. The smoothness assumption
 is satisfied because similar points, in terms of the distance, have the same 
 output.
 
-\subsection{The Cluster Assumption}
+\subsection{Cluster Assumption}
 \textbf{Assumption}: Data points are orgnaized in clusters, and points that 
 belong to the same cluster are more likely to have the same label.
 
@@ -81,7 +81,7 @@ more likely to have the same label.
     \label{fig:swiss_roll}
 \end{figure}
 
-\subsection{The Manifold Assumption}
+\subsection{Manifold Assumption}
 \textbf{Assumption}: The data lies on a low-dimensional manifold embedded in a 
 high-dimensional space.
 
@@ -221,8 +221,6 @@ Moreover, it proves that the transformer's ability to handle
 spatial data can be as effective in visual tasks as it has been in 
 processing text.
 
-\subsection{The Vision Transformer Architecture}
-
 In their paper, "An Image is Worth 16x16 Words: Transformers for 
 Image Recognition at Scale" \cite{vit} the authors propose a straightforward yet 
 highly 
@@ -245,7 +243,7 @@ datasets.
     \label{fig:vit_architecture}
 \end{figure}
 
-\subsubsection{Patch Embeddings}
+\subsection{Patch Embeddings}
 Patch embedding is a key process that transforms raw image data into a format 
 suitable for the transformer architecture. An image is first divided into small 
 patches, which can be considered as sub-areas of the input image. 
@@ -261,7 +259,7 @@ This method adapts the transformer's powerful self-attention mechanisms to
 handle and interpret spatial relations of visual data.
 
 
-\subsubsection{Self-Attention Mechanism}
+\subsection{Self-Attention Mechanism}
 The core of the transformer architecture is the self-attention mechanism, which 
 allows the model to weigh the importance of different parts of the input data.
 It is worth noting that the fundamental concept of self-attention does not 
@@ -298,7 +296,7 @@ not consider the order of the input sequence. If the input sequence order is
 changed then the output sequence will change the order as well, keeping the 
 same similarity results.
 
-\subsubsection{Queries, Keys and Values}
+\subsection{Queries, Keys and Values}
 In the self-attention task, each input vector $\boldsymbol{x_i}$ plays three 
 different roles:
 \begin{itemize}
@@ -372,7 +370,7 @@ In Equation (\ref{eq:self_attention_qkv_matrix}) the softmax function
 $\boldsymbol{\sigma}$ is applied to the rows of its argument.
 
 
-\subsubsection{Multi-Head Self-Attention Mechanism}
+\subsection{Multi-Head Self-Attention Mechanism}
 In an image each patch can have different relations with the others, depending 
 on the context. Therefore, using only one self-attention mechanism would sum all 
 the information together, limiting the ability to capture the scene context. 
@@ -421,10 +419,29 @@ the vanishing gradient problem. The residual connections are used to sum the
 output of the multi-head self-attention mechanism with the embedded patches, 
 and the layer normalization is applied to the sum.
 
-\subsubsection{Classification Transformer}
+\subsection{Classification Transformer}
 If the final task is a classification of the input image, it is necessary 
 to have a feed-forward layer on the top of the transformer encoder, as shown in 
 Figure \ref{fig:vit_architecture}.
+Therefore, the final output will depend on the relative relation of the patches 
+and their absolute location in the image.
 
 
-\section{Managing Unbalanced Data}
+\section{Homography Projection}
+
+\subsection{Scale Invariant Feature Transform (SIFT)}
+
+\subsection{Random Sample Consensus (RANSAC)}
+
+\subsection{Homography Estimation}
+
+
+% \section {Scene Perception}
+
+% \subsection {You Only Look Once (YOLO)}
+
+% \subsection{RetinaNet}
+
+% \subsection{Tracking with ByteTrack}
+
+% \subsection{Depth Estimation with MiDaS}

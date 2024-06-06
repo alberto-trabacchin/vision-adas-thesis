@@ -1,466 +1,123 @@
 \chapter{Methods}
 
-\section{Meta Pseudo-Labels}
-Large models usually tend to overfit on 
-small labeled datasets, and semi-supervised learning can help to mitigate this 
-issue by leveraging the information contained in the unlabeled data.
-However, to apply semi-supervised learning methods in practice, unlabeled data 
-needs to carry useful information that is not already contained in the labeled 
-dataset. This hypothesis can be formulated through three different assumptions: 
-\emph{smoothness}, \emph{clusters}, and \emph{manifold} 
-\cite{chapelle2010semi}.
+\section{Classical Computer Vision-based Approach}
 
-In a more formal formulation, given $p(y|\bm{x}, D_L)$ as the probability 
-distribution over the possible classes, given the input $x$ and the labeled 
-dataset $D_L$, the goal is to estimate $p(y|\bm{x}, D_L, D_U)$, where $D_U$ is the 
-unlabeled dataset. We can say that semi-supervised learning is effective only if 
-$p(y|\bm{x}, D_L, D_U)$ is more accurate than $p(y|\bm{x}, D_L)$. If it is not 
-the case, semi-supervised learning does not provide any additional benefit to 
-the inference of the model, and it could even deteriorate the performance 
-\cite{chapelle2010semi}.
+This section is related to all the experiments done on the classical computer 
+vision-based approach. The general scheme of the driver's attention model is 
+shown in Figure \ref{fig:driver_attention}. 
+The model is divided into four main stages: data synchronization, homography 
+projection of the gaze, scene perception, and the driver's behavioral model. 
 
-\subsection{Smoothness Assumption}
-\textbf{Assumption}: If two examples are close in the input space, then they 
-have similar outputs (labels).
+The data synchronization stage is responsible for aligning the data from the 
+different sensors. In particular it is important that gaze data and 
+images from the 
+eye-tracking glasses are well synchronized each other and with video frames 
+from the camera installed on the roof top of the car.
 
-The smoothness assumption implies that slightly changing the input data should 
-not drastically change the output. Therefore, also the model is supposed to 
-predict similar outputs for similar inputs. This assumption is fundamental in 
-the propagation of the labels on the unlabelled data from the prior knowledge.
+The homography projection of the gaze stage is responsible for projecting the 
+gaze of the driver from the ETG camera plane to the roof top camera plane.
+In this way we have a wider, more stable and accurate representation of 
+the outside environment.
+It is possible to 
+estimate the homography transformation making the approximation that the matched 
+keypoints are far away enough from the vehicle. This is a reasonable 
+approximation since the driver is usually looking at the road and the objects 
+far away from the vehicle. Moreover, the baseline of the stereo vision system is 
+small compared to the depth of the keypoints.
+The optimal way to estimate the projection would be through the epipolar 
+geometry, estimating the fundamental matrix and the essential matrix. 
+However, we have an uncalibrated stereo setup, and the baseline between the two 
+cameras is not fixed. Even though it could be possible to integrate GPS data 
+to estimate the two matrices, there is a consistent noise error that affects 
+accuracy of the estimation.
+The homography estimation is then divided in three steps: detection of keypoints 
+in the two images through the SIFT algorithm, matching of the keypoints through 
+RANSAC, and estimation of the homography matrix through the least squares method.
 
-In Figure \ref{fig:moon_cluster}, on the left, the smoothness assumption is 
-illustrated with an example on the moon dataset. The smoothness assumption 
-is satisfied because similar points, in terms of the distance, have the same 
-output.
+The scene perception stage is responsible for detecting and tracking the vulnerable 
+users in the scene, such as pedestrians and cyclists. The detection is done 
+through the YOLOv8 algorithm and the tracking through ByteTrack. In this way 
+it is possible to compare the gaze of the driver with the state of the targets, 
+including their position.
 
-\subsection{Cluster Assumption}
-\textbf{Assumption}: Data points are orgnaized in clusters, and points that 
-belong to the same cluster are more likely to have the same label.
-
-This assumption supports methods like clustering followed by label propagation, 
-where each cluster receives a common label, potentially inferred from a few 
-labeled examples within or near the cluster.
-It does not imply that each class is related to a unique cluster. 
-On the other hand, it means that it is not possible to have two different classes 
-in the same cluster.
-From this hypothesis, it is also derived the \emph{low-density separation} 
-assumption, which imposes that the decision boundary should lie in low-density
-regions between clusters.
-
-In Figure \ref{fig:moon_cluster}, on the right, the cluster assumption is 
-illustrated with 2D data points organized in clusters. Each cluster's point is 
-more likely to have the same label.
-\begin{figure}[h]
-    \centering
-    \begin{minipage}{0.5\textwidth}
-        \centering
-        \includegraphics[height=5.5cm]{images/ssl/moon.pdf} % first figure
-    \end{minipage}\hfill
-    \begin{minipage}{0.44\textwidth}
-        \centering
-        \includegraphics[height=5.5cm]{images/ssl/clusters.pdf} % second figure
-    \end{minipage}
-    \caption{Smoothness and cluster assumptions. \textbf{Left}: The moon dataset representing smoothness between 
-        data points of each class. \textbf{Right}: The cluster assumption 
-        illustrated with a toy example.}
-    \label{fig:moon_cluster}
-    \end{figure}
-\begin{figure}[h]
-    \centering
-    \begin{minipage}{0.4\textwidth}
-        \centering
-        \includegraphics[height=5.5cm]{images/ssl/swiss_roll_3d.pdf} % first figure
-    \end{minipage}\hfill
-    \begin{minipage}{0.55\textwidth}
-        \centering
-        \includegraphics[height=5.5cm]{images/ssl/swiss_roll_pca.pdf} % second figure
-    \end{minipage}
-    \caption{Illustration of the manifold assumption. 
-        \textbf{Left}: Data points are distributed in a high-dimensional space. 
-        \textbf{Right}: The data points lie on a lower-dimensional manifold.}
-    \label{fig:swiss_roll}
-\end{figure}
-
-\subsection{Manifold Assumption}
-\textbf{Assumption}: The data lies on a low-dimensional manifold embedded in a 
-high-dimensional space.
-
-This assumption is based on the idea that the data is not distributed uniformly 
-in the input space, but it is concentrated on a lower-dimensional manifold.
-It is fundamental to avoid problems related to the curse of dimensionality, 
-which can lead to overfitting and poor generalization because of sparse data.
-
-In Figure \ref{fig:swiss_roll}, the manifold assumption is illustrated with the 
-Swiss roll dataset. The data points are distributed in a three-dimensional 
-space, but they lie on a two-dimensional manifold. In general, the principal 
-components analysis (PCA) can be used to reduce the dimensionality of the data, 
-and in this specific case principal components are respectivlely the $x$ and $z$ 
-axes.
-
-
-\subsection{The Training Algorithm}
-Classical pseudo-labeling methods usually train the teacher model on the labeled 
-data and then they keep it fixed to predict the labels on the unlabeled data. 
-The pseudo-labels are then used to train the student model, which is a copy of 
-the teacher model. The student model is finally trained on the pseudo-labelled 
-data.
-
-On the other hand, on Meta Pseudo-Labels \cite{pham2021meta}, the teacher is 
-trained along with the student model. In particular the student model is trained 
-on the pseudo labels generated by the teacher model, and the teacher is trained 
-on the performance of the student model on the labeled data. This process is 
-repeated until the student model converges reaching a better performance 
-with respect to the teacher. Therefore, the teacher model is updated to 
-maximize the performance of the student.
-
-In a more formal way, Pseudo Labels aims to optimize the student's 
-loss function $CE(T(x_u, \theta_T), S(x_u, \theta_S))$, with the pseudo-labels 
-generated from the teacher on the unlabeled data:
-\begin{align}
-    \theta_S^{PL} &= \arg \min_{\theta_S} \mathbb{E}_{x_u}\left[
-        {CE(T(x_u, \theta_T), S(x_u, \theta_S))}\right] 
-        \label{eq:pl_student_param}\\
-        &:=
-        \arg \min_{\theta_S} \mathcal{L}_u(\theta_T, \theta_S) \nonumber
-\end{align}
-
-where $T(x_u, \theta_T)$ is the pseudo target generated by the trained teacher 
-model with its parameters $\theta_T$ already optimized and fixed. 
-Therefore, the final goal of 
-Pseudo Labels is to have a lower student loss with respect to the teacher on 
-the labelled data:
-\begin{align}
-    \mathbb{E}_{x_l, y_l}\left[CE(y_l, S(x_l, \theta_S^{PL}))\right]
-    &\leq
-    \mathbb{E}_{x_l, y_l}\left[CE(y_l, T(x_l, \theta_T))\right]
-    \qquad \Longleftrightarrow 
-    \label{eq:pl_student_loss}\\
-    \mathcal{L}_l(\theta_S^{PL})
-    &\leq\
-    \mathcal{L}_l(\theta_T) 
-    \nonumber
-\end{align}
-
-Combining Equations (\ref{eq:pl_student_param}) and (\ref{eq:pl_student_loss}) 
-it is possible to notice that the student loss $\mathcal{L}_l(\theta_S^{PL})$ 
-depends on the teacher parameters $\theta_T$. Therefore, it could be possible 
-get a better optimization of the teacher model to reduce the student loss. 
-This is the main idea behind Meta Pseudo-Labels.
-The final student loss $\mathcal{L}_l^*(\theta_S^{PL})$ will be the following:
-\begin{align}
-    \mathcal{L}^*_l(\theta_S^{PL*}) &= \min_{\theta_T} \mathcal{L}_l(\theta_S^{PL}(\theta_T))
-    \label{eq:pl_student_loss_final} \\
-    \text{where} \qquad \theta_S^{PL}(\theta_T) &= \arg\min_{\theta_S} \mathcal{L}_u(\theta_T, \theta_S)
-    \nonumber
-\end{align}
-
-However, calculating the gradient $\nabla_{\theta_T}\theta^{PL}_S(\theta_T)$ 
-is computationally expensive and complicated to get because it requires to 
-unroll all the previous training of the student, given that $\theta_S^{PL}$ was updated 
-multiple times with a combination of the fixed $\theta_T$.
-To overcome this issue, Meta Pseudo-Labels uses a meta-learning approach to 
-approximate  
-the computation of $\theta_S^{PL}(\theta_T)$ to a single step:
-\begin{align}
-    \theta_S^{PL}(\theta_T) &\approx \theta_S - \eta_S \nabla_{\theta_S} \mathcal{L}_u(\theta_T, \theta_S)
-    \label{eq:pl_student_update}
-\end{align}
-
-where $\eta_S$ is the learning rate used for training the student model.
-In this way, the objective function to optimize the student introduced in 
-Equation (\ref{eq:pl_student_loss_final}) can be approximated as follows:
-\begin{align}
-    \mathcal{L}^*_l(\theta_S^{PL}) &\approx \min_{\theta_T} \mathcal{L}_l(\theta_S - \eta_S \nabla_{\theta_S} \mathcal{L}_u(\theta_T, \theta_S))
-    \label{eq:pl_student_loss_final_approx}
-\end{align}
-
-The final step that distinguishes Meta Pseudo-Labels from other pseudo-labeling 
-algorithms is to not keep the teacher fixed during the training of the student. 
-With the approximation introduced in Equation (\ref{eq:pl_student_update}), 
-the objective function can be updated depending on the information provided only 
-at the previous iteration.
-Therefore, the teacher is trained along with the student.
-The combined training can be summarized in the following steps:
-
-\begin{itemize}
-    \item \textbf{Student}: Sample a batch from unlabeled data $x_u$, get the 
-    corresponding pseudo-labels $T(x_u, \theta_T)$, and update the parameters: 
-    $\theta_S \leftarrow \theta_S - \eta_S \nabla_{\theta_S} \mathcal{L}_u(\theta_T, \theta_S)$.
-    \item \textbf{Teacher}: Sample a batch from labeled data $(x_l, y_l)$ and 
-    use the new student's parameters to optimize the objective function:
-    $\theta_T \leftarrow \theta_T - \eta_T \nabla_{\theta_T} \mathcal{L}_l(\theta_S)$.
-\end{itemize}
-
-
-\section{The Vision Transformer}
-
-Transformers, originally developed for natural language processing tasks, have 
-revolutionized the way machines understand and generate text. 
-This model architecture, introduced by Vaswani et al. in the paper 
-"Attention is All You Need" \cite{attention_is_all_you_need} relies on a 
-mechanism known as self-attention to 
-process data sequences in parallel, significantly improving efficiency and 
-scalability compared to prior methods that used recurrent layers.
-
-Building on the success in NLP, the concept of transformers has been adapted 
-for image recognition tasks, marking a significant departure from the 
-conventional convolutional neural networks (CNNs) that have dominated the field 
-for years. This adaptation was most notably realized in the Vision Transformer 
-(ViT) model introduced by Dosovitskiy et al. \cite{vit}. Their research demonstrates how a 
-pure transformer applied directly to sequences of image patches can perform at 
-or above current state-of-the-art levels on major image recognition benchmarks 
-like ImageNet.
-
-This approach challenges the prevailing reliance on CNNs for image tasks, 
-suggesting that transformers can equal or exceed CNN performance on benchmarks 
-with sufficient training data and computational power. The implications of this 
-finding are fundamental, indicating a potential shift towards more flexible and 
-scalable models for not only image classification but potentially other computer 
-vision tasks as well.
-Moreover, it proves that the transformer's ability to handle 
-spatial data can be as effective in visual tasks as it has been in 
-processing text.
-
-In their paper, "An Image is Worth 16x16 Words: Transformers for 
-Image Recognition at Scale" \cite{vit} the authors propose a straightforward yet 
-highly 
-effective approach: an image is divided into fixed-size patches, these patches 
-are linearly embedded, and positional embeddings are added to retain positional 
-information. The resulting sequence of vectors is then fed into a standard 
-transformer architecture, similar to that used for NLP tasks. The model is 
-trained end-to-end for image classification tasks, leveraging extensive 
-pre-training on large datasets followed by fine-tuning on targeted smaller 
-datasets.
+Finally, on the top, there is the driver's attention model. The responsibility 
+of this block is to classify dangerous scenarios given the data from the 
+driver and the scene. However, this block is sensitive to the quality of the 
+signals of the previous stages.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.8\textwidth]{images/vit/vit_scheme.png}
-    \vspace*{0.3cm}
-    \caption{The Vision Transformer architecture \cite{vit}. The input image is divided 
-    into fixed-size patches, linearly embedded, and positional embeddings are 
-    added. The resulting sequence of vectors is fed into the transformer encoder 
-    architecture. On the top a feed-forward layer performs the classification.}
-    \label{fig:vit_architecture}
+    \includegraphics[width=0.9\textwidth]{images/dreyeve/classic_scheme.png}
+    \vspace*{0.6cm}
+    \caption{The overall driver's attention scheme. It is divided into four main 
+    stages: data synchronization, homography projection of the gaze, scene 
+    perception and the driver's behavioral model.
+    }
+    \label{fig:driver_attention}
 \end{figure}
 
-\subsection{Patch Embeddings}
-Patch embedding is a key process that transforms raw image data into a format 
-suitable for the transformer architecture. An image is first divided into small 
-patches, which can be considered as sub-areas of the input image. 
+\subsection{Data Preprocessing}
+The Dr(eye)ve dataset is composed of 74 sequences of five minutes each. 
+Moreover, the two cameras are not synchronized. 
+The ETG camera has a frame rate of 30 fps, while the roof top camera has a 
+frame rate of 25 fps. It is also important to notice that there are some videos 
+that was recorded at slightly different frame rates. All the synchronization data 
+are provided in the dataset.
 
-Each patch is then flattened and projected into a higher-dimensional space 
-through a linear transformation. This creates dense vector representations of 
-the patches, like the word embedding process in NLP. 
-Positional embeddings are added to these patch embeddings to preserve their 
-spatial relationships, allowing the transformer to understand the layout of the 
-image as it processes the sequence of embedded patches. 
+Therefore, we decided to implement 
+an interface to preprocess all the frames and synchronize them.
+After the synchronization, we compute all the homographies and store them in a 
+file. This file is then used to project the gaze of the driver in the roof top 
+camera plane.
+Furthermore, we chose to store other informations related to the quality of the 
+estimation.
+The data structure is described in Figure \ref{fig:homography_data_structure}:
+it is a list of lists where each element is a unique sample that has the 
+following fields: the gaze coordinates in the ETG and RT camera planes, the 
+homography matrix, detected keypoints on the two planes, and the number of 
+matchings between them.
 
-This method adapts the transformer's powerful self-attention mechanisms to 
-handle and interpret spatial relations of visual data.
-
-
-\subsection{Self-Attention Mechanism}
-The core of the transformer architecture is the self-attention mechanism, which 
-allows the model to weigh the importance of different parts of the input data.
-It is worth noting that the fundamental concept of self-attention does not 
-require any trainable parameters. It is actually computed only through the 
-embedded patches.
-
-Considering a sequence of embedded patches $\{\boldsymbol{x_1, x_2, ..., x_t}\}$ 
-as input, the self-attention is a sequence-to-sequence operation that outputs
-$\{\boldsymbol{y_1, y_2, ..., y_t}\}$. The goal is to have each output vector 
-$\boldsymbol{y_i}$ that represents a similarity between the $i$-th 
-patch and all the input sequence of patches. In particular it can be described by a  
-weighted sum of the input sequence
-\begin{equation}
-\boldsymbol{y_i} = \sum_{j=1}^{t} w_{ij} \boldsymbol{x_j}
-\label{eq:self_attention_output}
-\end{equation}
-where $\boldsymbol{w_i}:=\{w_{ij}\}_{j=1}^t$ is the set of weights that describes the importance 
-of each input vector for the $i$-th one. 
-Therefore each $i$-th vector has a different set of weights with respect to 
-the others.
-
-The simplest way to compute the similarity is to use the dot-product between the 
-input vectors $w'_{ij} = \boldsymbol{x_i^T x_j}$. Moreover, to guarantee them to have a limited 
-range in $(0, 1)$ and to sum up to $1$, the softmax function is applied:
-\begin{equation}
-    w_{ij} = \boldsymbol{\sigma}(\boldsymbol{w'_i})_j = 
-    \frac{e^{w_{ij}}}{\sum_{j} e^{w_{ij}}}
-    \label{eq:attention_weights}
-\end{equation}
-From Equation (\ref{eq:attention_weights}) it is possible to notice that the 
-weights depend only on the input vectors, and they are computed independently. 
-That means that the self-attention mechanism is a parallel operation that does 
-not consider the order of the input sequence. If the input sequence order is 
-changed then the output sequence will change the order as well, keeping the 
-same similarity results.
-
-\subsection{Queries, Keys and Values}
-In the self-attention task, each input vector $\boldsymbol{x_i}$ plays three 
-different roles:
-\begin{itemize}
-    \item \textbf{Query}: $\boldsymbol{x_i}$ is used to compute the similarity to all the other 
-    vectors in order to calculate $y_i$.
-    \item \textbf{Key}: $\boldsymbol{x_i}$ is used to compute the similarity of 
-    all the other vectors with respect to itself, in order to calculate all the 
-    other outputs.
-    \item \textbf{Value}: $\boldsymbol{x_i}$ is used to compute the weighted sum 
-    of the input vectors, given the weights already computed.
-\end{itemize}
-This method introduces some controllable parameters that can be learned during 
-the training to accomplish the respective tasks. In particular, the matrices 
-are $\boldsymbol{W_q}, \boldsymbol{W_k}, \boldsymbol{W_v}$ and they all have 
-dimesion $(q_k, q_k)$, given $q_k$ the embedding dimension of patches.
-Equations (\ref{eq:self_attention_output}) and (\ref{eq:attention_weights}) can 
-be rewritten as follows:
-\begin{equation}
-\begin{cases}
-    w_{ij} = \boldsymbol{\sigma}(\boldsymbol{K^T q_i})_j \\
-    \boldsymbol{y_i} = \sum_j w_{ij} \boldsymbol{v_j}
-\end{cases}
-\qquad
-\text{where}
-\quad
-\begin{cases}
-    \boldsymbol{q_i} = \boldsymbol{W_q x_i} \\
-    \boldsymbol{K} = \boldsymbol{W_k X} \\
-    \boldsymbol{v_j} = \boldsymbol{W_v x_j} \\
-    \boldsymbol{X} = (\boldsymbol{x_1}, ..., \boldsymbol{x_t})
-\end{cases}
-\label{eq:self_attention_qkv}
-\end{equation}
-It is worthwile ntoicing that it is easier to consider the queries and values 
-vectors, and the keys matrix. That is because the query is referred a specific 
-input vector that is used to compute the similarity with all the others. 
-The value is still directly related to the input vector used to compute the 
-weighted sum. On the other hand, the keys are related to all the input vectors. 
-Therefore, multiplying a query with the keys matrix will give all the similarities 
-for the selected vector.
-
-Adding trainable parameters to the self-attention mechanism allows to figure out 
-the importance of all the sub-areas of the input image, depending on the bias we 
-use to label the dataset. Then it is possible to use the attention mask, to 
-highlight the importance of some specific areas of the image.
-
-Finally, dot products between rows of $\boldsymbol{K^T}$ and 
-$\boldsymbol{q_i}$ typically grow with the dimension of the embedding, 
-and it can lead to instabilities in terms of gradients during the learning 
-process. Therefore it is common to normalize the dot product by the square root 
-of the embedding dimension $\sqrt{d_k}$, considering that it is also the 
-grow rate of the Euclidean distance of the input vectors.
-
-In a more general matrix form, Equation (\ref{eq:self_attention_qkv}) with the 
-normalization can be 
-described as follows:
-\begin{equation}
-Y = \boldsymbol{\sigma}\left(\boldsymbol{\frac{K^T Q}{\sqrt{d_k}}}\right) V\\
-\qquad
-\text{where}
-\quad
-\begin{cases}
-    \boldsymbol{Q} = \boldsymbol{W_q X} \\
-    \boldsymbol{K} = \boldsymbol{W_k X} \\
-    \boldsymbol{V} = \boldsymbol{W_v X} \\
-    \boldsymbol{X} = (\boldsymbol{x_1}, ..., \boldsymbol{x_t})
-\end{cases}
-\label{eq:self_attention_qkv_matrix}
-\end{equation}
-In Equation (\ref{eq:self_attention_qkv_matrix}) the softmax function 
-$\boldsymbol{\sigma}$ is applied to the rows of its argument.
-
-
-\subsection{Multi-Head Self-Attention Mechanism}
-In an image each patch can have different relations with the others, depending 
-on the context. Therefore, using only one self-attention mechanism would sum all 
-the information together, limiting the ability to capture the scene context. 
-To overcome this issue, the multi-head self-attention mechanism is introduced.
-It is a parallel operation based on the single self-attention mechanism, which 
-introduces multiple weight matrices $\boldsymbol{W_q^r, W_k^r, W_v^r}$, also 
-called \emph{attention heads}.
-
-It is also possible to keep the same number of parameters of the single 
-self-attention mechanism in an efficient way. The main idea is to project queries, 
-keys and values to a lower-dimensional space according to the number of heads.
-In particular, given $h$ the number of attention heads, $d_k$ the embedding 
-dimension of the patches, we can use a transformation matrix 
-$\boldsymbol{T^r}$ of dimension $\left(d_k, d_k/h\right)$.
-Therefore, the total number of parameters for
-the single-head and multi-head self-attentions will be:
-\begin{align*}
-    \text{\#params SHA} &= 3 \cdot d_k^2 \\
-    \text{\#params MHA} &= 3 \cdot h \cdot d_k \cdot\frac{d_k}{h} = 3 \cdot d_k^2
-\end{align*}
-\begin{figure}[htbp]
+\begin{figure}
     \centering
-    \includegraphics[width=0.95\textwidth]{images/vit/multi_head_attention_scheme.png}
-    \caption{Multi-head self-attention scheme schematically represented with 
-    the main blocks: patch embeddings, dimension reduction, attention heads, 
-    data concatenation, and final linear transformation.}
-    \label{fig:multi_head_attention}
+    \includegraphics[width=\textwidth]{images/dreyeve/homography_data.png}
+    \caption{The data structure used to store the homographies.
+    \textbf{Left}: Each element is a specific sample in the i-th video, at 
+    the j-th frame.
+    \textbf{Right}: The attributes of each sample.}
+    \label{fig:homography_data_structure}
 \end{figure}
-In Figure \ref{fig:multi_head_attention} the multi-head self-attention mechanism 
-is schematically represented, and data flow is from the bottom to the top. 
-The input patches are first embedded and projected to a lower-dimensional space. 
-Therefore we get queries, keys and values for each attention head. 
-The self-attention mechanism is applied to each head, and the outputs are 
-concatenated together. In this way we augment the information of the spatial 
-relation of each patch. Finally, a linear transformation is applied to get 
-the final output of the multi-head self-attention mechanism, which describe the 
-attention of each patch with respect to all the others.
 
-To avoid any misunderstanding on the generation of the queries, keys, values and 
-on the concatenation, data is represented through channels, where each channel is 
-related to a specific attention head and it is independent from the others.
+\subsection{Stereo Camera System Setup}
 
-It is also worth noticing that the transformer architecture leverages on residual 
-connections and layer normalization to stabilize the training process, avoiding 
-the vanishing gradient problem. The residual connections are used to sum the 
-output of the multi-head self-attention mechanism with the embedded patches, 
-and the layer normalization is applied to the sum.
-
-\subsection{Classification Transformer}
-If the final task is a classification of the input image, it is necessary 
-to have a feed-forward layer on the top of the transformer encoder, as shown in 
-Figure \ref{fig:vit_architecture}.
-Therefore, the final output will depend on the relative relation of the patches 
-and their absolute location in the image.
+\subsection{Perception Data Structure}
 
 
-\section{Managing Unbalanced Data}
 
-\subsection{Evaluation Metrics}
+\section{Deep Learning-based Approach}
 
-\subsection{Data Augmentation}
+\subsection{General Scheme}
 
-\subsubsection{Upsampling}
+\subsection{Attention Mechanism for Dangerous Scene Detection}
 
-\subsubsection{Downsampling}	
+\subsection{The Artificial Bias}
+
+\subsection{Data Preprocessing of Dr(eye)ve}
+
+\subsection{Data Preprocessing of BDD100k}
+
+
+\subsection{Handling Unbalanced Data}
+
+\subsubsection{Evaluation Metrics}
+
+\subsubsection{Data Augmentation}
+
+% \subsubsection{Upsampling}
+
+% \subsubsection{Downsampling}	
 
 \subsubsection{Weighting Loss Function}
 
-\subsubsection{Synthetic Minority Oversampling Technique (SMOTE)}
+% \subsubsection{Synthetic Minority Oversampling Technique (SMOTE)}
 
-\subsection{Receiver Operating Characteristic (ROC) Curve}
-
-
-\section{Homography Projection}
-
-\subsection{Camera Models}
-
-\subsection{Scale Invariant Feature Transform (SIFT)}
-
-\subsection{Random Sample Consensus (RANSAC)}
-
-\subsection{Homography Estimation}
-
-
-\section {Scene Perception}
-
-\subsection {You Only Look Once (YOLO)}
-
-\subsection{RetinaNet}
-
-\subsection{Tracking with ByteTrack}
-
-\subsection{Depth Estimation with MiDaS}
+% \subsection{Receiver Operating Characteristic (ROC) Curve}

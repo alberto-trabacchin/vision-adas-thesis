@@ -39,6 +39,10 @@ Unsupervised:
 2. Convolutional LSTM Autoencoder (CNN + LSTM, takes multiple frames)
 3. AnoPred (predicts future frames and uses other features, see 3.)
 
+Supervised:
+
+
+
 
 ### Pros:
 1. Dataset with 4,677 annotated videos.

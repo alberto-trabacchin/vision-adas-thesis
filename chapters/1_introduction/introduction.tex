@@ -1,78 +1,288 @@
 \chapter{Introduction}
 \pagenumbering{arabic}
-%
-\stext{Provo ad inserire i commenti in questo modo. Se non ci capiamo cambiamo metodo.}
-\stext{Forse hai visto anche che in main.tex ho aggiunto un pacchetto per gestire gli acronimi. L'ho usato per ADAS.
-Prova a guardarlo, dovrebbe aiutarti a tenere traccia dell'uso degli acronimi e a mantenere la notazione coerente.}
-\stext{Qui inserirei una sezione all'interno del capitolo che racconti qualcosa degli ADAS.
-Ti ho incollato qualcosa da ChatGPT, non è completo e ci sono diversi errori, ma credo renda l'idea.
-Oltre a questo forse inserirei un preambolo e cercherei di introdurre il problema specifico a cui ti sei approcciato.
-Al momento la descrizione del problema è molto generica, ma serve entrare nel dettaglio, soprattutto per dare l'idea
-di quali siano i tuoi contributi.\\
-Forse avevi già in mente di farlo, ma non hai ancora avuto tempo di scrivere.
-Volendo potresti inserire in ogni capitolo un commento (o già una specie di scaletta usando le sessioni, o un mix) 
-per chiarire il più possibile il filo logico che vuoi andare a seguire.}
+
 \section{\acl{adas}}
-%
-\ac{adas} are electronic systems in vehicles that use advanced technologies to assist the driver in the driving process. 
-These systems enhance vehicle safety and facilitate safer and more efficient driving by providing real-time information, automation, and alerts. 
-Here's an overview of the key components and functionalities of \ac{adas}:
-%
-\subsection*{Key Components of \ac{adas}}
+Advanced Driver Assistance Systems (ADAS) are technologies that improve road 
+safety by enhancing both vehicle and driver capabilities. These systems support 
+the driver in the driving process, reducing the likelihood of human error and 
+increasing road safety. ADAS includes a range of features from basic functions 
+such as automatic headlights and rain-sensing windshield wipers to more complex 
+systems like adaptive cruise control, lane departure warning, and collision 
+avoidance systems.
+
+The evolution of ADAS has been fueled by advancements in sensors, computing 
+power, and connectivity. These technologies work together to provide vehicles 
+with the ability to not only sense their environment but also to analyze and 
+respond to potential hazards. As such, ADAS is seen as a crucial step towards 
+fully autonomous vehicles, providing a safer, more comfortable driving experience.
+
+\subsection{Market Size and Growth}
+The market for \ac{adas} is experiencing robust growth as these technologies 
+become more integral to new vehicle designs, emphasizing safety and driving 
+efficiency. 
+
+In 2024, the global ADAS market is projected to be worth around 
+\$64.05 billion, with expectations to expand significantly at a \ac{cagr} 
+of 12.7\% reaching approximately \$211.71 billion by 2034 \cite{adas_report_2023}.
+This growth is given by advancements in autonomous driving technology and 
+an increasing emphasis on vehicle safety from both consumers and functional 
+safety certifications. 
+Significant investments are also being made in the development and 
+implementation of ADAS technologies across various global markets, including 
+Japan, China, the United States, and Europe \cite{adas_report_2023}.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{r|c}
+        \hline
+        \textbf{Market} & \textbf{CAGR} \\
+        \hline
+        Worldwide & 12.7\% \\
+        Japan & 13.6\% \\
+        China & 13.5\% \\
+        United States & 12.5\% \\
+        Canada & 9.7\% \\
+        Germany & 8.8\% \\
+        Spain & 8.5\% \\
+        \hline
+    \end{tabular}
+    \caption{\ac{cagr} of the ADAS market in different countries \cite{adas_report_2023}.}
+    \label{tab:adas_revenue}
+\end{table}
+Considering the market value and growth rate of \ac{adas} technologies, 
+ADAS systems must also be economically viable on a large scale. 
+This necessitates the use of cost-effective sensors such as cameras and radars, 
+which offer a balance between performance and affordability. While there are 
+more accurate options available, such as LiDAR sensors, these are typically more 
+expensive and are primarily used for self-driving car experiments in research 
+laboratories. The high cost of LiDAR sensors makes them less suitable for 
+widespread deployment in consumer vehicles. Therefore, the challenge lies in 
+leveraging affordable technologies like cameras and radars to their maximum 
+potential, to deliver effective ADAS systems that can be widely adopted.
+
+\subsection{Market Ecosystem}
+The market ecosystem for \ac{adas} can be 
+conceptually divided into several layers, each representing a different segment 
+of the value chain. These layers range from \ac*{oems} to the suppliers of the key 
+components such as sensors and processors. 
+Here's a breakdown of these layers and the main companies in each field:
+
+\subsubsection{\ac{oems}}
+\acl{oems} are companies that integrate ADAS into their vehicles. They either develop 
+some of their own ADAS technologies or incorporate systems designed by 
+Tier 1 suppliers. Some of the leading OEMs in the ADAS market include 
+Honda, Toyota, Nissan, General Motors, Tesla, Ford, Volkswagen, Volvo, BMW, and 
+Mercedes-Benz.
+
+\subsubsection{Tier 1 Suppliers}
+Tier 1 suppliers develop complete systems or significant components that are 
+directly supplied to \ac{oems}. These companies often develop the software and 
+hardware integration necessary for ADAS.
+Main Tier 1 suppliers in the ADAS market include Bosch, Continental, Aptiv, 
+Denso, Magna, and Valeo.
+
+\subsubsection{Autonomous Technology Developers}
+This layer includes companies specifically focused on developing software and 
+platforms that enable autonomous driving capabilities beyond standard ADAS features.
+Key players in this segment include Waymo (Google/Alphabet), Cruise (General Motors),
+Argo AI (Ford, Volkswagen), Aurora, and Zoox (Amazon).
+
+\subsubsection{Sensing and Perception}
+Companies in this segment focus on developing sensors and perception technologies 
+that allow vehicles to perceive their environment, which is essential for both 
+ADAS and fully autonomous functionalities.
+Main providers are Luminar (LiDARs), Velodyne (LiDARs), Mobileye (cameras), 
+Foresight Autonomous (cameras).
+
+\subsubsection{Processors and Computing}
+This segment involves the manufacturers of the advanced computing systems that 
+process inputs from various sensors to make real-time driving decisions.
+Key players include NVIDIA (GPUs and SoCs), Intel (through Mobileye), 
+Qualcomm (processors), NXP Semiconductors (microcontrollers), and 
+Renesas (microcontrollers and SoCs).
+
+\subsubsection{Sensors}
+This layer includes manufacturers of the various types of sensors used in ADAS 
+and autonomous vehicles, such as cameras, radar, LiDAR, and ultrasonic sensors.
+Main companies in this segment include Bosch (radar and video sensors),
+Continental (radar sensors), Sony (image sensors), Texas Instruments (radar chips),
+and ON Semiconductor (image sensors for automotive cameras).
+
+
+\subsection{Key Components of \ac{adas}}
+\ac{adas} systems are composed of several key components that work together to 
+enhance vehicle safety and driving experience. These components include sensors, 
+control units, actuators, human-machine interface, and connectivity.
+
+\subsubsection{Sensors}
+Sensors help the vehicle perceive its environment by collecting data on the 
+surrounding objects and road conditions. The main types of sensors used in ADAS 
+systems are:
+
 \begin{itemize}
-    \item \textbf{Sensors and Cameras}:
-    \begin{itemize}
-        \item \textit{Radar Sensors}: Measure the distance and speed of objects around the vehicle.
-        \item \textit{Cameras}: Provide visual data for object recognition, lane detection, and traffic sign recognition.
-        \item \textit{Ultrasonic Sensors}: Used for close-range detection, primarily in parking assistance.
-        \item \textit{Lidar}: Uses laser pulses to create a 3D map of the vehicle's surroundings.
-    \end{itemize}
+    \item \textbf{Radar Sensors}: These sensors use radio waves to detect the 
+    distance and speed of objects around the vehicle. They are particularly 
+    useful for measuring the relative speed of other vehicles and detecting 
+    objects in poor weather conditions.
     
-    \item \textbf{Control Units}:
-    \begin{itemize}
-        \item \textit{Electronic Control Units (ECUs)}: Process data from sensors and cameras, making real-time decisions and sending commands to actuators.
-    \end{itemize}
+    \item \textbf{Cameras}: Cameras provide visual data that is used for object 
+    recognition, lane detection, traffic sign recognition, and other visual 
+    tasks. They are essential for understanding the vehicle's surroundings and 
+    identifying potential hazards.
     
-    \item \textbf{Actuators}:
-    \begin{itemize}
-        \item Control the vehicle's braking, steering, and acceleration systems based on commands from the control units.
-    \end{itemize}
+    \item \textbf{Ultrasonic Sensors}: These sensors are used for close-range 
+    detection, primarily in parking assistance systems. They help the vehicle 
+    detect obstacles when maneuvering at low speeds.
+    
+    \item \textbf{LiDAR}: LiDAR sensors use laser pulses to create a 3D map of 
+    the vehicle's surroundings. They are particularly useful for creating 
+    detailed maps of the environment and detecting objects at longer ranges.
 \end{itemize}
-%
-\subsection*{Common \ac{adas} Features}
-\begin{itemize}
-    \item \textbf{Adaptive Cruise Control (ACC)}:
-    Maintains a set speed and adjusts it to keep a safe distance from the vehicle ahead.
-    \item \textbf{Lane Departure Warning (LDW) and Lane Keeping Assist (LKA)}:
-    \begin{itemize}
-        \item \textit{LDW}: Alerts the driver if the vehicle begins to drift out of its lane.
-        \item \textit{LKA}: Gently steers the vehicle back into its lane if it starts to drift.
-    \end{itemize}
-    \item \textbf{Blind Spot Detection (BSD)}:
-    Warns the driver of vehicles in the blind spot during lane changes.
-    \item \textbf{Automatic Emergency Braking (AEB)}:
-    Detects imminent collisions and applies the brakes automatically if the driver does not respond in time.
-    \item \textbf{Traffic Sign Recognition (TSR)}:
-    Identifies traffic signs and displays them on the dashboard or head-up display.
-    \item \textbf{Driver Monitoring Systems (DMS)}:
-    Monitors the driver’s attention and alertness, providing warnings or taking action if signs of drowsiness or distraction are detected.
-    \item \textbf{Parking Assistance}:
-    Includes features like rearview cameras, parking sensors, and automatic parking systems that assist with parking maneuvers.
-    \item \textbf{Night Vision Enhancement}:
-    Uses infrared sensors to detect objects and pedestrians in low-light conditions, displaying this information to the driver.
-\end{itemize}
-%
-\subsection*{Benefits of \ac{adas}}
-\begin{itemize}
-    \item \textbf{Safety}: Reduces the likelihood of accidents by providing warnings and taking proactive actions.
-    \item \textbf{Comfort}: Reduces driver workload by automating repetitive tasks like cruising and parking.
-    \item \textbf{Efficiency}: Helps in maintaining optimal driving patterns, potentially reducing fuel consumption.
-    \item \textbf{Regulatory Compliance}: Meets safety standards and regulations imposed by automotive safety authorities.
-\end{itemize}
-%
-\subsection*{Future of \ac{adas}}
-As technology advances, \ac{adas} is expected to evolve toward higher levels of automation, ultimately contributing to fully autonomous driving. Enhanced connectivity, improved sensor technology, and advanced artificial intelligence will continue to drive innovations in this field.
-%
+
+\subsubsection{Control Units}
+Control units are responsible for processing the data from sensors and cameras, 
+making real-time decisions, and sending commands to the vehicle's actuators.
+Decision making algorithms are implemented in these units to interpret sensor 
+data and determine the appropriate response to different driving scenarios.
+
+\subsubsection{Actuators}
+Actuators are the components that control the vehicle's braking, steering, and 
+acceleration systems based on the commands received from the control units. 
+These actuators are responsible for executing the decisions made by the ADAS 
+to ensure safe and efficient driving.
+
+\subsubsection{Human-Machine Interface}
+The human-machine interface is the system through which the driver interacts 
+with the ADAS. This interface includes displays, alerts, and notifications that 
+inform the driver about the status of the vehicle and provide warnings or 
+assistance when needed. The interface is crucial for ensuring that the driver 
+remains aware of the vehicle's behavior and can intervene when necessary.
+
+\subsubsection{Connectivity}
+Connectivity is an essential component of modern ADAS systems, enabling 
+communication between the vehicle and external systems. This connectivity allows 
+the vehicle to receive real-time traffic information, software updates, and 
+remote assistance. It also enables vehicle-to-vehicle and vehicle-to-infrastructure 
+communication, which is crucial for advanced safety features like collision 
+avoidance and traffic management.
+
+
+\subsection{Common \ac{adas} Features}
+ADAS systems offer a wide range of features that enhance vehicle safety, 
+comfort, and efficiency. Some of the most common ADAS features include: 
+\ac*{acc}, \ac*{ldw}, \ac*{bsd}, \ac*{aeb}, \ac*{tsr}, \ac*{dms}, parking assistance,
+adaptive headlights, and more. Most important functionalities are described in detail.
+
+\subsubsection{\ac{acc}}
+\ac{acc} is a feature that maintains a set speed and adjusts it to keep a safe 
+distance from the vehicle ahead. It uses sensors to detect the distance and 
+speed of the vehicle in front and automatically adjusts the vehicle's speed to
+maintain a safe following distance.
+
+\subsubsection{\ac{ldw}}
+\ac{ldw} is a system that alerts the driver if the vehicle begins to drift out 
+of its lane without signaling. It uses cameras or sensors to monitor the vehicle's 
+position within the lane and provides visual or audible warnings if the vehicle 
+starts to veer off course. Some vehicles also have \ac{lka} systems that can 
+automatically steer the vehicle back into its lane if the driver does not respond 
+to the warnings.
+
+\subsubsection{\ac{bsd}}
+\ac{bsd} is a system that warns the driver of vehicles in the blind spot during
+lane changes. It uses sensors to detect vehicles in adjacent lanes that may not
+be visible in the side mirrors and provides visual or audible alerts to prevent
+collisions during lane changes.
+
+\subsubsection{\ac{aeb}}
+\ac{aeb} is a safety feature that detects imminent collisions with vehicles,
+pedestrians, or other obstacles and automatically applies the brakes to prevent
+or mitigate the impact. This system helps reduce the severity of accidents by
+providing an additional layer of protection when the driver fails to react in
+time.
+
+\subsubsection{\ac{tsr}}
+\ac{tsr} is a feature that uses cameras or sensors to identify traffic signs
+such as speed limits, stop signs, and road markings. It displays this information
+on the vehicle's dashboard or head-up display, helping the driver stay informed
+about the current road conditions and regulations.
+
+\subsubsection{\ac{dms}}
+\ac{dms} is a system that monitors the driver's attention and alertness while
+driving. It uses sensors to track the driver's eye movements, head position, and
+other behavioral cues to detect signs of drowsiness, distraction, or inattention.
+The system can provide warnings or take corrective actions to prevent accidents
+caused by driver fatigue or distraction.
+
+
+
+% Sample text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{\acl{adas}}
+% %
+% \ac{adas} are electronic systems in vehicles that use advanced technologies to assist the driver in the driving process. 
+% These systems enhance vehicle safety and facilitate safer and more efficient driving by providing real-time information, automation, and alerts. 
+% Here's an overview of the key components and functionalities of \ac{adas}:
+% %
+% \subsection*{Key Components of \ac{adas}}
+% \begin{itemize}
+%     \item \textbf{Sensors and Cameras}:
+%     \begin{itemize}
+%         \item \textit{Radar Sensors}: Measure the distance and speed of objects around the vehicle.
+%         \item \textit{Cameras}: Provide visual data for object recognition, lane detection, and traffic sign recognition.
+%         \item \textit{Ultrasonic Sensors}: Used for close-range detection, primarily in parking assistance.
+%         \item \textit{Lidar}: Uses laser pulses to create a 3D map of the vehicle's surroundings.
+%     \end{itemize}
+    
+%     \item \textbf{Control Units}:
+%     \begin{itemize}
+%         \item \textit{Electronic Control Units (ECUs)}: Process data from sensors and cameras, making real-time decisions and sending commands to actuators.
+%     \end{itemize}
+    
+%     \item \textbf{Actuators}:
+%     \begin{itemize}
+%         \item Control the vehicle's braking, steering, and acceleration systems based on commands from the control units.
+%     \end{itemize}
+% \end{itemize}
+% %
+% \subsection*{Common \ac{adas} Features}
+% \begin{itemize}
+%     \item \textbf{Adaptive Cruise Control (ACC)}:
+%     Maintains a set speed and adjusts it to keep a safe distance from the vehicle ahead.
+%     \item \textbf{Lane Departure Warning (LDW) and Lane Keeping Assist (LKA)}:
+%     \begin{itemize}
+%         \item \textit{LDW}: Alerts the driver if the vehicle begins to drift out of its lane.
+%         \item \textit{LKA}: Gently steers the vehicle back into its lane if it starts to drift.
+%     \end{itemize}
+%     \item \textbf{Blind Spot Detection (BSD)}:
+%     Warns the driver of vehicles in the blind spot during lane changes.
+%     \item \textbf{Automatic Emergency Braking (AEB)}:
+%     Detects imminent collisions and applies the brakes automatically if the driver does not respond in time.
+%     \item \textbf{Traffic Sign Recognition (TSR)}:
+%     Identifies traffic signs and displays them on the dashboard or head-up display.
+%     \item \textbf{Driver Monitoring Systems (DMS)}:
+%     Monitors the driver’s attention and alertness, providing warnings or taking action if signs of drowsiness or distraction are detected.
+%     \item \textbf{Parking Assistance}:
+%     Includes features like rearview cameras, parking sensors, and automatic parking systems that assist with parking maneuvers.
+%     \item \textbf{Night Vision Enhancement}:
+%     Uses infrared sensors to detect objects and pedestrians in low-light conditions, displaying this information to the driver.
+% \end{itemize}
+% %
+% \subsection*{Benefits of \ac{adas}}
+% \begin{itemize}
+%     \item \textbf{Safety}: Reduces the likelihood of accidents by providing warnings and taking proactive actions.
+%     \item \textbf{Comfort}: Reduces driver workload by automating repetitive tasks like cruising and parking.
+%     \item \textbf{Efficiency}: Helps in maintaining optimal driving patterns, potentially reducing fuel consumption.
+%     \item \textbf{Regulatory Compliance}: Meets safety standards and regulations imposed by automotive safety authorities.
+% \end{itemize}
+% %
+% \subsection*{Future of \ac{adas}}
+% As technology advances, \ac{adas} is expected to evolve toward higher levels of automation, ultimately contributing to fully autonomous driving. Enhanced connectivity, improved sensor technology, and advanced artificial intelligence will continue to drive innovations in this field.
+% %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
 \section{Focus of this work}
 %
 In the field of modern automotive technology, \ac{adas} are playing a keyrole at augmenting driver safety, comfort, and overall driving experience.
