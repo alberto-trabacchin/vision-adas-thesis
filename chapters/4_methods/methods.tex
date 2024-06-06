@@ -56,7 +56,7 @@ signals of the previous stages.
     \label{fig:driver_attention}
 \end{figure}
 
-\subsection{Data Preprocessing}
+\subsection{Homography Data Preprocessing}
 The Dr(eye)ve dataset is composed of 74 sequences of five minutes each. 
 Moreover, the two cameras are not synchronized. 
 The ETG camera has a frame rate of 30 fps, while the roof top camera has a 
@@ -88,14 +88,23 @@ matchings between them.
 \end{figure}
 
 \subsection{Stereo Camera System Setup}
+The cameras recording setup can be reconducted to an uncalibrated stereo vision 
+setup. In particular, the two cameras are not aligned and the baseline is not 
+fixed. However, this is a problem for the projection of 3D world points between 
+the two cameras. In fact, the homography matrix is a planar transformation, 
+and it is not able to project points that are not on the same plane of the 
+keypoints. For this reason we decided to make the approximation that the 
+keypoints are far away enough from the vehicle. This is a reasonable 
+approximation since the driver is usually looking at the road and the objects 
+far away from the vehicle. Moreover, the baseline of the stereo vision system is 
+small compared to the average depth of the keypoints.
 
-\subsection{Perception Data Structure}
+
+\subsection{Targets Data Structure}
 
 
 
 \section{Deep Learning-based Approach}
-
-\subsection{General Scheme}
 
 \subsection{Attention Mechanism for Dangerous Scene Detection}
 
