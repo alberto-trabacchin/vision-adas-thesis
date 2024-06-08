@@ -289,3 +289,74 @@ url={https://doi.org/10.1007/s10994-019-05855-6}
   url          = {https://www.futuremarketinsights.com/reports/adas-market},
   note         = {Accessed: 2024-06-06}
 }
+
+
+@misc{dreyeve,
+      title={Predicting the Driver's Focus of Attention: the DR(eye)VE Project}, 
+      author={Andrea Palazzi and Davide Abati and Simone Calderara and Francesco Solera and Rita Cucchiara},
+      year={2018},
+      eprint={1705.03854},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
+@misc{midas,
+      title={Towards Robust Monocular Depth Estimation: Mixing Datasets for Zero-shot Cross-dataset Transfer}, 
+      author={René Ranftl and Katrin Lasinger and David Hafner and Konrad Schindler and Vladlen Koltun},
+      year={2020},
+      eprint={1907.01341},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
+@article{sfm_self_calibration1,
+   title={Hierarchical structure-and-motion recovery from uncalibrated images},
+   volume={140},
+   ISSN={1077-3142},
+   url={http://dx.doi.org/10.1016/j.cviu.2015.05.011},
+   DOI={10.1016/j.cviu.2015.05.011},
+   journal={Computer Vision and Image Understanding},
+   publisher={Elsevier BV},
+   author={Toldo, Roberto and Gherardi, Riccardo and Farenzena, Michela and Fusiello, Andrea},
+   year={2015},
+   month=nov, pages={127–143} }
+
+@misc{sfm_self_calibration2,
+      title={Self-Calibration Supported Robust Projective Structure-from-Motion}, 
+      author={Rui Gong and Danda Pani Paudel and Ajad Chhatkuli and Luc Van Gool},
+      year={2020},
+      eprint={2007.02045},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
+@misc{li2019stereo,
+      title={Stereo R-CNN based 3D Object Detection for Autonomous Driving}, 
+      author={Peiliang Li and Xiaozhi Chen and Shaojie Shen},
+      year={2019},
+      eprint={1902.09738},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
+
+@Article{Peng_2020_CVPR,
+author = {Peng, Wanli and Pan, Hao and Liu, He and Sun, Yi},
+title = {IDA-3D: Instance-Depth-Aware 3D Object Detection From Stereo Vision for Autonomous Driving},
+booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+month = June,
+year = {2020}
+} 
+
+@Article{bbox_mde,
+AUTHOR = {Yu, Jongsub and Choi, Hyukdoo},
+TITLE = {YOLO MDE: Object Detection with Monocular Depth Estimation},
+JOURNAL = {Electronics},
+VOLUME = {11},
+YEAR = {2022},
+NUMBER = {1},
+ARTICLE-NUMBER = {76},
+URL = {https://www.mdpi.com/2079-9292/11/1/76},
+ISSN = {2079-9292},
+ABSTRACT = {This paper presents an object detector with depth estimation using monocular camera images. Previous detection studies have typically focused on detecting objects with 2D or 3D bounding boxes. A 3D bounding box consists of the center point, its size parameters, and heading information. However, predicting complex output compositions leads a model to have generally low performances, and it is not necessary for risk assessment for autonomous driving. We focused on predicting a single depth per object, which is essential for risk assessment for autonomous driving. Our network architecture is based on YOLO v4, which is a fast and accurate one-stage object detector. We added an additional channel to the output layer for depth estimation. To train depth prediction, we extract the closest depth from the 3D bounding box coordinates of ground truth labels in the dataset. Our model is compared with the latest studies on 3D object detection using the KITTI object detection benchmark. As a result, we show that our model achieves higher detection performance and detection speed than existing models with comparable depth accuracy.},
+DOI = {10.3390/electronics11010076}
+}
