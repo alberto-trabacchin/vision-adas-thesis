@@ -345,7 +345,20 @@ title = {IDA-3D: Instance-Depth-Aware 3D Object Detection From Stereo Vision for
 booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
 month = June,
 year = {2020}
-} 
+}
+
+@Article{attention_maps,
+AUTHOR = {Ebert, Nikolas and Stricker, Didier and Wasenmüller, Oliver},
+TITLE = {PLG-ViT: Vision Transformer with Parallel Local and Global Self-Attention},
+JOURNAL = {Sensors},
+VOLUME = {23},
+YEAR = {2023},
+NUMBER = {7},
+ARTICLE-NUMBER = {3447},
+URL = {https://www.mdpi.com/1424-8220/23/7/3447},
+ISSN = {1424-8220},
+DOI = {10.3390/s23073447}
+}
 
 @Article{bbox_mde,
 AUTHOR = {Yu, Jongsub and Choi, Hyukdoo},
@@ -359,4 +372,13 @@ URL = {https://www.mdpi.com/2079-9292/11/1/76},
 ISSN = {2079-9292},
 ABSTRACT = {This paper presents an object detector with depth estimation using monocular camera images. Previous detection studies have typically focused on detecting objects with 2D or 3D bounding boxes. A 3D bounding box consists of the center point, its size parameters, and heading information. However, predicting complex output compositions leads a model to have generally low performances, and it is not necessary for risk assessment for autonomous driving. We focused on predicting a single depth per object, which is essential for risk assessment for autonomous driving. Our network architecture is based on YOLO v4, which is a fast and accurate one-stage object detector. We added an additional channel to the output layer for depth estimation. To train depth prediction, we extract the closest depth from the 3D bounding box coordinates of ground truth labels in the dataset. Our model is compared with the latest studies on 3D object detection using the KITTI object detection benchmark. As a result, we show that our model achieves higher detection performance and detection speed than existing models with comparable depth accuracy.},
 DOI = {10.3390/electronics11010076}
+}
+
+@misc{attention_vit,
+      title={Emerging Properties in Self-Supervised Vision Transformers}, 
+      author={Mathilde Caron and Hugo Touvron and Ishan Misra and Hervé Jégou and Julien Mairal and Piotr Bojanowski and Armand Joulin},
+      year={2021},
+      eprint={2104.14294},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
 }

@@ -175,11 +175,12 @@ is only related to correspondent keypoints. This means that if no matching
 keypoints related to a target are found, it is not possible to estimate its 
 depth. Finally, the stereo vision system is not always reliable, especially when 
 it is uncalibrated and the baseline is not fixed and relatively small compared to 
-the average depth of the keypoints. The roof top camera has a wide field of 
+the average depth of the keypoints. 
+Recently some self-calibration methods have been proposed 
+\cite{sfm_self_calibration1}, \cite{sfm_self_calibration2}.
+The roof top camera has a wide field of 
 view because it uses a wide angle lens, and then an anti-distortion algorithm 
 is computed. This affects the quality of the depth estimation.
-Recently some self-calibration methods have been proposed 
-\cite{sfm_self_calibration1}, \cite{sfm_self_calibration2}, but they are not
 
 The third approach is the most versatile and suitable to the specific application.
 In fact, the dense depth map computed by the pretrained model is not related to the 
@@ -206,7 +207,61 @@ In the experiments section we will show the performance of pretrained MiDaS
 
 
 \subsection{Adding Spatial Information}
-Spatial
+Spatial information can be fundamental to analyze the driver's attention 
+towards targets in the scene. In fact, the driver usually pays more attention 
+to some locations of the field of view, depending on the context (e.g. type of 
+road, traffic, weather conditions, crowdness, etc.).
+Moreover, the double camera setup allows to have a wider field of view on the 
+rooftop camera. This is particularly useful to track the gaze also when the 
+driver is moving the head. 
+
+Therefore, an initial approach is to include the spatial information of the 
+gaze in the driver's attention model. In particular, we divided the roof top 
+camera view in a 3x7 grid, as shown in Figure \ref{fig:rt_camera_grid}. 
+This division is made to have a more detailed representation of the scene, in 
+fact it is possible to notice that cells from  1 to 7 are out of interest when 
+the driver is looking straight ahead. These area are 
+located on the top of the image, where the driver is usually not looking at, 
+except for some specific situations (e.g. traffic lights, road signs, etc.). 
+
+Cells 8, 9, 13, 14 represent out of field of view areas, where there could be 
+potential threats (e.g. a pedestrian crossing the road from the left side, 
+a car crossing the road). 
+
+Cells 10, 11, 12 are the center of the field of view, 
+where the driver is usually looking at. In particular, considering the city 
+center shown in Figure \ref{fig:rt_camera_grid}, area 11 captures front 
+vehicles. 
+Cells 10, 12, show possible targets interacting 
+in the near future with the ego-vehicle 
+from the road sides (e.g. the ego-vehicle approaching a crosswalk with a 
+pedestrian waiting to cross the road).
+
+Cells 15, 16, 20, 21 represent the left and sie corners out of the field of view 
+of the ETG camera. These areas are similar to cells 8, 9, 13, 14, but on with 
+closer targets. Therefore they are more dangerous because targets on these 
+locations are more challenging to spot and the driver has less time to react.
+
+Cell 17, 18, 19 are at the bottom-center of the field of view.
+These areas cover in part the dashboard of the car, and the driver is usually 
+looking at them when checking the speed, the fuel, the GPS, etc. 
+Depending on the context, these areas could also cover close vehicles on the 
+front of the ego-vehicle (e.g. a line of vehicles at a traffic light). 
+Therefore, these areas can identify a warning when the driver is not 
+looking at the road and there is a potential threat.
+
+In general, we identified different areas of interest in the field of view of 
+the driver, depending on the specific context. This is an initial equal division 
+that still helps characterize the scene. However, considering the wide view of 
+the roof top camera, and the distortion applied to the image, there are better 
+solutions to divide the scene. For example, it is possible to make a non-equal 
+division, grouping together areas that are more similar to each other.
+In summary, spatial information is both informative and complicated to manage 
+because it is highly dependent on the context. Therefore, it could be helpful 
+to let a model learn the spatial information by itself, through a deep learning 
+approach. This mainly motivates the move from the classical computer 
+vision-based approach to the deep learning-based approach.
+ 
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{images/dreyeve/rt_cam_grid.png}
@@ -216,8 +271,197 @@ Spatial
 
 
 \section{Deep Learning-based Approach}
+In this section we describe the deep learning-based approach to the driver's 
+attention model.
+Even though in the previous section we identified the main stages of the 
+classical computer vision-based approach, and many positive aspects were 
+highlighted, there are also some drawbacks.
+In particular, for each stage there are some simplification hypothesis that 
+affect quality of inputs for the driver's attention model.
+
+For example, the homography projection of the gaze is not perfect, and the 
+approximation that the matched keypoints are far away enough from the vehicle 
+is not always true. Moreover, the quality of homography estimation heavily 
+depends on the quality of the keypoints' detection and matching. This can be 
+compromised by the quality of the images, presence of occlusions, light and 
+weather conditions, etc.
+
+The scene perception stage is also affected by the quality of the detection 
+and tracking algorithms. In particular, ByteTrack is not always able to track
+overlapping objects, and the quality of the tracking is affected by the 
+quality of the detection. Moreover, the detection is not always perfect, and 
+there are some false positives and false negatives. 
+
+Depth estimation stage is also affected by the quality of the pretrained 
+model of MiDaS. In particular, the model is trained on a large datasets in 
+completely different contexts, and it is not always able to generalize well to 
+different scenarios. Moreover, the depth map is not absolute, and it is not 
+possible to estimate the absoulte distance in meters.
+
+That is why it is better to let a model learn important features by itself, through 
+some classification biases used to label a dataset. We decided to use a vision 
+transformer model to learn the self-attention map of the scene to detect 
+potential threats. 
 
 \subsection{Attention Map for Anomaly Detection}
+The vision transformer model is able to learn the self-attention map of each 
+frame in the scene.
+
+
+\newlength{\subfigwidth}
+\setlength{\subfigwidth}{32mm}
+\newlength{\horspace}
+\setlength{\horspace}{.25\textwidth}
+\begin{figure}
+    \caption{Attention masks for a pre-trained multi-head ViT \cite{attention_vit}.}
+    \centering
+    \begin{tabular}{r p{\horspace} p{\horspace} p{\horspace}}
+    Original & 
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/1/img.png}
+    \end{subfigure}
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/2/img.png}
+    \end{subfigure} 
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/4/img.png}
+    \end{subfigure} \\
+    %
+    Head 1 &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/1/attn-head0.png}
+    \end{subfigure}
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/2/attn-head0.png}
+    \end{subfigure} 
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/4/attn-head0.png}
+    \end{subfigure} \\
+    %
+    Head 2 &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/1/attn-head1.png}
+    \end{subfigure}
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/2/attn-head1.png}
+    \end{subfigure} 
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/4/attn-head1.png}
+    \end{subfigure} \\
+    Head 3 &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/1/attn-head2.png}
+    \end{subfigure}
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/2/attn-head2.png}
+    \end{subfigure} 
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/4/attn-head2.png}
+    \end{subfigure} \\
+    Head 4 &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/1/attn-head3.png}
+    \end{subfigure}
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/2/attn-head3.png}
+    \end{subfigure} 
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/4/attn-head3.png}
+    \end{subfigure} \\
+    Head 5 &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/1/attn-head4.png}
+    \end{subfigure}
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/2/attn-head4.png}
+    \end{subfigure} 
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/4/attn-head4.png}
+    \end{subfigure} \\
+    Head 6 &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/1/attn-head5.png}
+    \end{subfigure}
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/2/attn-head5.png}
+    \end{subfigure} 
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/vit_attention/4/attn-head5.png}
+    \end{subfigure} \\
+\end{tabular}
+\end{figure}
+    
+    % Image & 
+    % \begin{subfigure}[b]{\subfigwidth}
+    %     \caption{I32}
+    %     \includegraphics[width=\subfigwidth]{example-image-a}
+    % \end{subfigure} &
+    % \begin{subfigure}[b]{\subfigwidth}
+    %     \caption{TV}
+    %     \includegraphics[width=\subfigwidth]{example-image-a}
+    % \end{subfigure} &
+    % \begin{subfigure}[b]{\subfigwidth}
+    %     \caption{DIP}
+    %     \includegraphics[width=\subfigwidth]{example-image-a}
+    % \end{subfigure} &
+    % \begin{subfigure}[b]{\subfigwidth}
+    %     \caption{sst}
+    %     \includegraphics[width=\subfigwidth]{example-image-a}
+    % \end{subfigure} \\
+    
+    % Residual & 
+    % \includegraphics[width=\subfigwidth]{example-image-b} &
+    % \includegraphics[width=\subfigwidth]{example-image-b} &
+    % \includegraphics[width=\subfigwidth]{example-image-b} &
+    % \includegraphics[width=\subfigwidth]{example-image-b}
+    
+    % \end{tabular}
+    
+    % \begin{tabular}{r p{\subfigwidth} p{\subfigwidth} p{\subfigwidth} p{\subfigwidth}}
+    
+    % Image & 
+    % \begin{subfigure}[b]{\subfigwidth}
+    %     \caption{gst}
+    %     \includegraphics[width=\subfigwidth]{example-image-c}
+    % \end{subfigure} &
+    % \begin{subfigure}[b]{\subfigwidth}
+    %     \caption{est}
+    %     \includegraphics[width=\subfigwidth]{example-image-c}
+    % \end{subfigure} &
+    % \begin{subfigure}[b]{\subfigwidth}
+    %     \caption{mst}
+    %     \includegraphics[width=\subfigwidth]{example-image-c}
+    % \end{subfigure} &
+    % \begin{subfigure}[b]{\subfigwidth}
+    %     \caption{est}
+    %     \includegraphics[width=\subfigwidth]{example-image-c}
+    % \end{subfigure} \\
+    
+    % Residual & 
+    % \includegraphics[width=\subfigwidth]{example-image-a} &
+    % \includegraphics[width=\subfigwidth]{example-image-a} &
+    % \includegraphics[width=\subfigwidth]{example-image-a} &
+    % \includegraphics[width=\subfigwidth]{example-image-a}
+    
+    % \end{tabular}
+    % \end{figure}
+
+
+\subsection{The Artificial Bias}
 
 \subsection{The Artificial Bias}
 
