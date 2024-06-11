@@ -301,13 +301,68 @@ possible to estimate the absoulte distance in meters.
 That is why it is better to let a model learn important features by itself, through 
 some classification biases used to label a dataset. We decided to use a vision 
 transformer model to learn the self-attention map of the scene to detect 
-potential threats. 
+potential threats.
+Four main experiments were made: supervised and semi-supervised training on Dr(eye)ve, 
+supervised and semi-supervised training on BDD100k.
 
 \subsection{Attention Map for Anomaly Detection}
-The vision transformer model is able to learn the self-attention map of each 
-frame in the scene.
+The vision transformer model is able to learn an attention map of the scene for 
+each head. This feature is useful to let the model learn many spatial relations 
+between patches. The idea is to have many images labeled by humans to detect 
+dangerous situations in a driving dataset. Then, we can use the attention map 
+to spot critical areas of the scene that are more likely to be related to 
+dangerous situations.
+It is also possible to check if attention maps are consistent with the human 
+decision bias with a test set.
 
+An example of attention maps for a pre-trained multi-head vision transformer is 
+shown in Figure \ref{fig:attention_maps}.
+It is possible to notice that each head is focusing on some areas of the 
+scene, learning different relations. This is particularly useful to detect 
+anomalies in the scene, such as a pedestrian crossing the road, a car approaching 
+the ego-vehicle, etc. In this particular case, the model is pre-trained on 
+ImageNet, therefore many highlighted areas correspond to the presence of 
+people and cars. However, in the fifht head the model extracts more general 
+features to combine with the desired targets.
 
+\subsubsection{Artificial Bias}
+Labelling an entire dataset with dangerous situations is a very challenging 
+task. On one hand, it is not always possible to have a clear definition of what 
+is a dangerous situation. In fact, it is highly dependent on the context, the 
+person who is labelling and the driving experience. On the other hand, it is 
+very time consuming and expensive to label a large dataset.
+
+Therefore, we decided to start using an \emph{artificial bias} to classify 
+dangerous situations. In particular, we used two different criterias to label 
+Dr(eye)ve and BDD100k datasets. In Dr(eye)ve, we used the following criteria:
+a driving scene is considered dangerous if there is at least one vulnerable 
+road user (e.g. pedestrian, cyclist) or one car; the scene is condidered safe 
+otherwise.
+
+In BDD100k, on the other hand, we used the following criteria: a driving scene 
+is considered dangerous if there is at least one vulnerable user (e.g. pedestrian, 
+cyclist) or a bicycle; the scene is considered safe otherwise.
+
+The main motivation for the change from Dr(eye)ve to BDD100k is that the former 
+dataset does not have any human annotations regarding location of targets. 
+Therefore an object detector was used to accomplish the task. However, the 
+quality of the detection is not always perfect, and there are some false 
+positives and false negatives.
+The latter, on the other hand, has high-quality human annotations for many 
+classes. Moreover, it is the largest dataset available for driving scenarios, 
+because each labelled frame corresponds to the frame at the tenth second of 
+a driving video. This is particularly useful to leverage semi-supervised learning 
+techniques, like Meta Pseudo Labels \cite{pham2021meta}.
+
+Finally, we used two different labelling rules and two different datasets because 
+Dr(eye)ve has many more frames with no other vehicles in the scene (recordings 
+during night, in the countryside, etc.), while BDD100k has a high percentage of 
+frames containing other vehicles. Therefore, the second labelling method is to 
+have a less skewed dataset.
+However, the two methods should not affect the model training, since we are 
+grouping frames according to the presence of some objects, that the model should 
+find out from the training set.
+%
 \newlength{\subfigwidth}
 \setlength{\subfigwidth}{32mm}
 \newlength{\horspace}
@@ -402,70 +457,60 @@ frame in the scene.
     \begin{subfigure}[b]{\subfigwidth}
         \includegraphics[width=\subfigwidth]{images/vit_attention/4/attn-head5.png}
     \end{subfigure} \\
+\label{fig:attention_maps}
 \end{tabular}
 \end{figure}
-    
-    % Image & 
-    % \begin{subfigure}[b]{\subfigwidth}
-    %     \caption{I32}
-    %     \includegraphics[width=\subfigwidth]{example-image-a}
-    % \end{subfigure} &
-    % \begin{subfigure}[b]{\subfigwidth}
-    %     \caption{TV}
-    %     \includegraphics[width=\subfigwidth]{example-image-a}
-    % \end{subfigure} &
-    % \begin{subfigure}[b]{\subfigwidth}
-    %     \caption{DIP}
-    %     \includegraphics[width=\subfigwidth]{example-image-a}
-    % \end{subfigure} &
-    % \begin{subfigure}[b]{\subfigwidth}
-    %     \caption{sst}
-    %     \includegraphics[width=\subfigwidth]{example-image-a}
-    % \end{subfigure} \\
-    
-    % Residual & 
-    % \includegraphics[width=\subfigwidth]{example-image-b} &
-    % \includegraphics[width=\subfigwidth]{example-image-b} &
-    % \includegraphics[width=\subfigwidth]{example-image-b} &
-    % \includegraphics[width=\subfigwidth]{example-image-b}
-    
-    % \end{tabular}
-    
-    % \begin{tabular}{r p{\subfigwidth} p{\subfigwidth} p{\subfigwidth} p{\subfigwidth}}
-    
-    % Image & 
-    % \begin{subfigure}[b]{\subfigwidth}
-    %     \caption{gst}
-    %     \includegraphics[width=\subfigwidth]{example-image-c}
-    % \end{subfigure} &
-    % \begin{subfigure}[b]{\subfigwidth}
-    %     \caption{est}
-    %     \includegraphics[width=\subfigwidth]{example-image-c}
-    % \end{subfigure} &
-    % \begin{subfigure}[b]{\subfigwidth}
-    %     \caption{mst}
-    %     \includegraphics[width=\subfigwidth]{example-image-c}
-    % \end{subfigure} &
-    % \begin{subfigure}[b]{\subfigwidth}
-    %     \caption{est}
-    %     \includegraphics[width=\subfigwidth]{example-image-c}
-    % \end{subfigure} \\
-    
-    % Residual & 
-    % \includegraphics[width=\subfigwidth]{example-image-a} &
-    % \includegraphics[width=\subfigwidth]{example-image-a} &
-    % \includegraphics[width=\subfigwidth]{example-image-a} &
-    % \includegraphics[width=\subfigwidth]{example-image-a}
-    
-    % \end{tabular}
-    % \end{figure}
-
-
-\subsection{The Artificial Bias}
-
-\subsection{The Artificial Bias}
 
 \subsection{Data Preprocessing of Dr(eye)ve}
+The Dr(eye)ve dataset is composed of 74 video sequences of five minutes each.
+To reduce redundancy of images it was downsampled at 4 fps and resized and 
+stretched to 300x300 pixels. Then RetinaNet \cite{retinanet} was used to detect 
+the desired targets, 
+and the label was assigned to the frame if at least one of the targets was detected.
+
+Then we divided the dataset in training, validation and test sets. In particular,
+the validation set is based on 1000 images, 
+equally balanced between dangerous and safe situations.
+The test set is based on 200 images, also equally balanced between dangerous 
+and safe cases.
+Both the validation and test sets are always kept fixed, with the same ratio.
+
+On the other hand, the training set has different sizes, because we made some 
+experiments in both supervised and semi-supervised learning, changing the 
+labelled training size to figure out how it affected the predictions.
+Therefore, we started with 500 labels, then 1000, 2500, 5000 and 10000.
+The initial training set is not equally distributed between dangerous and safe 
+cases (around 63\% of safe cases and 37\% of dangerous cases).
+A further training set with 40000 labels was also made to better understand the 
+model's behavior with a large amount of labelled data.
+
+\subsection{Training Pipeline on Dr(eye)ve}
+Starting from the smallest training set, when increasing labels after each 
+experiment, we still use RetinaNet to classify new images. However, the criteria 
+to augment the training set is based on the model's predictions. In particular, 
+we used the object detector as a \emph{validator} to correct wrong predictions.
+In summary, the training pipeline can be described in the following way:
+%
+\begin{enumerate}
+    \addtolength\itemsep{-2mm}
+    \item Prepare training, validation and test sets.
+    \item Train the model and stop when reaching maximum validation accuracy.
+    \item Pick new samples from the unlabeled set and predict the labels.
+    \item Use RetinaNet to determine ground-truth labels on the picked samples.
+    \item Update the training set with wrong samples.
+    \item Go to point 2.
+\end{enumerate}
+In particular, when increasing the training set, we compensate the unbalance 
+between dangerous and safe cases by picking the same number of wrong predictions 
+between the two classes. This is particularly useful to avoid the model to 
+overfit on the majority class.
+However, we also weight the loss function to give more importance to the 
+minority class.
+
+The same pipeline is used for training models with Meta Pseudo Labels, but in 
+this case the unlabeled set is both used to train the model and to pick new 
+samples to label. Moreover, we stopped the training when reaching the maximum 
+validation accuracy of the student. 
 
 \subsection{Data Preprocessing of BDD100k}
 
