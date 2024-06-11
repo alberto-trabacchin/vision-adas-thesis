@@ -513,20 +513,148 @@ samples to label. Moreover, we stopped the training when reaching the maximum
 validation accuracy of the student. 
 
 \subsection{Data Preprocessing of BDD100k}
+The BDD100K dataset is a large and diverse driving video database designed for 
+the development and evaluation of automated driving technologies. It includes 
+100,000 videos captured from various geographic, environmental, and weather 
+conditions.
+Each video in the BDD100K dataset is typically about 40 seconds long, recorded 
+at 30 frames per second, resulting in approximately 1,200 frames per video. 
+However, only 100,000 frames are completely labelled by humans, and each frame 
+corresponds to the tenth second of a video.
 
+Therefore, we used all the labelled frames and downsampled the unlabeled set (the 
+videos) at 3fps. This is to reduce redundancy of data in semi-supervised 
+learning and speeding-up the training process.
+We also resized and stretched all frames to 600x600 pixels. We chose this 
+resolution because it is a good trade-off between details of the scene and 
+computational cost.
+
+In this case it not required to use any validator because we only used 
+human-labelled frames for the labelled training set. In particular, we labelled 
+a frame as dangerous if there is at least one vulnerable target, including 
+pedestrians, riders, bicycles. The scene is considered safe otherwise.
+However, considering the trade-off between resolution and details described above, 
+we choose to set a minimum threshold of the area occupied by the bounding box 
+of the target to consider the scene as dangerous. This is particularly useful 
+to have more reliable data, to make sure that the model is able to extract 
+enough useful feature from.
+The minimum threshold area is set to 5000 pixels for each target in the original 
+image resolution of 1280x720 pixels.
 
 \subsection{Handling Unbalanced Data}
+Managing unbalanced datasets in binary classification poses significant challenges 
+due to the disproportionate distribution of the classes. In such scenarios, 
+models trained on these datasets might exhibit a bias toward the majority class, 
+often at the expense of the minority class. This can lead to a situation where 
+the model performs well statistically in terms of overall accuracy but fails to 
+correctly identify instances of the less frequent class.
+
+The complexity arises because the usual evaluation metric, accuracy, does not 
+reflect the model's performance on the minority class effectively. 
+This misrepresentation can lead to misleading conclusions about the model's true 
+effectiveness, especially in the BDD100k dataset, where there is a proportion 
+of 90\% of safe cases and 10\% of dangerous cases.
+
+To address these challenges, it's crucial to employ a suite of metrics that 
+provide a more comprehensive view of the model’s performance across both classes. 
+Metrics such as precision, recall, F1-score, and others allow for a more detailed 
+assessment of how well the model identifies and classifies instances from both the 
+majority and minority classes. Each metric highlights different aspects of the 
+model's behavior, such as its ability to correctly predict positive cases, avoid 
+false positives, or balance these factors through a combined score. 
+By considering these metrics, we can better understand 
+and mitigate the biases inherent in models trained on unbalanced datasets.
 
 \subsubsection{Evaluation Metrics}
+In the context of unbalanced datasets like Dr(eye)ve and BDD100k, traditional 
+accuracy, which simply measures the proportion of total correct predictions 
+relative to the total dataset size, can be misleading. For instance, in BDD100k 
+dataset, where 90\% of the data are of one class, a naive model predicting only 
+that class would achieve 90\% accuracy, despite not having learned to identify 
+the rarer class effectively.
 
-\subsubsection{Data Augmentation}
+Instead, more nuanced metrics such as precision, recall, and F1-score are used. 
+Precision is the ratio of correctly predicted positive observations to the total 
+predicted positives. It is defined as:
+\begin{equation*}
+    \text{Precision} = \frac{TP}{TP + FP}
+\end{equation*}
+where TP is the number of true positives and FP is the number of false positives. 
+This metric helps to understand the accuracy of the positive predictions.
 
-% \subsubsection{Upsampling}
+Recall (or sensitivity) measures the ability of a model to find all the relevant 
+cases within a dataset. It is calculated by:
+\begin{equation*}
+    \text{Recall} = \text{Sensitivity} = \frac{TP}{TP + FN}
+\end{equation*}
+where FN is the number of false negatives. This metric is crucial for cases where 
+missing a positive instance is significantly worse than falsely labeling negative 
+instances as positive.
 
-% \subsubsection{Downsampling}	
+The F1-score is the harmonic mean of precision and recall, and is calculated by:
+\begin{equation*}
+    \text{F1-score} = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}
+\end{equation*}
+This score is particularly useful for unbalanced datasets because it takes both 
+false positives and false negatives into account, providing a more realistic 
+measure of a model’s performance, especially when the classes are unevenly 
+distributed.
 
-\subsubsection{Weighting Loss Function}
+In case of Dr(eye)ve this problem does not affect the validation set because it 
+is forced to be balanced. However, the training set is unbalanced, and the model 
+could overfit on the majority class, even though we also weighted the loss 
+function. In this case, we used the F1-score as the main metric to evaluate the 
+model's performance.
 
-% \subsubsection{Synthetic Minority Oversampling Technique (SMOTE)}
+In case of BDD100k, on the other hand, the problem affects both the training 
+and validation sets. In this case, we used the F1-score as the main metric to 
+evaluate the model's performance. However, we also considered recall as an 
+important metric to evaluate the model's ability to find all the relevant cases 
+within the dataset, even though it could lead to more false positives.
 
-% \subsection{Receiver Operating Characteristic (ROC) Curve}
+\subsubsection{Receiver Operating Characteristic (ROC) Curve}
+The Receiver Operating Characteristic (ROC) curve is a crucial tool for 
+evaluating binary classification models, particularly in scenarios like detecting 
+dangerous scenes in driving datasets, where the data is highly unbalanced. 
+The ROC curve plots the true positive rate (sensitivity) against the false positive 
+rate (1 - specificity) at various threshold settings. 
+Sensitivity, as described above is also called recall, and specificity is 
+defined as the true negative rate, or the proportion of negative instances 
+correctly identified as such:
+\begin{equation*}
+    \text{Specificity} = \frac{TN}{TN + FP}
+\end{equation*}
+
+This curve helps to 
+visualize the trade-off between sensitivity and specificity from the two extreme 
+operation points (with a threshold of 0.0 and 1.0).
+In fact, it is possible to notice that setting a threshold of 0.0, the model 
+will output all positive cases, then the sensitivity will be 1.0, but the 
+specificity will be 0.0. On the other hand, setting a threshold of 1.0, the model 
+will output all negative cases, then the specificity will be 1.0, but the 
+sensitivity will be 0.0. An example of ROC curve is shown in Figure 
+\ref{fig:roc_curve}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/roc/roc_curve.pdf}
+    \caption{Example of ROC curve for a binary classification model.}
+    \label{fig:roc_curve}
+\end{figure}
+
+Setting the operation point on the ROC curve involves choosing a specific 
+threshold that defines how the binary classifier will categorize positive and 
+negative classes. This threshold setting is crucial in unbalanced datasets 
+because it helps balance the sensitivity and specificity according to the 
+specific needs of the application. For instance, in detecting dangerous driving 
+scenes, missing a dangerous scene (low sensitivity) might be more critical than 
+incorrectly labeling a safe scene as dangerous (high specificity). Therefore, 
+we choose a threshold that prioritizes sensitivity.
+
+The optimal solution often depends on the specific costs associated with false 
+positives and false negatives. These can be explicitly defined through a cost 
+function, which quantifies the impact of these errors. For instance, a cost 
+function could be constructed such that the cost of missing a dangerous scene 
+(false negative) is set higher than incorrectly identifying a scene as dangerous 
+(false positive). By minimizing this cost function across possible thresholds, 
+we can determine the most cost-effective operation point on the ROC curve.
