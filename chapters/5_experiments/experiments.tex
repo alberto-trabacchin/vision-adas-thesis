@@ -168,3 +168,128 @@ in foreground and background, that contribute to add noise to the data to
 classify.
 This decision represents a further challenge for the model to 
 isolate the right group of pixels.
+
+\subsubsection{Common Features Extraction}
+The first experiment consists of showing the model the two groups of images, 
+without explicitly explaining the difference between them. The model is asked 
+to describe the common targets in each group. The question-answer pairs are 
+shown below:
+%
+{\fontfamily{cmr}\selectfont
+\begin{description}
+    \item[Q:] What common targets do all the images have?
+    Do not list a target if it is not inside all the images. 
+    (\emph{showing the dangerous images})
+    \item[A:] Cars, roads, \hl{people}, sky.
+    \item[Q:] What common targets do all the images have?
+    Do not list a target if it is not inside all the images. 
+    (\emph{showing the safe images})
+    \item[A:] Road, \hl{other vehicles}, sorrounding environment.    
+\end{description}
+}
+It is possible to notice that for the dangerous images the model correctly 
+detects also people as common targets. Moreover, vehicles are shown in both 
+groups, and the model is able to distinguish them as common targets correctly.
+This means that the model is able to extract the common noise in both groups 
+(the presence of cars, that usually occupy many pixels with respect to people), 
+but at the same time it is able to extract features of people related to the 
+dangerous group.
+
+This is a promising result, considering that GPT4 is a pretrained model on 
+general multimodal data, and not specifically on driving scenarios. 
+However, it has over 174 billion parameters, and that is why it is capable to 
+generalize in many different contexts. Using a vision transformer architecture 
+for specific tasks, like driving scenarios, with much less parameters, could 
+still lead to good results.
+
+\subsubsection{Grouping and Classification}
+\setlength{\subfigwidth}{45mm}
+\setlength{\horspace}{.3\textwidth}
+\begin{figure}
+    \centering
+    \begin{tabular}{p{\horspace} p{\horspace}}
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/gpt4/s1.jpg}
+    \end{subfigure}
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/gpt4/s2.jpg}
+    \end{subfigure} \\
+    %
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/gpt4/s3.jpg}
+    \end{subfigure}
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/gpt4/s5.jpg}
+    \end{subfigure}
+\end{tabular}
+\caption{Group of safe images, there are no people in all the images.}
+\label{fig:sub_dangerous_group}
+\end{figure}
+%
+\begin{figure}
+    \centering
+    \begin{tabular}{p{\horspace} p{\horspace}}
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/gpt4/d2.jpg}
+    \end{subfigure}
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/gpt4/d5.jpg}
+    \end{subfigure} \\
+    %
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/gpt4/d7.jpg}
+    \end{subfigure}
+    \hfill &
+    \begin{subfigure}[b]{\subfigwidth}
+        \includegraphics[width=\subfigwidth]{images/gpt4/d6.jpg}
+    \end{subfigure}
+\end{tabular}
+\caption{Group of safe images, there are no people in all the images.}
+\label{fig:sub_safe_group}
+\end{figure}
+\begin{figure}
+\centering
+\includegraphics[width=\subfigwidth]{images/gpt4/d1.jpg}
+\caption{Test image}
+\label{fig:test_image}
+\end{figure}
+
+In this experiment we only showed the model the two groups of images, without 
+asking to extract common targets. Then we show a new image and ask the model 
+to classify it in the right group. The question-answer pairs are shown below:
+{\fontfamily{cmr}\selectfont
+\begin{description}
+    \item[Q:] I will show you two groups of images. Then I will show you a test 
+    image and you have to tell me what group it is related to. You have to 
+    identify common features for each group to find the correct matching. Do not 
+    output anything before I have finished, when I will tell you "predict this 
+    image".
+    \item[A:] Understood! I'm ready when you are to proceed with the image groups 
+    and the test image.
+    \item[Q:] This is the first group. (\emph{showing the first group of images})
+    \item[A:] I've received the first group of images. Please show me the next group.
+    \item[Q:] This is the second group. (\emph{showing the second group of images})
+    \item[A:] I've received the second group of images. Please proceed with showing 
+    the test image when you are ready.
+    \item[Q:] This is the test image. (\emph{showing the test image})
+    \item[A:] Based on the test image and comparing it to the two groups shown earlier:
+    The test image features an urban setting with buildings lining the streets 
+    and multiple vehicles on the road. It closely resembles the environment and 
+    context of the images in the second group, which also depict urban settings 
+    with buildings, streets, and a 
+    \hl{visible presence of pedestrians} or traffic. 
+    This environment is distinct from the first group, which primarily showed 
+    roads in more open, less densely populated areas or showing less urban 
+    characteristics. 
+    Therefore, \hl{the test image belongs to the second group}.
+\end{description}
+}
+Also in this experiment the model is able to correctly classify the test image 
+in the right group. The model is able to give a detailed explanation of the 
+features that are common in the test image and in the second group of images.
+It is impressive that the model is capable to give such detailed explanations 
+of contexts in images, considering that it is a general model and not specifically 
+trained on driving scenarios.
