@@ -32,11 +32,80 @@ flat and the homography is a planar transformation. However, most pixels with
 high contrast correspond to objects that are far away from the vehicle, 
 therefore the approximation is reasonable.
 
+In Figure \ref{fig:gaze_matchings} we show keypoints' matchings between the 
+two images. The keypoints are extracted using the SIFT algorithm.
+In a first instance, matchings are computed according to the Lowe's ratio test, 
+with a threshold of 0.7. This is to make sure that there is enough Euclidean 
+distance from the best matching to the second best matching. Then, we apply 
+the RANSAC algorithm, with a threshold of 5 pixels for the reprojection error.
+Finally, we compute the homography matrix using the inliers from the RANSAC 
+algorithm. To optimize the estimation problem, we set the maximum number of 
+iterations to 2000 and a confidence of 99.5\%.
+
+As it is possible to see from Figure \ref{fig:gaze_matchings}, the matchings 
+are accurate enough to compute homography. The dark points are all the keypoints 
+extracted with SIFT, and the colored lines are the correspondent matchings 
+obtained through RANSAC. 
+As expected, in a scenario wehre there is a high contrast between the road 
+evironment and the sky, the matchings are related to those loactions. 
+However, many other keypoints where there is high contrast are detected, for 
+example on crosswalks, pedestrians and buildings. They are probably not matched 
+beacuse they are not unique enough to satisfy the Lowe's ratio test.
+
+This is a fundamental aspect to consider when designing a system that should be 
+used in many different scenarios, during the day and night, in different weather 
+conditions, etc. Moreover, in Figure \ref{fig:gaze_projection} and 
+\ref{fig:gaze_matchings} we show the results of an especially favorable scenario, 
+where there are good conditions of light and contrast, and the driver is looking 
+straight ahead.
+
 \subsection{Distribution of People in Dr(eye)ve}
+After computing all the projected gaze points, we can focus on the interaction 
+of the driver with the vulnerable users. Therefore, it is important to have 
+a general overview of the distribution of people in the Dr(eye)ve dataset.
+However, considering that the focus is on the interaction \emph{during time},
+it is also important to embed poeple's tracking information in the analysis.
+
+Therefore, in Figure \ref{fig:tracking_distribution} we count the number of 
+different people that are tracked by the driver. In particular, on the lower 
+x-axis there is the total observation time of the person in seconds. On the 
+upper x-axis there is the number of frames where the person is tracked, this is 
+just to have a different representation of the same data that considers 
+preprocessing. On the y-axis there is the number of people observed by the driver 
+for the specific amount of time. The distribution is shown in a logarithmic scale 
+to better compare the values.
+The plots also compare the downtown with all other scenarios. Green bars 
+represent the downtown scenarios, while red bars represent the sum of all 
+the scenarios in the dataset (therefore including the downtown).
+
+The distribution is right-skewed, with a long tail of people that are observed 
+for a short amount of time. 
+On one hand, this is expected, considering that the driver is usually looking 
+straight ahead when driving. On the other hand, it is important to consider 
+that some missing data could be due to tracking losses or occlusions with 
+ByteTrack, or some non-accurate gaze projections that do not overlap with the 
+bounding boxes of the people.
+
+In Figure \ref{fig:tracking_cum_distribution} we show the cumulative distribution 
+of the tracking counts. This is a useful representation to understand the number 
+of people that are observed for at least a certain amount of time. The plot
+
+% Need to format the figures in a better way (increase font size)
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/dreyeve/tracking_distrib.png}
+    \caption{Gaze tracking counts towards people in the Dr(eye)ve dataset.}
+    \label{fig:tracking_distribution}
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/dreyeve/tracking_distrib_cum.png}
+    \caption{Cumulative distribution of gaze tracking counts in the Dr(eye)ve dataset.}
+    \label{fig:tracking_cum_distribution}
+\end{figure}
+
 \subsection{Gaze Interaction with Targets}
 \subsection{Adding Depth Information}
-\subsection{Adding Spatial Information}
-
 
 \section {Deep Learning-based Approach}
 \subsection {Data Distribution of BDD100k}
