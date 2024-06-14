@@ -2,7 +2,7 @@
 
 \section{Classical Computer Vision-based Approach}
 
-\subsection{Gaze Projection}
+\subsection{Glances to Vulnerable Users}
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{images/dreyeve/gaze_projection.png}
@@ -136,10 +136,7 @@ information embedded in the dataset can generalize well.
         \includegraphics[width=\textwidth]{images/dreyeve/weather_distrib.pdf}
         \caption{Distribution of weather.}
         \label{fig:plot2}
-    \end{minipage}\hfill
-\end{figure}
-\begin{figure}
-    \centering
+    \end{minipage}\hfill\\\vspace{0.5cm}
     \includegraphics[width=0.5\textwidth]{images/dreyeve/area_distrib.pdf}
     \caption{Distribution of areas.}
     \label{fig:plot3}
@@ -150,9 +147,58 @@ In Figure \ref{fig:glances} there are six different people that the driver
 observed for at least 0.5 seconds. This minimum threshold is considered a good 
 compromise between the time needed to understand the context and the quantity 
 of data available, as shown in Figure \ref{fig:tracking_cum_distribution}.
-In particular, it is possible to notice that two 
+Each plot is referred to a unique person, tracked during the whole sequence.
+In particular, it is possible to notice that two different functions overlapped
+for each plot:
+the observation signal (blue) and the detection signal (red).
+Both functions can assume two different states: True or False.
 
-\begin{figure}[h]
+The observation signal is set to True when the driver is looking at the person, 
+and False otherwise. The detection signal is set to True when the person is 
+correctly detected and tracked by ByteTrack; otherwise it is set to False.
+Therefore we can have three different states:
+\begin{itemize}
+    \addtolength\itemsep{-2mm}
+    \item \textbf{D=True, O=True}:\\
+    Driver is looking at a visible and detected person.
+    \item \textbf{D=True, O=False}:\\
+    The person is visible and detected, but the driver is not looking at it.
+    \item{\textbf{D=False, O=False}}:\\
+    Tracking of person is lost (possible overlapping, occlusion or missed detection).
+\end{itemize}
+It is important to emphasize that it is not possible to also have the fourth state 
+with D=False and O=True, even though the driver could be looking at a person that 
+is not detected by ByteTrack at the moment. Therefore, when there are high 
+variations of both the observation and detection signals at the same states, 
+it is possible that the person is occluded or overlapped, and the driver is 
+looking at it. If the frequency is very high, probably the detection algorithm 
+is missing some detections between time frames (e.g. there is a variation of 
+light conditions, some quick movements, etc.). An example of this case is shown 
+in Figure \ref{fig:glances}.d), between 11s and 13s.
+
+Another case is when the person is continuously detected and the driver is looking 
+at it only for a short period of time. There can be oscillations of the observation 
+during this period, probably due to a small projection error when the case is close 
+to some corners of the bounding boxes. This can be amplified in quick movements' 
+scenarios. An example of this case is shown in all the figures in different 
+periods of time.
+
+If the person is detected continuously and the observation signal varies slowly 
+and periodically, like in Figure \ref{fig:glances}.b-e), it is possible that the 
+driver is looking at different parts of the scene keeping updating the attention 
+towards them.
+
+Finally, in Figure \ref{fig:glances}.c-f) there are some cases where the person 
+is not glanced at by the driver, and the detection signal varies at high 
+frequency. This is the case when the person is visible and tracked, but th driver 
+is not paying attention to it. 
+
+This is a good example of the importance of contextualizign the scene through 
+perception and driver's data. However, there are many complex cases that are 
+difficult to explain with just these two signals, especially when it is 
+fundamental to consider possible tracking losses or mismatching.
+
+\begin{figure}
     \raggedright
     \includegraphics[width=0.23\textwidth]{images/dreyeve/gazes/glances_legend.png}\\
     \centering
