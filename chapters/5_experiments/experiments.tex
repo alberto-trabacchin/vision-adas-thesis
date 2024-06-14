@@ -59,7 +59,7 @@ conditions, etc. Moreover, in Figure \ref{fig:gaze_projection} and
 where there are good conditions of light and contrast, and the driver is looking 
 straight ahead.
 
-\subsection{Distribution of People in Dr(eye)ve}
+\subsection{Data Distribution of Dr(eye)ve}
 After computing all the projected gaze points, we can focus on the interaction 
 of the driver with the vulnerable users. Therefore, it is important to have 
 a general overview of the distribution of people in the Dr(eye)ve dataset.
@@ -88,7 +88,26 @@ bounding boxes of the people.
 
 In Figure \ref{fig:tracking_cum_distribution} we show the cumulative distribution 
 of the tracking counts. This is a useful representation to understand the number 
-of people that are observed for at least a certain amount of time. The plot
+of people that are observed, and so tracked, for at least a certain amount of time. 
+In this case, the y-axis is linear to better understand the variation of counts 
+with respect to the time.
+
+From the cumulative distribution it is possible to see that the total number of 
+different observed people is around 110. However, considering a minimum observation 
+threshold of 0.3s, which consists of 9 frames, the number of people is reduced 
+to 40.
+This is a relative small number to consider such a complex interaction betweeen 
+humans, in many different scenarios. Moreover, as described in one of the next 
+sections, ByteTrack suffers from some tracking losses and mismatching, 
+compromising the quality of the data.
+
+It is also important to consider the distribution of recordings with respect to 
+time, weather and areas for each driver. In fact the Dr(eye)ve dataset is 
+composed of 8 different drivers, each one with a different driving style and 
+preferences. In Figure \ref{fig:plot1}, \ref{fig:plot2} and \ref{fig:plot3} we 
+show the mentioned plots. Data is enough equally distributed among the drivers, 
+with a slight preference for some of them. This means that the behavioral 
+information embedded in the dataset can generalize well.
 
 % Need to format the figures in a better way (increase font size)
 \begin{figure}
@@ -104,7 +123,75 @@ of people that are observed for at least a certain amount of time. The plot
     \label{fig:tracking_cum_distribution}
 \end{figure}
 
+\begin{figure}[h]
+    \centering
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/dreyeve/time_distrib.pdf}
+        \caption{Distribution of time.}
+        \label{fig:plot1}
+    \end{minipage}\hfill
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/dreyeve/weather_distrib.pdf}
+        \caption{Distribution of weather.}
+        \label{fig:plot2}
+    \end{minipage}\hfill
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{images/dreyeve/area_distrib.pdf}
+    \caption{Distribution of areas.}
+    \label{fig:plot3}
+\end{figure}
+
 \subsection{Gaze Interaction with Targets}
+In Figure \ref{fig:glances} there are six different people that the driver 
+observed for at least 0.5 seconds. This minimum threshold is considered a good 
+compromise between the time needed to understand the context and the quantity 
+of data available, as shown in Figure \ref{fig:tracking_cum_distribution}.
+In particular, it is possible to notice that two 
+
+\begin{figure}[h]
+    \raggedright
+    \includegraphics[width=0.23\textwidth]{images/dreyeve/gazes/glances_legend.png}\\
+    \centering
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/dreyeve/gazes/1.png}
+        \textbf{a)}
+    \end{minipage}\hfill
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/dreyeve/gazes/2.png}
+        \textbf{b)}
+    \end{minipage}\hfill \\\vspace{0.2cm}
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/dreyeve/gazes/3.png}
+        \textbf{c)}
+    \end{minipage}\hfill
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/dreyeve/gazes/4.png}
+        \textbf{d)}
+    \end{minipage}\hfill\\\vspace{0.2cm}
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/dreyeve/gazes/5.png}
+        \textbf{e)}
+    \end{minipage}\hfill
+    \begin{minipage}{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/dreyeve/gazes/6.png}
+        \textbf{f)}
+    \end{minipage}
+    \caption{Driver glances towards people in the Dr(eye)ve dataset 
+    (minimum glance threshold is set to 0.5s).}
+    \label{fig:glances}
+\end{figure}
+
+\subsection{Tracking Errors}
 \subsection{Adding Depth Information}
 
 \section {Deep Learning-based Approach}
@@ -115,7 +202,7 @@ of people that are observed for at least a certain amount of time. The plot
 \subsection{Semi-Supervised Training on BDD100k}
 
 \subsection{Experiments with GPT4-o}
-In May 2024 OpenAI released GPT4-o, their multilingual, multimodal generative 
+In May 2024, OpenAI released GPT4-o, their multilingual, multimodal generative 
 pre-trained transformer. Considering its powerful capability to describe general 
 contexts in wide scenes, we decided to test the architecture to solve a problem 
 similar to ours. Experiments were conducted on BDD100k dataset.
