@@ -79,7 +79,7 @@ represent the downtown scenarios, while red bars represent the sum of all
 the scenarios in the dataset (therefore including the downtown).
 
 The distribution is right-skewed, with a long tail of people that are observed 
-for a short amount of time. 
+for a short amount of time.
 On one hand, this is expected, considering that the driver is usually looking 
 straight ahead when driving. On the other hand, it is important to consider 
 that some missing data could be due to tracking losses or occlusions with 
@@ -109,19 +109,22 @@ show the mentioned plots. Data is enough equally distributed among the drivers,
 with a slight preference for some of them. This means that the behavioral 
 information embedded in the dataset can generalize well.
 
-% Need to format the figures in a better way (increase font size)
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\textwidth]{images/dreyeve/tracking_distrib.png}
-    \caption{Gaze tracking counts towards people in the Dr(eye)ve dataset.}
-    \label{fig:tracking_distribution}
+    \begin{minipage}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/dreyeve/tracking_distrib.pdf}
+        \caption{Observation time counts.}
+        \label{fig:tracking_distribution}
+    \end{minipage}\hfill
+    \begin{minipage}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/dreyeve/tracking_distrib_cum.pdf}
+        \caption{Cumulative of the counts.}
+        \label{fig:tracking_cum_distribution}
+    \end{minipage}
 \end{figure}
-\begin{figure}
-    \centering
-    \includegraphics[width=0.9\textwidth]{images/dreyeve/tracking_distrib_cum.png}
-    \caption{Cumulative distribution of gaze tracking counts in the Dr(eye)ve dataset.}
-    \label{fig:tracking_cum_distribution}
-\end{figure}
+
 
 \begin{figure}[h]
     \centering
@@ -190,13 +193,13 @@ towards them.
 
 Finally, in Figure \ref{fig:glances}.c-f) there are some cases where the person 
 is not glanced at by the driver, and the detection signal varies at high 
-frequency. This is the case when the person is visible and tracked, but th driver 
+frequency. This is the case when the person is visible and tracked, but the driver 
 is not paying attention to it. 
 
-This is a good example of the importance of contextualizign the scene through 
+This is a good example of the importance of contextualizing the scene through 
 perception and driver's data. However, there are many complex cases that are 
 difficult to explain with just these two signals, especially when it is 
-fundamental to consider possible tracking losses or mismatching.
+fundamental to consider possible tracking losses or mismatchings.
 
 \begin{figure}
     \raggedright
@@ -237,8 +240,56 @@ fundamental to consider possible tracking losses or mismatching.
     \label{fig:glances}
 \end{figure}
 
-\subsection{Tracking Errors}
+\subsection{Tracking Performance}
+As mentioned before, analyzing driving interatctions between the driver and 
+vulnerable users is a complex task that can be compromised by tracking errors.
+Even though ByteTrack is a state-of-the-art tracking algorithm, especially 
+designed for scenarios with occlusions and overlapping, it can still suffer 
+from some mismatches and tracking losses.
+It is complicated to find out when the tracking is lost, from the output of 
+the algorithm. Even worse, if there is a tracking mismatch, driver's gaze 
+information can be compromised, leading to wrong conclusions about the interaction 
+between the driver and the other targets.
+
+In Figure \ref{fig:tracking_mismatch} we show some examples of tracking mismatches
+in a driving scenario of Dr(eye)ve.
+In particular, four different frames from the roof top camera are shown. 
+We decided to show the frames where there are overlapping or occluded people, 
+to emphasize the complexity of the tracking task.
+
+From Figure \ref{fig:tracking_mismatch}.a) to Figure \ref{fig:tracking_mismatch}.b)
+the tracked person (with ID 342) overlaps with another person that is walking on 
+the crosswalks. In this case the tracking is not lost, and the person is correctly 
+tracked.
+
+From Figure \ref{fig:tracking_mismatch}.b) to Figure \ref{fig:tracking_mismatch}.c)
+the same tracked person overlaps with another target, but this time there is 
+a tracking mismatch. The bounding box is now assigned to the incoming person, 
+and the tracked person is lost.
+
+A similar case is shown from Figure \ref{fig:tracking_mismatch}.c) to 
+Figure \ref{fig:tracking_mismatch}.d). The tracked person is mismatched with 
+another incoming person.
+
+Even though lighting conditions are optimal, and people are not occluded by 
+other objects, tracking mismatches can still happen. This is a fundamental 
+aspect to consider when designing a feature for an ADAS system. 
+Another aspect is that, despite the presence of other objects in the background 
+like cars, the tracking algorithm is able to correctly keep the right tracking, 
+considering that the backbone model is not specifically trained on detecting 
+people in driving scenarios. This is a good sign of the robustness of the 
+algorithm with respect to the background environment, and could be enhanced 
+through an ad-hoc fine-tuning of the detection stage on driving scenarios.
+\begin{figure}
+\centering
+\includegraphics[width=0.85\textwidth]{images/dreyeve/tracking_mismatch.png}
+\vspace{0.4cm}
+\caption{ByteTrack's tracking mismatches in a driving scenario.}
+\label{fig:tracking_mismatch}
+\end{figure}
+
 \subsection{Adding Depth Information}
+
 
 \section {Deep Learning-based Approach}
 \subsection {Data Distribution of BDD100k}
