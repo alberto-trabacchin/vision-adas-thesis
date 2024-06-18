@@ -288,10 +288,110 @@ through an ad-hoc fine-tuning of the detection stage on driving scenarios.
 \label{fig:tracking_mismatch}
 \end{figure}
 
-\subsection{Adding Depth Information}
+\subsection{Monocular Depth Estimation with MiDaS}
+In this section we show and evaluate the results of the monocular depth estimation 
+computed by MiDaS \cite{midas}. To evaluate the quality of the estimation it 
+is necessary to have a ground-truth information to compare with. In this case, 
+Dr(eye)ve dataset does not provide any depth information by default, because no 
+depth sensors are used. 
+Therefore, the idea is to validate the model on another 
+dataset that provides depth information and a good variety of scenarios, from 
+downtowns to highways, with different weather conditions, etc. 
+We decided to use the NuScenes dataset \cite{nuscenes}, that provides both 
+LiDAR and camera data.
+
+In Figure \ref{fig:mde} we show the results of the monocular depth estimation 
+for an entire scene of the NuScenes dataset. The left image is an heatmap of 
+the relative inverse depth estimated by MiDaS, and compared with the ground-truth 
+pointclouds taken from the front LiDAR. In particular, it is necessary to mention 
+that MiDaS provides a \emph{relative} inverse depth that depends on the specific 
+image, depending on the distance of closer and farther objects.
+Considering that the comparison is not straightforward for the entire dataset, 
+we decided to show the results for one entire scene, where at least the same 
+environment is present in all the frames. Then the relative inverse depth is 
+normalized to be in the range $[0, 1]$, and compared with the absolute depth 
+of correspondent points in the LiDAR pointcloud. This means that non-correspondent 
+pixels in the dense depth map are masked out.
+Finally, we decided to use an heatmap to not only show the distribution of points, 
+but also find how frequently the model makes some errors in the estimation.
+Considering the preprocessing of the data, a reference curve is also shown. 
+It spans from 4m to 60m on the x-axis and from the 
+minimum to the maximum of the relative inverse depth on the y-axis. This is to have 
+a unique function that is able to map all values in the two domains.
+To be precise, the reference curve should not span only up to the maximum 
+value of the pointcloud, but it should consider the maximum distance in the 
+entire scene. However, this is a good approximation to have a general idea 
+of the quality of the estimation, leveraging ground-truth data. In fact, 
+from the experiments we realized that the model is more accurate in estimating 
+high relative distances between objects in the scene, and this is usually related 
+to closer-to-the-ego-vehicle objects. Moreover, LiDAR pointclouds can reach 
+up to 100m, but the further points are, the more sparcely they are distributed
+in the 3D space.
+
+Another important aspect to consider is the output of MiDaS, that is the relative 
+inverse depth. This means that the closer the object is, the higher the output 
+of the model is. This is the opposite of the LiDAR pointcloud, where the closer 
+the object is, the lower the depth value is. However, we decided not to invert 
+one of the two signals to have a better comparison at closer distances, but also 
+including farther estimations, with the output tending to zero for the farther objects.
+
+From the results in the heatmap it is possible to notice that the model is able 
+to estimate the depth of closer objects with a good approximation, but it is 
+much less accurate for farther objects. Regarding closer objects, there 
+are many point clouds related to the road that, considering its shapes, it is 
+probably easier to estimate. On the other hand, farther objects are usually 
+less visible in the image, and the model is not able to estimate them correctly. 
+Moreover, there are some close pointclouds that are estimated far from the ego-vehicle,
+and it adds a consistent error for the evaluation.
+
+Considering the problems to evaluate the accuracy of the model with respect to 
+the ground-truth data, we decided to report two error metrics: the root mean 
+squared error (RMSE) and the relative root mean squared error (RRMSE). 
+They are calculated as follows:
+\begin{align}
+    \text{RMSE} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} \left(d_i - \hat{d}_i\right)^2} \qquad\qquad
+    \text{RRMSE} = \sqrt{\frac{1}{n} \frac{\sum_{i=1}^{n}{\left(d_i - \hat{d}_i\right)^2}}{\sum_{i=1}^{n}d_i^2}} \nonumber
+\end{align}
+where $d_i$ is the normalized depth of the i-th point in the LiDAR pointcloud, 
+and $\hat{d}_i$ is the relative depth estimated by MiDaS. In total 
+there are $n$ point clouds visible in the scene. As it possible to notice from the 
+definition of the metrics, the RRMSE is a normalized version of the RMSE with 
+respect to the average depth of the scene. This is useful to understand the 
+quality of the estimation in all the dataset. However, we have inverted the 
+relative depth obtained from MiDaS, therefore small values in the dense depth 
+map heavily affect the RRMSE.
+
+The right image, on the other hand, 
+shows the projection of the LiDAR pointcloud on the image plane, through the 
+camera calibration matrix. Each point is colored according to the depth value 
+in the LiDAR pointcloud. This is to have a visual understanding of the distribution 
+of pointclouds in one frame of the scene. As shown in the picture, the scenario 
+corresponds to a downtown environment, with many buildings and cars. 
+Closer point clouds can be related to the road, parked vehicles on the sides, 
+road obstacles, etc. Farther point clouds are usually related to buildings, 
+trees, and other objects that are not directly on the road.
+\begin{figure}
+    \centering
+    \begin{minipage}{0.52\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/nuscenes/depth_0.png} % first figure itself
+    \end{minipage}\hfill
+    \begin{minipage}{0.47\textwidth}
+        \centering
+        \includegraphics[width=\textwidth, height=4.8cm]{images/nuscenes/lidar_over_img.png} % second figure itself
+    \end{minipage}
+    \caption{Monocular depth estimation with MiDaS on NuScenes dataset \cite{nuscenes}.
+    \textbf{Left}: Relative inverse depth estimated from the model compared to 
+    the ground-truth information taken from the front LiDAR for an entire scene.
+    \textbf{Right}: Projection of the LiDAR point cloud on the image plane for
+    one sample of the same scene.} 
+    \label{fig:mde}
+\end{figure}
+
 
 
 \section {Deep Learning-based Approach}
+Sample text
 \subsection {Data Distribution of BDD100k}
 \subsection{Supervised Training on Dr(eye)ve}
 \subsection{Semi-Supervised Training on Dr(eye)ve}
