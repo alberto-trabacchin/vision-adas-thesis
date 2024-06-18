@@ -298,12 +298,29 @@ completely different contexts, and it is not always able to generalize well to
 different scenarios. Moreover, the depth map is not absolute, and it is not 
 possible to estimate the absoulte distance in meters.
 
-That is why it is better to let a model learn important features by itself, through 
+That is why it is better to let a model learn important features automatically, through 
 some classification biases used to label a dataset. We decided to use a vision 
 transformer model to learn the self-attention map of the scene to detect 
 potential threats.
 Four main experiments were made: supervised and semi-supervised training on Dr(eye)ve, 
 supervised and semi-supervised training on BDD100k.
+The general scheme is shown in Figure \ref{fig:dl_approach_scheme}; as it is 
+possible to notice, the scheme does not consists of some blocks to extract 
+indirect features from the scene, but it is mainly focused on the deep learning 
+model to learn the features by itself by camera images. In particular, the 
+attention model is represented by two vision transformers: one is the teacher and 
+the other is the student. The teacher is in charge of generating pseudo labels 
+for the student from the unlabelled dataset. The trained student is then used 
+to make the final predictions, and it is supposed to perform better than the
+teacher.
+\begin{figure}
+\centering
+\includegraphics[width=0.85\textwidth]{images/ssl/dl_approach_scheme.png}
+\vspace{0.4cm}
+\caption{General scheme of the deep learning-based approach for detecting
+dangerous situations in driving scenarios.}
+\label{fig:dl_approach_scheme}
+\end{figure}
 
 \subsection{Attention Map for Anomaly Detection}
 The vision transformer model is able to learn an attention map of the scene for 
@@ -625,6 +642,13 @@ correctly identified as such:
     \text{Specificity} = \frac{TN}{TN + FP}
 \end{equation*}
 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/roc/roc_curve.pdf}
+    \caption{Example of ROC curve for a binary classification model.}
+    \label{fig:roc_curve}
+\end{figure}
 This curve helps to 
 visualize the trade-off between sensitivity and specificity from the two extreme 
 operation points (with a threshold of 0.0 and 1.0).
@@ -634,13 +658,6 @@ specificity will be 0.0. On the other hand, setting a threshold of 1.0, the mode
 will output all negative cases, then the specificity will be 1.0, but the 
 sensitivity will be 0.0. An example of ROC curve is shown in Figure 
 \ref{fig:roc_curve}.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.6\textwidth]{images/roc/roc_curve.pdf}
-    \caption{Example of ROC curve for a binary classification model.}
-    \label{fig:roc_curve}
-\end{figure}
 
 Setting the operation point on the ROC curve involves choosing a specific 
 threshold that defines how the binary classifier will categorize positive and 
