@@ -49,7 +49,8 @@ signals of the previous stages.
     \centering
     \includegraphics[width=0.9\textwidth]{images/dreyeve/classic_scheme.png}
     \vspace*{0.6cm}
-    \caption{The overall driver's attention scheme. It is divided into four main 
+    \caption[Traditional computer vision-based driver's attention model]
+    {The overall driver's attention scheme. It is divided into four main 
     stages: data synchronization, homography projection of the gaze, scene 
     perception and the driver's behavioral model.
     }
@@ -80,7 +81,8 @@ matchings between them.
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{images/dreyeve/homography_data.png}
-    \caption{The data structure used to store the homographies.
+    \caption[Data structure to store homographies]
+    {The data structure used to store the homographies.
     \textbf{Left}: Each element is a specific sample in the i-th video, at 
     the j-th frame.
     \textbf{Right}: The attributes of each sample.}
@@ -126,7 +128,8 @@ the problem, we set two different states for each target: a
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{images/dreyeve/targets_data.png}
-\caption{The data structure used to store targets' states.
+\caption[Data structure to store targets' states]
+{The data structure used to store targets' states.
 \textbf{Left}: Each element is a specific person, which contains the set of 
 states during all its tracking.
 \textbf{Right}: The attributes of the tracked person during time.
@@ -200,7 +203,8 @@ In the experiments section we will show the performance of pretrained MiDaS
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{images/dreyeve/depth_estimation.png}
-\caption{Summary of the possible three methods to estimate the depth of targets.}
+\caption[Three possible methods to estimate targets' depth]
+{Summary of the possible three methods to estimate the depth of targets.}
 \label{fig:depth_estimation}
 \end{figure}
 
@@ -265,7 +269,8 @@ vision-based approach to the deep learning-based approach.
 \begin{figure}
 \centering
 \includegraphics[width=\textwidth]{images/dreyeve/rt_cam_grid.png}
-\caption{Division of the roof top camera view in a 3x7 grid.}
+\caption[Grid division of the roof top camera view]
+{Division of the roof top camera view in a 3x7 grid.}
 \label{fig:rt_camera_grid}
 \end{figure}
 
@@ -317,7 +322,8 @@ teacher.
 \centering
 \includegraphics[width=0.85\textwidth]{images/ssl/dl_approach_scheme.png}
 \vspace{0.4cm}
-\caption{General scheme of the deep learning-based approach for detecting
+\caption[Deep learning-based detection model of dangerous scenarios.]
+{General scheme of the deep learning-based approach for detecting
 dangerous situations in driving scenarios.}
 \label{fig:dl_approach_scheme}
 \end{figure}
@@ -385,7 +391,8 @@ find out from the training set.
 \newlength{\horspace}
 \setlength{\horspace}{.25\textwidth}
 \begin{figure}
-    \caption{Attention masks for a pre-trained multi-head ViT \cite{attention_vit}.}
+    \caption[Attention maps for a pre-trained multi-head ViT.]
+    {Attention masks for a pre-trained multi-head ViT \cite{attention_vit}.}
     \centering
     \begin{tabular}{r p{\horspace} p{\horspace} p{\horspace}}
     Original & 
@@ -646,7 +653,8 @@ correctly identified as such:
 \begin{figure}
     \centering
     \includegraphics[width=0.6\textwidth]{images/roc/roc_curve.pdf}
-    \caption{Example of ROC curve for a binary classification model.}
+    \caption
+    {Example of ROC curve for a binary classification model.}
     \label{fig:roc_curve}
 \end{figure}
 This curve helps to 

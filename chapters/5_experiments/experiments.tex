@@ -6,7 +6,8 @@
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{images/dreyeve/gaze_projection.png}
-    \caption{Projection of the gaze from the ETG camera to the RT camera. 
+    \caption[Projection of the gaze from the ETG camera to the RT camera.]
+    {Projection of the gaze from the ETG camera to the RT camera. 
     All the gaze points are manually set.
     \textbf{Left}: Roof top camera view.
     \textbf{Right}: ETG camera view.}
@@ -15,7 +16,8 @@
 \begin{figure}
     \centering
     \includegraphics[width=\textwidth]{images/dreyeve/gaze_matchings.png}
-    \caption{Projection of the gaze from the ETG camera to the RT camera. 
+    \caption[Keypoints' matchings between the two cameras.]
+    {Projection of the gaze from the ETG camera to the RT camera. 
     All the gaze points are manually set.
     \textbf{Left}: Roof top camera view.
     \textbf{Right}: ETG camera view.}
@@ -114,13 +116,15 @@ information embedded in the dataset can generalize well.
     \begin{minipage}{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/dreyeve/tracking_distrib.pdf}
-        \caption{Observation time counts.}
+        \caption[Observation time counts.]
+        {Observation time counts.}
         \label{fig:tracking_distribution}
     \end{minipage}\hfill
     \begin{minipage}{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/dreyeve/tracking_distrib_cum.pdf}
-        \caption{Cumulative of the counts.}
+        \caption[Cumulative of the observation counts.]
+        {Cumulative of the counts.}
         \label{fig:tracking_cum_distribution}
     \end{minipage}
 \end{figure}
@@ -140,7 +144,8 @@ information embedded in the dataset can generalize well.
         \centering
         \includegraphics[width=\textwidth]{images/dreyeve/area_distrib.pdf}
     \end{minipage}\hfill
-    \caption{Distribution of recordings in Dr(eye)ve dataset. 
+    \caption[Distribution of recordings with respect to time, weather and areas.]
+    {Distribution of recordings in Dr(eye)ve dataset. 
     \textbf{Left}: Distribution of recordings with respect to time.
     \textbf{Center}: Distribution of recordings with respect to weather.
     \textbf{Right}: Distribution of recordings with respect to driving areas.}
@@ -237,7 +242,8 @@ fundamental to consider possible tracking losses or mismatchings.
         \includegraphics[width=\textwidth]{images/dreyeve/gazes/6.png}
         \textbf{f)}
     \end{minipage}
-    \caption{Driver glances towards people in the Dr(eye)ve dataset 
+    \caption[Driver glances towards people in the Dr(eye)ve dataset.]
+    {Driver glances towards people in the Dr(eye)ve dataset 
     (minimum glance threshold is set to 0.5s).}
     \label{fig:glances}
 \end{figure}
@@ -384,7 +390,8 @@ trees, and other objects that are not directly on the road.
         \centering
         \includegraphics[width=\textwidth, height=4.8cm]{images/nuscenes/lidar_over_img.png} % second figure itself
     \end{minipage}
-    \caption{Monocular depth estimation with MiDaS on NuScenes dataset \cite{nuscenes}.
+    \caption[Monocular depth estimation with MiDaS on NuScenes dataset.]
+    {Monocular depth estimation with MiDaS on NuScenes dataset \cite{nuscenes}.
     \textbf{Left}: Relative inverse depth estimated from the model compared to 
     the ground-truth information taken from the front LiDAR for an entire scene.
     \textbf{Right}: Projection of the LiDAR point cloud on the image plane for
@@ -407,7 +414,8 @@ Table \ref{tab:mde_metrics}.
     Scene 4 & 21.96 & 0.40 \\ \hline
     Scene 5 & 24.54 & 0.99 \\ \hline
     \end{tabular}
-    \caption{Evaluation of MiDaS on five scenes.}
+    \caption[MiDaS depth estimation evaluation on NuScenes dataset.]
+    {Evaluation of MiDaS on five scenes.}
     \label{tab:mde_metrics}
 \end{table}
 
@@ -581,7 +589,8 @@ training with Meta Pseudo Labels.
         \hline
         \end{tabular}\\
         \vspace{2.5cm}
-        \caption{Definition of ViT models.}
+        \caption[Definition of ViT models for training on the Dr(eye)ve dataset.]
+        {Definition of ViT models.}
         \label{tab:models_dreyeve}
         \begin{tabular}{l*{6}{l}r}
             \hline
@@ -642,7 +651,8 @@ ROC curve of the trained model.
         \centering
         \includegraphics[width=\textwidth]{images/bdd100k/frame_counts.pdf}
     \end{minipage}
-    \caption{Distribution of classes in the training set of the BDD100k dataset.
+    \caption[Distribution of classes in the training set of the BDD100k dataset.]
+    {Distribution of classes in the training set of the BDD100k dataset.
     \textbf{Left}: Number of instances per class. 
     \textbf{Right}: Number of frames containing each class.
     }
@@ -699,7 +709,8 @@ common targets are present in each group.
         \includegraphics[width=\subfigwidth]{images/gpt4/s6.jpg}
     \end{subfigure}
 \end{tabular}
-\caption{Group of safe images, there are no people in all the images.}
+\caption[Group of safe images for common features' extraction.]
+{Group of safe images, there are no people in all the images.}
 \label{fig:safe_group}
 \end{figure}
 %
@@ -730,7 +741,8 @@ common targets are present in each group.
         \includegraphics[width=\subfigwidth]{images/gpt4/d6.jpg}
     \end{subfigure}
 \end{tabular}
-\caption{Group of dangerous images, there are some people in each image.}
+\caption[Group of dangerous images for common features' extraction.]
+{Group of dangerous images, there are some people in each image.}
 \label{fig:dangerous_group}
 \end{figure}
 The first group of images is shown in Figure \ref{fig:safe_group}. It consists 
@@ -830,7 +842,8 @@ still lead to good results.
         \includegraphics[width=\subfigwidth]{images/gpt4/s5.jpg}
     \end{subfigure}
 \end{tabular}
-\caption{Group of safe images, there are no people in all the images.}
+\caption[Group of safe images for image classification.]
+{Group of safe images, there are no people in all the images.}
 \label{fig:sub_dangerous_group}
 \end{figure}
 %
@@ -853,13 +866,14 @@ still lead to good results.
         \includegraphics[width=\subfigwidth]{images/gpt4/d6.jpg}
     \end{subfigure}
 \end{tabular}
-\caption{Group of safe images, there are no people in all the images.}
+\caption[Group of dangerous images for image classification.]
+{Group of dangerous images, there are some people in each image.}
 \label{fig:sub_safe_group}
 \end{figure}
 \begin{figure}
 \centering
 \includegraphics[width=\subfigwidth]{images/gpt4/d1.jpg}
-\caption{Test image}
+\caption[Test image]{Classification test image.}
 \label{fig:test_image}
 \end{figure}
 
