@@ -1,6 +1,6 @@
 \chapter{Experiments}
 
-\section{Classical Computer Vision-based Approach}
+\section{Traditional Computer Vision-based Approach}
 
 \subsection{Glances to Vulnerable Users}
 \begin{figure}
@@ -411,15 +411,143 @@ Table \ref{tab:mde_metrics}.
 
 \section {Deep Learning-based Approach}
 \subsection{Training on Dr(eye)ve}
+To compare supervised and semi-supervised training of ViTs on Dr(eye)ve, we 
+trained different models with different number of labels. In particular, we 
+used the method with the validator explained in the methods section.
+The reason behind using two different vision transformer models is to also 
+understand if and when more parameters are necessary to better generalize the 
+validation set.
+
+In Table \ref{tab:dreyeve_training} we show the results obtained with the 
+training method for both supervised and semi-supervised training.
+Relevant information to track is reported in the columns, and they are:
+\begin{itemize}
+    \addtolength\itemsep{-2mm}
+    \item \textbf{Mode}: the training method used, supervised or semi-supervised
+    (MPL).
+    \item \textbf{Model}: the vision transformer model used, MViT or LViT.
+    \item \textbf{Labels}: the number of labels used in the training.
+    \item \textbf{Safe [\%]}: the percentage of safe frames in the training set.
+    \item \textbf{Dang. [\%]}: the percentage of dangerous frames in the training set.
+    \item \textbf{top-acc.}: the best accuracy of the model on the validation set.
+    \item \textbf{Biters @top-acc.}: the number of batches seen by the model when 
+    it reaches the top accuracy.
+    \item \textbf{max. Biters}: the maximum number of batches seen by the model 
+    during the entire training.
+\end{itemize}
+In Table \ref{tab:models_dreyeve} the two models, MViT and LViT, are described 
+in details through their fundamental hyperparameters. In order, they are:
+\begin{itemize}
+    \addtolength\itemsep{-2mm}
+    \item \textbf{Patch size}: the dimension of each patch in pixels.
+    \item \textbf{Emb. size}: the size of the embedding layer.
+    \item \textbf{Depth}: the number of layers in the model.
+    \item \textbf{Heads}: the number of heads in the multi-head attention mechanism.
+    \item \textbf{MLP size}: the size of the multi-layer perceptron of the model.
+\end{itemize}
+
+\subsubsection{Training Setups}
+Regarding the trainings, we used a learning rate of 0.001, a seed of 42, and 
+two GPUs' setups: one with two NVIDIA Tesla A100 of 40GB each, and the other with 
+one NVIDIA RTX 3080 of 10GB. The semi-supervised learning was performed in the 
+first setup, in distributed training. The supervised learning, on the other hand, 
+was performed in the second setup. 
+
+Considering different models, different setups and different 
+training methods, we introduce a custom metric, \emph{Biter}, that allows to 
+compare the results in all the experiments. The metric defines the number of 
+batches that the model has seen during training, therefore it is calculated as 
+the batch size multiplied by the number of iterations. This is a good metric 
+for comparing supervised and semi-supervised training because it is independent 
+from the number of labels used. This is important, considering that while Meta 
+Pseudo Labels iterates through the labelled dataset it also add new information 
+from the unlabelled dataset. Therefore, the number of epochs has a different 
+meaning in the two training methods.
+
+\subsubsection{Training Results}
+From the results in Table \ref{tab:dreyeve_training} it is possible to notice 
+that in supervised learning mode the model asymptotically increases the best 
+accuracy with the number of labels. This is expected, considering that the 
+model is able to generalize better with more information. However, the model 
+does not always increase the accuracy with the number of labels, as shown in 
+the case of MViT-1k and MViT-5k. This is probably due to the fact that adding 
+more labels does not always mean better generalization. In fact, some new labels 
+could just be already seen samples, contributing to unbalancing the dataset with 
+respect to the validation set. 
+
+For the supervised training, from 500 to 5,000 labels, Biters to reach the top
+accuracy increase exponentially, until 100,000 Biters for the last case, 
+due to the increasing size of the labelled set.
+However, with many more labels, the case with 40,000 labels, just 36,000 Biters 
+are required to reach the optimal training. This is probably due to the redundancy 
+of the labels that comes when substantially enlarging the dataset.
+
+
+The experiment with 40,000 labels was specifically design to understand the model 
+behavior with a large amount of labels. What we noticed is that the model 
+overfits the training set in all the cases except for the last one. This is 
+why we also decided to train the LViT model with 500 and 10,000 labels.
+In the former case, it is possible to notice that with more parameters the model 
+reaches better generalization with respect to the MViT model with the same number 
+of labels. In the latter case, the model still increases the best accuracy with 
+respect to both the MViT and LViT models with less labels. This implies that 
+increasing the model is beneficial also with few labels.
+
+Regarding the semi-supervised training with 500 labels, the model is able to 
+outperform all the supervised epxeriments up to 5,000 labels. This is a good 
+result, considering that the smaller model in semi-supervised learning performs 
+similarly to the larger model with 20 times more labels. This means that 
+unlabelled data carries a lot of information that can be used to improve the 
+generalization of the model.
+However, when training in semi-supervised learning mode, it is complicated 
+to understand when the model is overfitting the labelled set. This is because 
+training is done in two stages for each iteration, through the teacher and the 
+student. Therefore, for a range of Biters, the teacher is learning the training 
+set to better supervise the student. During the second phase, the student 
+starts learning from the "right" pseudo-labels, better performing the teacher 
+on validation data.
+This process takes many more Biters than the supervised learning, as it is 
+possible to notice in the last column of Table \ref{tab:dreyeve_training}.
+However, a validation accuracy of 0.77 is reached with just 180,000 Biters.
+
+\subsubsection{Models Description}
+The patch size is kept at 6 pixels, considering that the dataset is based on 
+images with a resolution of 300x300 pixels. This means that each image is 
+divided in 50x50 patches; this seems a good compromise to both have a general 
+overview of the scene and to have enough information to understand the details.
+
+
+\subsubsection{Possible Problems}
+We also made one last experiment in supervised learning, substantially reducing 
+the transformer's size. In this case, the model overfits quickly the training 
+set, in both cases with few and many labels, without reaching the same generalization of 
+the other cases. This strange behavior is probably due to the fact that the 
+model is not able to learn the complexities of the dataset with a smaller 
+number of parameters. The quick overfitting can be justified by easier, but 
+wrong, features extracted by the model.
+
+However, there is a potential problem in the training pipeline; the training 
+and validation sets are not related to completely different scenes. This means 
+that some frames of the same video can be in the training set and in the 
+validation set. Even though the frames are not the same, and videos were 
+downsampled at 4Hz, there still could be some information leakage between the 
+two sets. 
+
+These are a fundamental aspects to consider, and that is also why we 
+decided to move to BDD100k for the next experiments. Moreover, BDD100k is 
+definetly larger, with much unlabelled data that can be used for semi-supervised 
+training with Meta Pseudo Labels.
+
 \begin{sidewaystable}
     \centering
     \caption{Results of supervised and semi-supervised training of ViTs on Dr(eye)ve.}
+    \label{tab:dreyeve_training}
     \begin{tabular}{l*{6}{l}r}
         \hline
         \textbf{Mode} & \textbf{Model} & \textbf{Labels} & \textbf{Safe [\%]} & 
         \textbf{Dang.[\%]} & \textbf{top-acc.} & 
-        \begin{tabular}{@{}c@{}}\textbf{Biter.@} \\ \textbf{top-acc.}\end{tabular} &
-        \begin{tabular}{@{}c@{}}\textbf{max.} \\ \textbf{Biters.}\end{tabular}\\
+        \begin{tabular}{@{}c@{}}\textbf{Biters.@} \\ \textbf{top-acc.}\end{tabular} &
+        \begin{tabular}{@{}c@{}}\textbf{max.} \\ \textbf{Biters}\end{tabular}\\
         \hline
         \hline
         \multirow{7}{*}{Supervised} & 
@@ -431,7 +559,7 @@ Table \ref{tab:mde_metrics}.
         \cline{2-8}
         & MViT-5k & \num{5.0e3} & 51 & 49 & 0.697 & \num{1.0e5} & \num{2.2e5} \\
         \cline{2-8}
-        & MViT-40k & \num{4.0e4} & 83 & 17 & 0.819 & \num{3.6e4} & \num{2.0e6} \\
+        & MViT-40k & \num{4.0e4} & 83 & 17 & \textbf{0.819} & \num{3.6e4} & \num{2.0e6} \\
         \cline{2-8}
         & LViT-0.5k & \num{5.0e2} & 63 & 37 & \textbf{0.756} & \num{6.4e4} & \num{8.0e4} \\
         \cline{2-8}
@@ -442,6 +570,7 @@ Table \ref{tab:mde_metrics}.
         \end{tabular}\\
         \vspace{2.5cm}
         \caption{Definition of ViT models.}
+        \label{tab:models_dreyeve}
         \begin{tabular}{l*{6}{l}r}
             \hline
             \textbf{Hyperp.} & \textbf{MViT} & \textbf{LViT} \\
@@ -508,8 +637,7 @@ ROC curve of the trained model.
     \label{fig:bdd100k_distribution}
 \end{figure}
 
-\subsection{Supervised Training on BDD100k}
-\subsection{Semi-Supervised Training on BDD100k}
+\subsection{Training on BDD100k}
 
 \subsection{Experiments with GPT4-o}
 In May 2024, OpenAI released GPT4-o, their multilingual, multimodal generative 
