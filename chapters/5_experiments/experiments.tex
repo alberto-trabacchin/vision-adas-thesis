@@ -302,6 +302,7 @@ downtowns to highways, with different weather conditions, etc.
 We decided to use the NuScenes dataset \cite{nuscenes}, that provides both 
 LiDAR and camera data.
 
+\subsubsection{Evaluation on NuScenes}
 In Figure \ref{fig:mde} we show the results of the monocular depth estimation 
 for an entire scene of the NuScenes dataset. The left image is an heatmap of 
 the relative inverse depth estimated by MiDaS, and compared with the ground-truth 
@@ -346,6 +347,7 @@ less visible in the image, and the model is not able to estimate them correctly.
 Moreover, there are some close pointclouds that are estimated far from the ego-vehicle,
 and it adds a consistent error for the evaluation.
 
+\subsubsection{Relative Evaluation Metrics}
 Considering the problems to evaluate the accuracy of the model with respect to 
 the ground-truth data, we decided to report two error metrics: the root mean 
 squared error (RMSE) and the relative root mean squared error (RRMSE). 
