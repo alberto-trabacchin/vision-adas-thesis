@@ -516,6 +516,14 @@ images with a resolution of 300x300 pixels. This means that each image is
 divided in 50x50 patches; this seems a good compromise to both have a general 
 overview of the scene and to have enough information to understand the details.
 
+On the other hand, embedding size is increased from 64 to 1024, considering the 
+quantity of information to keep to represent the complexity of the dataset.
+The depth of the model is increased from 6 to 14, and the number of attention 
+heads is doubled. This is to let the model learn more complex and deep features, 
+with many relations between the patches. Finally, the size of the multi-layer
+perceptron is increased to 2048, to better match extracted features with 
+dangerous scenarios.
+
 
 \subsubsection{Possible Problems}
 We also made one last experiment in supervised learning, substantially reducing 
