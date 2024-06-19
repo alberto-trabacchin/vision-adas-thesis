@@ -104,7 +104,7 @@ compromising the quality of the data.
 It is also important to consider the distribution of recordings with respect to 
 time, weather and areas for each driver. In fact the Dr(eye)ve dataset is 
 composed of 8 different drivers, each one with a different driving style and 
-preferences. In Figure \ref{fig:plot1}, \ref{fig:plot2} and \ref{fig:plot3} we 
+preferences. In Figure \ref{fig:dreyeve_rec_distrib} we 
 show the mentioned plots. Data is enough equally distributed among the drivers, 
 with a slight preference for some of them. This means that the behavioral 
 information embedded in the dataset can generalize well.
@@ -128,21 +128,23 @@ information embedded in the dataset can generalize well.
 
 \begin{figure}[h]
     \centering
-    \begin{minipage}{0.5\textwidth}
+    \begin{minipage}{0.33\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/dreyeve/time_distrib.pdf}
-        \caption{Distribution of time.}
-        \label{fig:plot1}
     \end{minipage}\hfill
-    \begin{minipage}{0.5\textwidth}
+    \begin{minipage}{0.33\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/dreyeve/weather_distrib.pdf}
-        \caption{Distribution of weather.}
-        \label{fig:plot2}
-    \end{minipage}\hfill\\\vspace{0.5cm}
-    \includegraphics[width=0.5\textwidth]{images/dreyeve/area_distrib.pdf}
-    \caption{Distribution of areas.}
-    \label{fig:plot3}
+    \end{minipage}\hfill
+    \begin{minipage}{0.33\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/dreyeve/area_distrib.pdf}
+    \end{minipage}\hfill
+    \caption{Distribution of recordings in Dr(eye)ve dataset. 
+    \textbf{Left}: Distribution of recordings with respect to time.
+    \textbf{Center}: Distribution of recordings with respect to weather.
+    \textbf{Right}: Distribution of recordings with respect to driving areas.}
+    \label{fig:dreyeve_rec_distrib}
 \end{figure}
 
 \subsection{Gaze Interaction with Targets}
