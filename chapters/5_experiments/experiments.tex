@@ -388,13 +388,77 @@ trees, and other objects that are not directly on the road.
     \label{fig:mde}
 \end{figure}
 
+After having introduced the relative metric, the RRMSE, we evaluated the model 
+on other five scenes of the dataset. Results for camparing the metrics are reported in 
+Table \ref{tab:mde_metrics}.
+\begin{table}[h]
+    \vspace{0.3cm}
+    \centering
+    \begin{tabular}{c|c|c}
+    \hline
+    \textbf{Scene} & \textbf{RMSE} & \textbf{RRMSE} \\ \hline
+    Scene 1 & 58.36 & 1.09 \\ \hline
+    Scene 2 & 29.09 & 0.52 \\ \hline
+    Scene 3 & 26.50 & 0.53 \\ \hline
+    Scene 4 & 21.96 & 0.40 \\ \hline
+    Scene 5 & 24.54 & 0.99 \\ \hline
+    \end{tabular}
+    \caption{Evaluation of MiDaS on five scenes.}
+    \label{tab:mde_metrics}
+\end{table}
+
 
 
 \section {Deep Learning-based Approach}
-Sample text
-\subsection {Data Distribution of BDD100k}
 \subsection{Supervised Training on Dr(eye)ve}
 \subsection{Semi-Supervised Training on Dr(eye)ve}
+\subsection {Data Distribution of BDD100k}
+The BDD100k dataset contains a large variety of driving scenarios and objects.
+In Figure \ref{fig:bdd100k_distribution} we show the distribution of classes 
+in the training set. Because manual labels are only available for the frame at the 
+tenth second of each video, statistics regards only a smaller part of all data.
+However, the distribution is still representative, considering that it covers 
+all the scenes.
+As it is possible to see from the bar plots, the dataset is unbalanced, with 
+some classes that are more frequent than others. In particular, the most frequent 
+classes are \emph{car}, \emph{traffic sign}, \emph{traffic light} and 
+\emph{pedestrian}. This is expected, considering that the dataset is mainly 
+focused on downtown scenarios, where these objects are usually present. 
+However, the classification bias used for the Dr(eye)ve dataset is not valid 
+anymore: using the presence of cars or people in the scene to classify a scene 
+as dangerous would mean that at least 98\% of the dataset is dangerous. 
+In fact the number of frames containing at least one car is 68,943; but there are 
+also some frames containing one person (pedestrian, rider, etc.), without cars.
+The total number of frames in the training set is 70,000.
+
+This observation explains why we changed the bias towards only the presence of 
+people. Considering only pedestrians, riders and bicycles in the scene, we still 
+have an unbalanced dataset, but in the oppsite direction. In fact the number of 
+dangerous frames is 7,411, while the safe frames are 62,589. The dangerous and 
+safe ratios are, respectively 10.5\% and 89.5\% over the entire training set.
+This is a common distribution in anomaly detection tasks, and it is actually an 
+intrinsic characteristic of the problem to solve. In fact, a similar distribution 
+of classes is also present in the test set. That is why, instead of augmenting 
+the training set, we change the final classification threshold according to the 
+ROC curve of the trained model.
+
+\begin{figure}
+    \centering
+    \begin{minipage}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/bdd100k/object_counts.pdf}
+    \end{minipage}\hfill
+    \begin{minipage}{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/bdd100k/frame_counts.pdf}
+    \end{minipage}
+    \caption{Distribution of classes in the training set of the BDD100k dataset.
+    \textbf{Left}: Number of instances per class. 
+    \textbf{Right}: Number of frames containing each class.
+    }
+    \label{fig:bdd100k_distribution}
+\end{figure}
+
 \subsection{Supervised Training on BDD100k}
 \subsection{Semi-Supervised Training on BDD100k}
 
