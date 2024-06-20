@@ -148,6 +148,7 @@ the self-attention mechanism.
         \textbf{Params.} & \textbf{GFLOPS} & \textbf{Size [MB]} & 
         \textbf{Year} \\
         \hline
+        \hline
         AlexNet & 56.522 & 79.066 & 61.1M & 0.71 & 233.1 & 2012 \\
         \hline
         VGG11 & 69.020 & 88.628 & 132.9M & 7.61 & 506.8 & 2014 \\
@@ -250,11 +251,71 @@ converges.
 \section{\acl{vad}}
 \ac{vad} is a challenging task that aims to 
 identify patterns in data that do not conform to expected results. It is a 
-more general task, not only focused in driving tasks, but also used in 
+more general task, not only focused in driving scenarios, but also used in 
 medical imaging, surveillance systems, and industrial quality control.
 However, many of these techniques are cross-domain, meaning they can be applied and 
 adapted to various fields beyond their initial area of application.
 Generally, the two main aspects to focus on are the availability 
 of datasets and the development of effective models.
 
-\subsection{Existing \acl*{vad} (\ac*{vad}) Datasets}
+\subsection{Existing \ac{vad} Datasets}
+Considering the common techniques used in \ac{vad}, and the initial focus 
+on surveillance systems, many more datasets have been released in this field 
+compared to driving scenarios. Therefore, we divide the datasets into 
+two categories: surveillance and driving-related datasets.
+
+\subsubsection{Surveillance Datasets}
+Li et al. proposed UCSD Ped1/Ped2 \cite{anomaly_detection_crowded_scenes}, 
+a dataset of densely 
+crowded pedestrian walkways to detect abnormal movements and prohibited objects.
+In particular, "Ped1" is based on 70 scenes where peple are walking toward and 
+away from the camera.
+"Ped2" is composed of 28 scenes depicting pedestrians walking almost 
+horizontally to the camera.
+Another dataset is Avenue \cite{avenue}, a dataset of 15 sequences with 14 
+unusual events, such as throwing objects, running, and loitering, with a total 
+of 35,240 frames.
+Liu et al. proposed ShanghaiTech \cite{shanghaitech_dataset}, a dataset of 437 
+videos (330 
+for training and 107 for testing) with 130 abnormal events and a total of 
+13 different scenes related to walking pedestrians.
+Finally, the UCF-Crime dataset \cite{ucf_crime} is composed of 1900 videos 
+with 13 anomalies including robberies, accidents, and thefts.
+
+\subsubsection{Driving Datasets}
+Chan et al. introduced a new dataset with 678 dashcam accident videos taken from 
+the web \cite{anticip_accident_dashcam}; in each video, the last 10 frames are 
+labelled as anomalous.
+Yao et al. proposed AnAn Accident Detection (A3D)\cite{a3d}, which contains 1,500
+anomalous driving videos with the start and end frames' annotations. In total 
+the dataset contains, respctively, 79,991 and 128,175 training and testing frames.
+There are 1,500 anomaly events that include targets like cars, trucks, bikes, 
+pedestrians and animals.
+
+Considering the interaction of the driver's gaze towards the environment,
+there is Driver Attention Prediction in Driving Accident scenarios (DADA) 
+\cite{dada1}, \cite{dada2}, a dataset of 2,000 videos focused on the prediction 
+of the driver's gaze in accident scenarios. In total they collected 658,476 
+frames, each labelled as normal or anomalous. A similar work was proposed 
+by Palazzi et al. with DR(eye)VE \cite{dreyeve}, a dataset based on 74 
+videos, 8 drivers, over 500,000 frames, 6 total hours of driving in 
+downtowns, countrysides and highways. 
+They also provide data about driver's gaze location, through a pair of 
+eye-tracking glasses.
+
+Xia et al. created the BDD-A \cite{bdd_a} dataset, a subset of the Berkeley 
+DeepDrive dataset \cite{bdd100k} with 1,232 critical scenes and a total of 
+3.5 hours of driving. To create the dataset, they selected video clips that 
+both included braking events and took place in busy areas, and then included 
+6.5 seconds before and 3.5 seconds after the braking event.
+They also collected gaze data of 45 partecipants, who were asked to watch 
+the videos and press a button when they noticed an unsafe maneuver.
+
+
+\subsection{State-of-the-Art \ac{vad} Models}
+
+\subsubsection{Unsupervised Learning}
+
+\subsubsection{Semi-Supervised Learning}
+
+\subsubsection{Supervised Learning}
