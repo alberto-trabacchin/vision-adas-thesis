@@ -265,7 +265,7 @@ compared to driving scenarios. Therefore, we divide the datasets into
 two categories: surveillance and driving-related datasets.
 
 \subsubsection{Surveillance Datasets}
-Li et al. proposed UCSD Ped1/Ped2 \cite{anomaly_detection_crowded_scenes}, 
+Li et al. proposed UCSD Ped1/Ped2 \cite{ucsd}, 
 a dataset of densely 
 crowded pedestrian walkways to detect abnormal movements and prohibited objects.
 In particular, "Ped1" is based on 70 scenes where peple are walking toward and 
@@ -311,10 +311,50 @@ both included braking events and took place in busy areas, and then included
 They also collected gaze data of 45 partecipants, who were asked to watch 
 the videos and press a button when they noticed an unsafe maneuver.
 
+Finally, a recent dataset focused on detection of traffic accidents is DoTA 
+\cite{dota_dataset}. It contains 4,677 videos with temporal, spatial, and 
+categorical annotations. In total there are 9 different categories of accidents,
+including collision with other vehicles in different directions and out-of-control 
+situations. Moreover, they double the classes, splitting each category to 
+ego-involved and non-ego-involved accidents, resulting in 18 categories total.
 
 \subsection{State-of-the-Art \ac{vad} Models}
+\acl{vad} models for driving scenarios can be divide into three main categories, 
+depending on the available data and learning approach: 
+unsupervised, semi-supervised, and supervised mode.
+Typically, it is easy to collect unlabelled data through ego-vehicle-mounted 
+cameras or dashcams, while labelled data is much more difficult and expensive 
+to obtain. Moreover, the quality of the labels can be affected by human 
+subjectivity, age, and experience. Therefore, most of the research in this 
+field is focused on unsupervised and semi-supervised learning.
+
+Another imoprtant division is related to what features to extract: some models 
+consider a single frame to analyze, while others take a sequence through a 
+sliding time window. 
 
 \subsubsection{Unsupervised Learning}
+Hasan et al. \cite{hasan_convae} proposed a \ac{convae} model for reconstructing 
+some stacked frames. Then anomalies were identified by comparing the 
+reconstruction error. They fonud out that anomalies were better detected with 
+longer sequences. To process the sequence with a \ac{cnn}, they input the data 
+in a temporal cuboid format, converting RGB images to grayscale.
+
+Medel et al. \cite{medel_lstmconvae} and Luo et al. \cite{luo_lstmconvae}
+ used a spatio-temporal architecture, a 
+combination of a \ac{cnn} to extract spatial features for each frame and a 
+\ac{lstm} to capture temporal dependencies between all the features. 
+The model is also called \ac{convlstmae}.
+The end 
+goal is also to reconstruct a sequence of frames, and anomalies are detected 
+by comparing the reconstruction error. However, they tested the model on 
+surveillance datasets, including Avenue \cite{a3d} and UCSD \cite{ucsd}.
+
+Regarding driving scenarios, Yao et al. \cite{dota_dataset} introduced a 
+\emph{when-where-what} pipeline to detect, localize and recognize anomalous 
+events from their custom dataset (DoTA). For the reconstruction task in 
+unsupervised mode, they compare five different models described before: 
+\ac{convae} \cite{hasan_convae}, \ac{convlstmae} \cite{luo_lstmconvae}, 
+AnoPred \cite{shanghaitech_dataset}, TAD \cite{a3d}, 
 
 \subsubsection{Semi-Supervised Learning}
 
