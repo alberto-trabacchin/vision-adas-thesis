@@ -396,7 +396,7 @@ the single-head and multi-head self-attentions will be:
 \end{align*}
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.98\textwidth]{images/vit/multi_head_attention_scheme.png}
+    \includegraphics[width=\textwidth]{images/vit/multi_head_attention_scheme.png}
     \caption[Multi-head self-attention mechanism.]
     {Multi-head self-attention mechanism schematically represented with 
     the main blocks: patch embeddings, dimension reduction, attention heads, 
@@ -440,7 +440,152 @@ the Random Sample Consensus (RANSAC) \cite{ransac}, and the optimization
 algorithm to estimate the homography between two images.
 
 \subsection{Scale Invariant Feature Transform (SIFT)}
+The \ac{sift} algorithm is a method to detect and describe local features in 
+images. It was introduced by David Lowe in 2004 \cite{lowe_sift}, and it is 
+still used in computer vision tasks thanks to its robustness to changes in 
+illumination, rotation, and scale. However, being computationally expensive, 
+it is difficult to integrate it in real-time applications. Therefore other 
+versions of the algorithm have been developed, like \ac{surf} \cite{surf} and
+\ac{asift} \cite{asift}. These algorithms have also been implemented in 
+computer vision libraries, like OpenCV, to leverage the power of parallel 
+computing of GPUs.
 
-\subsection{Random Sample Consensus (RANSAC)}
+The \ac{sift} algorithm is based on the following steps: scale-space peak
+selection, keypoints detection, and assignment of descriptors to the keypoints.
+
+\subsubsection{Scale-Space Peak Selection}
+To make the algorithm robust and scale-invariant, the first step is to analyze 
+the image at different scales, applying a Gaussian filter with different 
+standard deviations. Given an image $I(x, y)$, the scale-space representation 
+is defined as: 
+\begin{equation}
+    L(x, y, \sigma) = G(x, y, \sigma) * I(x, y)
+    \label{eq:scale_space}
+\end{equation}
+where $G(x, y, \sigma)$ is the Gaussian kernel with standard deviation $\sigma$.
+The scale-space representation is computed for different values of $\sigma$, and 
+the process is repeated for different octaves of the image. An octave is 
+a set of images, each one with a resolution half of the previous one. The number 
+of images for each octave is not standard, and it depends on the resolution 
+of the original image.
+
+The scale-space representation is used to detect the local maxima and minima 
+of the difference of Gaussian (DoG) function. The DoG function is computed as 
+the difference between two consecutive images of the same octave (let's say 
+they have standard deviations $\sigma$ and $k\sigma$):
+\begin{equation}
+    D(x, y, \sigma) = L(x, y, k\sigma) - L(x, y, \sigma)
+    \label{eq:dog}
+\end{equation}
+The local maxima and minima of the DoG function are detected by comparing each 
+pixel with its eight neighbors in the same image and the nine neighbors in the 
+previous and next images (26 in total). If the pixel is a local maxima or minima, it is 
+considered a keypoint. To be a maxima or minima, the candidate pixel must be 
+greater or smaller than all the neighbors, respectively.
+
+\subsubsection{Keypoints Localization}
+The scale-space peak selection produces many keypoints, but not all of them are 
+stable under changes in illumination, rotation, and scale. Therefore, the 
+keypoints are filtered by applying the Taylor expansion to the DoG function 
+for each candidate keypoint. The Taylor expansion is used to estimate 
+the actual maxima or minima of the DoG function, approximated by the 
+second-order derivative of the function with respect to the selected keypoint.
+
+Considering the DoG function $D$ related to a keypoint, and an offset 
+along all the dimensions
+$\boldsymbol{x} = (dx, dy, d\sigma)^T$, 
+to find accurate location of the selected keypoint a second-order Taylor expansion 
+is computed as follows:
+\begin{equation}
+    D(\boldsymbol{x}) = D + \frac{\partial D}{\partial \boldsymbol{x}}^T \boldsymbol{x} + 
+    \frac{1}{2} \boldsymbol{x}^T \frac{\partial^2 D}{\partial \boldsymbol{x}^2} \boldsymbol{x}
+    \label{eq:taylor_expansion}
+\end{equation}
+Minima, or maxima, $\boldsymbol{\hat{x}}$ is detected by solving the equation:
+\begin{equation}
+    \boldsymbol{\hat{x}} = \arg \min_{\boldsymbol{x}} D(\boldsymbol{x})
+    = \arg \{ \nabla_{\boldsymbol{x}} D(\boldsymbol{x}) = \boldsymbol{0} \}
+\end{equation}
+
+Keypoints with low intensity are filtered out, depending on a threshold. Therefore, 
+the more accurate keypoint $\boldsymbol{\hat{x}}$ is discarded if:
+\begin{equation}
+    D(\boldsymbol{\hat{x}}) < \text{threshold}
+\label{eq:contrast_threshold}
+\end{equation}
+
+To remove the keypoints that are located on edges, on the other hand, the ratio 
+between the principal curvatures of the DoG function is computed. 
+If the ration is greater than a threshold, it means that there is a high variation 
+of intensity on one direction with respect to the other (typical of an edge). 
+Otherwise the keypoint corresponds to a corner and it is kept.
+Principal curvatures are given by the eigenvalues $\lambda_1$ and $\lambda_2$
+of the Hessian matrix of the 
+DoG function, and the ratio is computed as follows:
+
+\begin{equation}
+    \frac{\text{Tr}(H)^2}{\text{Det}(H)} = \frac{(r+1)^2}{r} < \text{threshold}
+    \qquad
+    \text{where:} \quad r = \frac{\lambda_1}{\lambda_2}
+    \label{eq:edge_threshold}
+\end{equation}
+It is possible to notice that the evaluation function in Equation 
+(\ref{eq:edge_threshold}) has a minimum when the two eigenvalues are equal, 
+and it grows when the ratio between the two eigenvalues increases.
+
+\subsubsection{Keypoint Orientation}
+To make the keypoints invariant to rotation of the image, the orientation with 
+respect to the neighbor pixels is computed. The orientation is computed through 
+two terms, the magnitude and the orientation of the gradient of the 
+correspondent DoG function:
+\begin{align*}
+    m(x, y) &= \sqrt{\left[D(x+1, y) - D(x-1, y)\right]^2 + \left[D(x, y+1) - D(x, y-1)\right]^2} \\
+    \theta(x, y) &= \arctan\left(\frac{D(x, y+1) - D(x, y-1)}{D(x+1, y) - D(x-1, y)}\right)
+\end{align*}
+The angle $\theta$ is computed in the range $[0, 2\pi]$, and it is quantized 
+in a histogram with 36 bins. The assigned orientation consists of the peak of 
+the histogram, and all the other peaks that are greater than 80\% of the maximum.
+
+\subsubsection{Keypoint Descriptor}
+After having assigned the orientation to the keypoints, the final step is to 
+assign a unique descriptor to each keypoint. 
+A grid of 16x16 pixels is considered around the keypoint, and it goruped into 
+4x4 macro-areas. For each macro-area, the gradient magnitude and orientation 
+are computed, and they are grouped into 8 bins. Therefore, the descriptor is 
+a 128-dimensional vector (4x4x8).
+
+To make the descriptor invariant to rotation, the orientation of the keypoint 
+is subtracted from each gradient orientation.
+Moreover, to make the descriptor invariant to illumination changes, each 
+magnitude is truncated to a maximum thrashold, and then normalized.
 
 \subsection{Homography Estimation}
+The homography is a transformation that maps points from a plane to another 
+plane. Therefore, all points that lie on a plane can be transformed through 
+a homography, considering to use the pinhole camera model.
+
+Considering two cameras with same intrinsic parameters, relative pose between 
+the two cameras is expressed by the transformation matrix $T$, defined as follows:
+\begin{equation*}
+    T_{12} = \begin{bmatrix}
+        R_{12} & t_{12} \\
+        0 & 1
+    \end{bmatrix}
+    \in \mathbb{R}^{4 \times 4}
+\end{equation*}
+where $R_{12}$ is the rotation matrix and $t_{12}$ is the translation vector 
+between the two cameras.
+Without loss of generality, the setup shown in Figure \ref{fig:homography_scheme}
+is described withour referring to a specific camera.
+Cameras have their own coordinate system $\{O, \hat{x}, \hat{y}, \hat{z}\}$,
+and all points lie on the same plane.
+Distance of a camera from the plane is $d$, and the 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/dreyeve/homography.png}
+    \vspace{0.2cm}
+    \caption[Homography scheme.]
+    {Homography between two images. The transformation matrix defines the 
+    relative pose between the two cameras. All points lie on the same plane.}
+    \label{fig:homography_scheme}
+\end{figure}
