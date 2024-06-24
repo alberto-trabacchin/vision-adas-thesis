@@ -559,6 +559,14 @@ is subtracted from each gradient orientation.
 Moreover, to make the descriptor invariant to illumination changes, each 
 magnitude is truncated to a maximum thrashold, and then normalized.
 
+\subsubsection{Matching Keypoints}
+To match similar keypoints in two different images, the Euclidean distance 
+between the descriptors can be computed. However, considering a descriptor, 
+there could be more than one similar match on the other image (i.e. the second 
+best match could be close to the best). To overcome this issue, the ratio between 
+the best and the second best match is computed. If the ratio is less than a 
+threshold, the match is considered valid.
+
 \subsection{Homography Estimation}
 The homography is a transformation that maps points from a plane to another 
 plane. Therefore, all points that lie on a plane can be transformed through 
