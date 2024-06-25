@@ -567,31 +567,49 @@ best match could be close to the best). To overcome this issue, the ratio betwee
 the best and the second best match is computed. If the ratio is less than a 
 threshold, the match is considered valid.
 
-\subsection{Homography Estimation}
-The homography is a transformation that maps points from a plane to another 
-plane. Therefore, all points that lie on a plane can be transformed through 
-a homography, considering to use the pinhole camera model.
+\subsection{Projective Transformation}
+A homography is the transformation between two planes under perspective projection.
+This means that a planar object in transformed by a homogeraphy into its image 
+sensor.
+However, the transformation can also be seen between two cameras, if all points 
+in the Euclidean space lie on the same plane.
 
-Considering two cameras with same intrinsic parameters, relative pose between 
-the two cameras is expressed by the transformation matrix $T$, defined as follows:
-\begin{equation*}
-    T_{12} = \begin{bmatrix}
-        R_{12} & t_{12} \\
-        0 & 1
+Considering a general point $P_i \in \mathbb{R}^{3}$ in the Euclidean space, 
+lying on a plane, and its correspondent projections on the two cameras' planes
+$\boldsymbol{p_i}, \boldsymbol{p_i'} \in \mathbb{R}^{2}$.
+Without focusing on a specific point, and without loss of generality, projection 
+can be described by the following equation:
+\begin{align}
+    \boldsymbol{\tilde{p}} &\sim \boldsymbol{H} \boldsymbol{\tilde{p}'} && \boldsymbol{H} \in \mathbb{R}^{3 \times 3}, 
+    \label{eq:homography}\\
+    & && \boldsymbol{\tilde{p}}, \boldsymbol{\tilde{p}'} \in \mathbb{P}^{2}\nonumber
+\end{align}
+where $\boldsymbol{\tilde{p}}$ and $\boldsymbol{\tilde{p}'}$ are homogeneous 
+coordinates of the points $\boldsymbol{p}$ and $\boldsymbol{p'}$ in the 2D
+projective space $\mathbb{P}^{2}$. It is worth to notice that $\boldsymbol{H}$ 
+is the homography matrix, and it is defined up to a scale factor. Therefore, to 
+fully define it, at least four correspondent points are required.
+Considering homogeneous coordinates of the points, Equation (\ref{eq:homography}) 
+can be rewritten as follows:
+\begin{equation}
+    \begin{bmatrix}
+        x \\
+        y \\
+        1
     \end{bmatrix}
-    \in \mathbb{R}^{4 \times 4},
-    \qquad
-    R_{12} \in \mathbb{R}^{3 \times 3},
-    \qquad
-    t_{12} \in \mathbb{R}^{3}
-\end{equation*}
-where $R_{12}$ is the rotation matrix and $t_{12}$ is the translation vector 
-between the two cameras.
-Without loss of generality, the setup shown in Figure \ref{fig:homography_scheme}
-is described withour referring to a specific camera.
-Cameras have their own coordinate system $\{O, \hat{x}, \hat{y}, \hat{z}\}$,
-and all points lie on the same plane.
-Distance of a camera from the plane is $d$, and the 
+    =
+    \begin{bmatrix}
+        h_{11} & h_{12} & h_{13} \\
+        h_{21} & h_{22} & h_{23} \\
+        h_{31} & h_{32} & h_{33} \\
+    \end{bmatrix}
+    \begin{bmatrix}
+        x' \\
+        y' \\
+        1
+    \end{bmatrix}
+    \label{eq:homography_matrix}
+\end{equation}
 \begin{figure}
     \centering
     \includegraphics[width=0.6\textwidth]{images/dreyeve/homography.png}
@@ -601,3 +619,71 @@ Distance of a camera from the plane is $d$, and the
     relative pose between the two cameras. All points lie on the same plane.}
     \label{fig:homography_scheme}
 \end{figure}
+
+\subsubsection{Homography Estimation}
+Given the $i$-th correspondance between two images, defined by the set 
+$\{(x_i, y_i), (x_i', y_i')\}$, constraints described in Equation \ref{eq:homography_matrix}
+are:
+\begin{align}
+&\begin{cases}
+    x_i' = h_{11} x_i + h_{12} y_i + h_{13} \\
+    y_i' = h_{21} x_i + h_{22} y_i + h_{23} \\
+    1 = h_{31} x_i + h_{32} y_i + h_{33}
+\end{cases}
+\qquad \Longleftrightarrow \nonumber\\[0.2cm]
+&\begin{cases}
+    x_i' \left(h_{31} x_i + h_{32} y_i + h_{33}\right) = h_{11} x_i + h_{12} y_i + h_{13} \\
+    y_i' \left(h_{31} x_i + h_{32} y_i + h_{33}\right) = h_{21} x_i + h_{22} y_i + h_{23}
+    \label{eq:homography_constraints}
+\end{cases}
+\end{align}
+In a matrix form, rearranging the terms to explicit terms of the homography matrix,
+Equation (\ref{eq:homography_constraints}) can be written as:
+\begin{equation}
+    \begin{bmatrix}
+        x_i & y_i & 1 & 0 & 0 & 0 & -x_i'x_i & -x_i'y_i \\
+        0 & 0 & 0 & x_i & y_i & 1 & -y_i'x_i & -y_i'y_i
+    \end{bmatrix}
+    \begin{bmatrix}
+        h_{11} \\
+        \vdots \\
+        h_{33}
+    \end{bmatrix}
+    =
+    \begin{bmatrix}
+        x_i' \\
+        y_i'
+    \end{bmatrix}
+    \label{eq:homography_matrix_constraints}
+\end{equation}
+Considering now a general case with $n$ correspondences the problem to solve 
+becomes in the form:
+\begin{equation}
+\begin{bmatrix}
+    x_1 & y_1 & 1 & 0 & 0 & 0 & -x_1'x_1 & -x_1'y_1 & -x_1'\\
+    0 & 0 & 0 & x_1 & y_1 & 1 & -y_1'x_1 & -y_1'y_1 & -y_1'\\
+    \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+    x_n & y_n & 1 & 0 & 0 & 0 & -x_n'x_n & -x_n'y_n & -x_n'\\
+    0 & 0 & 0 & x_n & y_n & 1 & -y_n'x_n & -y_n'y_n & -y_n'
+\end{bmatrix}
+\begin{bmatrix}
+    h_{11} \\
+    \vdots \\
+    h_{33}
+\end{bmatrix}
+=
+\boldsymbol{0}
+\label{eq:homography_matrix_constraints_general}
+\end{equation}
+Equation (\ref{eq:homography_matrix_constraints_general}) is in the form of 
+$\boldsymbol{Ah} = \boldsymbol{0}$, where $\boldsymbol{A} \in \mathbb{R}^{3x3}$
+and $\boldsymbol{h} \in \mathbb{R}^{9}$.
+When the number of correspondences is greater than 4, the system is overdetermined, 
+and the homography matrix can be estimated by solving the least squares problem:
+\begin{equation}
+    \boldsymbol{h}^* = \arg \min_{\boldsymbol{h}} \left\| \boldsymbol{Ah} \right\|
+    \quad
+    \text{such that }
+    \left\| \boldsymbol{h} \right\| = 1
+    \label{eq:homography_least_squares}
+\end{equation}
