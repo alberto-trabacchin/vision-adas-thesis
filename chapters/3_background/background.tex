@@ -574,6 +574,13 @@ sensor.
 However, the transformation can also be seen between two cameras, if all points 
 in the Euclidean space lie on the same plane.
 
+In Figure \ref{fig:homography_scheme} the homography transformation between two 
+camera planes is represented. Two cameras, with their own system of coordinates, 
+are pointing to the same plane. All points in the Euclidean space lie on the 
+same plane, and they are projected on the two cameras' planes. The homography 
+matrix $\boldsymbol{H}$ is the transformation of the projected points between 
+the two camera planes.
+
 Considering a general point $P_i \in \mathbb{R}^{3}$ in the Euclidean space, 
 lying on a plane, and its correspondent projections on the two cameras' planes
 $\boldsymbol{p_i}, \boldsymbol{p_i'} \in \mathbb{R}^{2}$.
@@ -615,8 +622,9 @@ can be rewritten as follows:
     \includegraphics[width=0.6\textwidth]{images/dreyeve/homography.png}
     \vspace{0.2cm}
     \caption[Homography scheme.]
-    {Homography between two images. The transformation matrix defines the 
-    relative pose between the two cameras. All points lie on the same plane.}
+    {Homography between two planes. The transformation matrix defines the 
+    projection between the camera planes. All points in the Euclidean space 
+    lie on the same plane.}
     \label{fig:homography_scheme}
 \end{figure}
 

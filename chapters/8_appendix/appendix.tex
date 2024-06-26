@@ -1,0 +1,63 @@
+\begin{appendices}
+    \chapter{Training Algorithms}
+    \begin{algorithm}
+        \nextfloat{\caption{Preprocessing of DR(eye)VE dataset}}
+        \vspace{0.2cm}
+        \DontPrintSemicolon
+        \textit{trainSet, valSet, testSet, ulSet} $\gets$ \textbf{Dreyeve}(\textit{splitIdxs, resolution, fps})\;
+        \textit{validator} $\gets$ \textbf{RetinaNet}(\,)\;
+        \For{\textit{set} $\gets$ \{\textit{trainSet, valSet, testSet}\}}{
+            \textit{labels} $\gets$ validator(\textit{set})\;
+            \textit{set.labels} $\gets$ \textit{labels}\;
+        }
+        \textbf{save} \textit{trainSet, valSet, testSet, ulSet}\;
+    \end{algorithm}
+    \begin{algorithm}
+        \nextfloat{\caption{Semi-supervised training with Meta-Pseudo Labels}}
+        \vspace{0.2cm}
+        \DontPrintSemicolon
+        \textit{trainSet, valSet, testSet, ulSet} $\gets$ \textbf{load} data\;
+        \textit{teacher} $\gets$ \textbf{ViT}(\textit{patch, depth, embedding, mlp, heads})\;
+        \textit{student} $\gets$ \textbf{ViT}(\textit{patch, depth, embedding, mlp, heads})\;
+        \While{$\text{training}$}{
+            \textit{pseudoLabels} $\gets$ \textit{teacher}(\textit{ulSet})\;
+            \text{train(\textit{student, ulSet, pseudoLabels})}\;
+            \text{train(\textit{student, trainSet})}\;
+            \text{train(\textit{teacher, trainSet})}\;
+            \textit{metrics} $\gets$ \text{validate(\textit{student, valSet})}\;
+            \text{validate(\textit{teacher, valSet})}\;
+            \If {$\textit{metrics.accuracy}$ \text{is increased}}{
+                \textbf{save} \textit{student}\;
+            }
+        }
+    \end{algorithm}
+    \begin{algorithm}
+        \nextfloat{\caption{Update training set with $N$ wrong predictions}}
+        \vspace{0.2cm}
+        \DontPrintSemicolon
+        \textit{trainSet} $\gets$ \textbf{load} \text{training set}\;
+        \textit{model} $\gets$ \textbf{load} \text{trained model}\;
+        \textit{validator} $\gets$ \textbf{RetinaNet}(\,)\;
+        \textit{S.count, S.max} $\gets$ $0, \,N/2$\;
+        \textit{D.count, D.max} $\gets$ $0, \,N/2$\;
+        \For{sample $\gets$ \textit{ulSet}}{
+            \If{(\textit{S.count = S.max}) \textbf{and} (\textit{D.count = D.max})}{
+                \textbf{break}\;
+            }
+            \textit{label} $\gets$ \textit{validator}(\textit{sample})\;
+            \textit{pred} $\gets$ \textit{model}(\textit{sample})\;
+            \If{\textit{pred} $=$ \textit{label}}{
+                \textbf{continue}\;
+            }
+            \If{(\textit{label=Safe}) \textbf{and} (\textit{S.count \textless S.max})}{
+                \textit{trainSet} $\gets$ (\textit{sample, label})\;
+                \textit{S.count} $\gets$ \textit{S.count} $+1$\;
+            }
+            \If{(\textit{label=Dangerous}) \textbf{and} (\textit{D.count \textless D.max})}{
+                \textit{trainSet} $\gets$ (\textit{sample, label})\;
+                \textit{D.count} $\gets$ \textit{D.count} $+1$\;
+            }
+        }
+        \textbf{save} \textit{trainSet}\;
+    \end{algorithm}
+\end{appendices}
