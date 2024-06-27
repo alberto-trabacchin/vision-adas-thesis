@@ -12,3 +12,4 @@ main.run.xml
 main.lot
 main.lof
 chapters/*/*.aux
+main.out
