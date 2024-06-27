@@ -54,7 +54,8 @@
 \addbibresource{bibliography/bibliography.bib}
 
 \usepackage{amsmath}
-\usepackage{acronym}
+% \usepackage{acronym}
+\usepackage{acro}
 \usepackage{xcolor}
 \usepackage[ruled]{algorithm2e}
 
@@ -65,31 +66,128 @@
 \color{black}}
 
 % list of acronyms
-\acrodef{adas}[ADAS]{Advanced Driver Assistance Systems}
-\acrodef{who}[WHO]{World Health Organization}
-\acrodef{cagr}[CAGR]{Compound Annual Growth Rate}
-\acrodef{oems}[OEMs]{Original Equipment Manufacturers}
-\acrodef{acc}[ACC]{Adaptive Cruise Control}
-\acrodef{lka}[LKA]{Lane Keeping Assistance}
-\acrodef{ldw}[LDW]{Lane Departure Warning}
-\acrodef{aeb}[AEB]{Automatic Emergency Braking}
-\acrodef{bsd}[BSD]{Blind Spot Detection}
-\acrodef{tsr}[TSR]{Traffic Sign Recognition}
-\acrodef{dms}[DMS]{Driver Monitoring System}
-\acrodef{mpl}[MPL]{Meta Pseudo Labels}
-\acrodef{vit}[ViT]{Vision Transformer}
-\acrodef{cnn}[CNN]{Convolutional Neural Network}
-\acrodef{rnn}[RNN]{Recurrent Neural Network}
-\acrodef{lstm}[LSTM]{Long Short-Term Memory}
-\acrodef{gru}[GRU]{Gated Recurrent Unit}
-\acrodef{mlp}[MLP]{Multi-Layer Perceptron}
-\acrodef{vad}[VAD]{Video Anomaly Detection}
-\acrodef{convae}[ConvAE]{Convolutional Autoencoder}
-\acrodef{convlstmae}[ConvLSTM-AE]{Convolutional LSTM Autoencoder}
-\acrodef{sift}[SIFT]{Scale-Invariant Feature Transform}
-\acrodef{ransac}[RANSAC]{Random Sample Consensus}
-\acrodef{asift}[ASIFT]{Affine Scale-Invariant Feature Transform}
-\acrodef{surf}[SURF]{Speeded-Up Robust Features}
+% \acrodef{adas}[ADAS]{Advanced Driver Assistance Systems}
+% \acrodef{who}[WHO]{World Health Organization}
+% \acrodef{cagr}[CAGR]{Compound Annual Growth Rate}
+% \acrodef{oems}[OEMs]{Original Equipment Manufacturers}
+% \acrodef{acc}[ACC]{Adaptive Cruise Control}
+% \acrodef{lka}[LKA]{Lane Keeping Assistance}
+% \acrodef{ldw}[LDW]{Lane Departure Warning}
+% \acrodef{aeb}[AEB]{Automatic Emergency Braking}
+% \acrodef{bsd}[BSD]{Blind Spot Detection}
+% \acrodef{tsr}[TSR]{Traffic Sign Recognition}
+% \acrodef{dms}[DMS]{Driver Monitoring System}
+% \acrodef{mpl}[MPL]{Meta Pseudo Labels}
+% \acrodef{vit}[ViT]{Vision Transformer}
+% \acrodef{cnn}[CNN]{Convolutional Neural Network}
+% \acrodef{rnn}[RNN]{Recurrent Neural Network}
+% \acrodef{lstm}[LSTM]{Long Short-Term Memory}
+% \acrodef{gru}[GRU]{Gated Recurrent Unit}
+% \acrodef{mlp}[MLP]{Multi-Layer Perceptron}
+% \acrodef{vad}[VAD]{Video Anomaly Detection}
+% \acrodef{convae}[ConvAE]{Convolutional Autoencoder}
+% \acrodef{convlstmae}[ConvLSTM-AE]{Convolutional LSTM Autoencoder}
+% \acrodef{sift}[SIFT]{Scale-Invariant Feature Transform}
+% \acrodef{ransac}[RANSAC]{Random Sample Consensus}
+% \acrodef{asift}[ASIFT]{Affine Scale-Invariant Feature Transform}
+% \acrodef{surf}[SURF]{Speeded-Up Robust Features}
+
+\DeclareAcronym{adas}{
+    short = ADAS,
+    long = Advanced Driver Assistance Systems
+}
+\DeclareAcronym{cagr}{
+    short = CAGR,
+    long = Compound Annual Growth Rate
+}
+\DeclareAcronym{oems}{
+    short = OEMs,
+    long = Original Equipment Manufacturers
+}
+\DeclareAcronym{acc}{
+    short = ACC,
+    long = Adaptive Cruise Control
+}
+\DeclareAcronym{lka}{
+    short = LKA,
+    long = Lane Keeping Assistance
+}
+\DeclareAcronym{ldw}{
+    short = LDW,
+    long = Lane Departure Warning
+}
+\DeclareAcronym{aeb}{
+    short = AEB,
+    long = Automatic Emergency Braking
+}
+\DeclareAcronym{bsd}{
+    short = BSD,
+    long = Blind Spot Detection
+}
+\DeclareAcronym{tsr}{
+    short = TSR,
+    long = Traffic Sign Recognition
+}
+\DeclareAcronym{dms}{
+    short = DMS,
+    long = Driver Monitoring System
+}
+\DeclareAcronym{mpl}{
+    short = MPL,
+    long = Meta Pseudo Labels
+}
+\DeclareAcronym{vit}{
+    short = ViT,
+    long = Vision Transformer
+}
+\DeclareAcronym{cnn}{
+    short = CNN,
+    long = Convolutional Neural Network
+}
+\DeclareAcronym{rnn}{
+    short = RNN,
+    long = Recurrent Neural Network
+}
+\DeclareAcronym{lstm}{
+    short = LSTM,
+    long = Long Short-Term Memory
+}
+\DeclareAcronym{gru}{
+    short = GRU,
+    long = Gated Recurrent Unit
+}
+\DeclareAcronym{mlp}{
+    short = MLP,
+    long = Multi-Layer Perceptron
+}
+\DeclareAcronym{vad}{
+    short = VAD,
+    long = Video Anomaly Detection
+}
+\DeclareAcronym{convae}{
+    short = ConvAE,
+    long = Convolutional Autoencoder
+}
+\DeclareAcronym{convlstmae}{
+    short = ConvLSTM-AE,
+    long = Convolutional LSTM Autoencoder
+}
+\DeclareAcronym{sift}{
+    short = SIFT,
+    long = Scale-Invariant Feature Transform
+}
+\DeclareAcronym{ransac}{
+    short = RANSAC,
+    long = Random Sample Consensus
+}
+\DeclareAcronym{asift}{
+    short = ASIFT,
+    long = Affine Scale-Invariant Feature Transform
+}
+\DeclareAcronym{surf}{
+    short = SURF,
+    long = Speeded-Up Robust Features
+}
 
 
 \begin{document}
@@ -105,6 +203,7 @@
 \tableofcontents
 \listoffigures
 \listoftables
+\printacronyms
 \include{chapters/1_introduction/introduction.tex}
 %
 \include{chapters/2_related_work/related_work.tex}
