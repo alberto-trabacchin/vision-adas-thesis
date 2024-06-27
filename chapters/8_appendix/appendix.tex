@@ -24,9 +24,9 @@
             \text{train(\textit{student, ulSet, pseudoLabels})}\;
             \text{train(\textit{student, trainSet})}\;
             \text{train(\textit{teacher, trainSet})}\;
-            \textit{metrics} $\gets$ \text{validate(\textit{student, valSet})}\;
-            \text{validate(\textit{teacher, valSet})}\;
-            \If {$\textit{metrics.accuracy}$ \text{is increased}}{
+            \textit{S.metrics} $\gets$ \text{validate(\textit{student, valSet})}\;
+            \textit{T.metrics} $\gets$ \text{validate(\textit{teacher, valSet})}\;
+            \If {$\textit{S.metrics.accuracy}$ \text{is increased}}{
                 \textbf{save} \textit{student}\;
             }
         }
@@ -50,12 +50,15 @@
                 \textbf{continue}\;
             }
             \If{(\textit{label=Safe}) \textbf{and} (\textit{S.count \textless S.max})}{
-                \textit{trainSet} $\gets$ (\textit{sample, label})\;
+                \textit{trainSet}.append(\textit{sample, label})\;
                 \textit{S.count} $\gets$ \textit{S.count} $+1$\;
             }
             \If{(\textit{label=Dangerous}) \textbf{and} (\textit{D.count \textless D.max})}{
-                \textit{trainSet} $\gets$ (\textit{sample, label})\;
+                \textit{trainSet}.append(\textit{sample, label})\;
                 \textit{D.count} $\gets$ \textit{D.count} $+1$\;
+            }
+            \If{\textbf{endof} \textit{ulSet}}{
+                \textbf{break}\;
             }
         }
         \textbf{save} \textit{trainSet}\;
