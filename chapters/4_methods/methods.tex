@@ -638,8 +638,8 @@ evaluate the model's performance. However, we also considered recall as an
 important metric to evaluate the model's ability to find all the relevant cases 
 within the dataset, even though it could lead to more false positives.
 
-\subsubsection{Receiver Operating Characteristic (ROC) Curve}
-The Receiver Operating Characteristic (ROC) curve is a crucial tool for 
+\subsubsection{\ac{roc} Curve}
+The Receiver Operating Characteristic (\ac{roc}) curve is a crucial tool for 
 evaluating binary classification models, particularly in scenarios like detecting 
 dangerous scenes in driving datasets, where the data is highly unbalanced. 
 The ROC curve plots the true positive rate (sensitivity) against the false positive 
@@ -685,3 +685,36 @@ function could be constructed such that the cost of missing a dangerous scene
 (false negative) is set higher than incorrectly identifying a scene as dangerous 
 (false positive). By minimizing this cost function across possible thresholds, 
 we can determine the most cost-effective operation point on the ROC curve.
+
+\subsubsection{\ac{mcc}}
+The Matthews Correlation Coefficient (\ac{mcc}) is a metric used to evaluate the 
+quality of binary classifications. It is especially useful in scenarios where 
+the dataset is unbalanced. The MCC takes into account true and false positives 
+and negatives and is generally regarded as a balanced measure that can be used 
+even if the classes are of very different sizes. 
+The coefficient returns a value between -1 and +1. An \ac{mcc} of +1 indicates a 
+perfect prediction, 0 indicates a random prediction, and -1 indicates total 
+disagreement between prediction and observation.
+The formula for \ac{mcc} is:
+\begin{equation*}
+    \text{MCC} = \frac{TP \times TN - FP \times FN}{\sqrt{(TP + FP)(TP + FN)(TN + FP)(TN + FN)}}
+\end{equation*}
+When any of the sums in the denominator is zero, the denominator can be 
+arbitrarily set to 1, leading to a \ac{mcc} of zero if both classes are absent 
+from the dataset.
+
+In unbalanced datasets, where the number of instances in each class is not equal, 
+common metrics like accuracy can be misleading. For example, in a dataset where 
+95\% of instances belong to one class, a model that always predicts the majority 
+class will have high accuracy but will perform poorly on the minority class. 
+The F1 score, which considers both precision and recall, improves on this by 
+focusing on the performance related to the minority class but still can be skewed 
+depending on the ratio of the classes.
+\ac{mcc}, on the other hand, provides a more comprehensive evaluation as it 
+considers all four confusion matrix categories, making it more reliable in 
+assessing the performance of classifiers on unbalanced datasets.
+
+Therefore, when evaluating the performance of supervised and semi-supervised 
+learning on BDD100K, we combine multiple metrics, including \ac{roc} curve, 
+\ac{auc}, F1-score and \ac{mcc}, to provide a comprehensive view of the model's 
+effectiveness in detecting dangerous driving scenarios.
