@@ -662,8 +662,30 @@ ROC curve of the trained model.
 \end{figure}
 
 \subsection{Training on BDD100k}
+In this section we show the results after training two standard vision transformers 
+on the BDD100k dataset.
 
-\subsection{Experiments with GPT4-o}
+\subsubsection{Training Setups}
+
+\subsubsection{Training Results}
+This is a test example.
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/bdd100k/training/cost.pdf}
+    \caption[Cost function with 100,000 unlabelled frames.]
+    {Cost function with 100,000 unlabelled frames.}
+    \label{fig:cost_100k_ul}
+\end{figure}
+\begin{equation}
+\centering
+\mathcal{C} = \frac{FP + 100 \, FN}{N}
+\end{equation}
+
+\subsubsection{Models Description}
+
+\subsubsection{Possible Problems}
+
+\subsection{Few-Shots Learning on GPT4-o}
 In May 2024, OpenAI released GPT4-o, their multilingual, multimodal generative 
 pre-trained transformer. Considering its powerful capability to describe general 
 contexts in wide scenes, we decided to test the architecture to solve a problem 
