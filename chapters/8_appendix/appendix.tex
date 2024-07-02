@@ -65,4 +65,68 @@
     \end{algorithm}
 
 \chapter{Probabilistic Perspective of \ac{roc}}
+In this appendix, we provide a more formal and detailedexplanation of the \ac{roc} curve 
+from a probabilistic perspective. It is fundamental to better interpret results on 
+unbalanced datasets and to understand the trade-off between \ac{tpr} and \ac{fpr}.
+We took inspiration from the work of David J. Hand \cite{roc_auc_probabilistic} 
+and adapted the explanation to our specific case.
+
+\section{Definitions}
+A trained model for binary classification can also be considered as a probabilistic 
+classifier that outputs a score $s(\boldsymbol{x}) = p(\text{class}=1\,|\,\boldsymbol{x})$,
+where $\boldsymbol{x}$ is the input data.
+Considering the set of classes $k = \{0, 1\}$, $f_k(s)$ is the \ac{pdf} of the 
+score $s$ for class $k$. Its \ac{cdf} is defined as $F_k(s)$.
+Therefore \ac{fpr} and \ac{tpr} can be defined as:
+\begin{align*}
+    \text{\ac{fpr}} &= 1 - F_0(s) = 1 - P(\boldsymbol{X_0} \leq s) = P(\boldsymbol{X_0} > s)\\
+    \text{\ac{tpr}} &= 1 - F_1(s) = 1 - P(\boldsymbol{X_1} \leq s) = P(\boldsymbol{X_1} > s)
+\end{align*}
+where $\boldsymbol{X_0}$ and $\boldsymbol{X_1}$ are random variables representing 
+the score $s$ for a random sample of class 0 and 1, respectively.
+For simplicity, \ac{fpr} and \ac{tpr} are respectively defined as $x(s)$, $y(s)$,
+and the decision threshold is $\tau$. Moreover, from the definition of \ac{roc} curve,
+we have $y(x(\tau)) = y(\tau)$.
+ Then we have:
+\begin{align*}
+    \ac{fpr} &= x(s) \\
+    \ac{tpr} &= y(s)
+\end{align*}
+
+\section{Derivation}
+Considering that the \ac{auc} is the area under the \ac{roc} curve, we can express 
+it as:
+\begin{align}
+    \text{\ac{auc}} &= \int_{0}^{1} y(x)dx \nonumber\\
+    &= \int_{0}^{1} y(x(\tau))dx(\tau) \nonumber
+\end{align}
+Changing the variable of integration from $x$ to $\tau$, and knowing that 
+$dx(\tau) = x'(\tau)d\tau$:
+\begin{align}
+    \text{\ac{auc}} &= \int_{+\infty}^{-\infty} y(\tau)x'(\tau)d\tau \nonumber\\
+    &= \int_{+\infty}^{-\infty} (1-F_1(\tau)) (-f_0(\tau)) d\tau \nonumber \\
+    &= \int_{-\infty}^{+\infty} (1 - F_1(\tau))f_0(\tau) d\tau 
+    \label{eq:auc1}\\
+    &= \int_{-\infty}^{+\infty} P(\boldsymbol{X_1} > \tau) P(\boldsymbol{X_0} = \tau) d\tau
+    \label{eq:auc2}
+\end{align}
+
+\section{Interpretation}
+From Equation \ref{eq:auc1}, we can interpret the \ac{auc} as the probability that 
+a randomly chosen positive sample has a higher score than a randomly chosen negative 
+sample. This is equivalent to multiplying the \ac{cdf} of the positive class by the 
+\ac{pdf} of the negative class and integrating over all possible values of the score.
+A more intuitive notation is also given in Equation \ref{eq:auc2}.
+
+Considering our problem of detecting dangerous events in driving scenes, the 
+\ac{auc} can be interpreted as the probability that a randomly chosen dangerous 
+case has a higher score than a randomly chosen safe case. In other words, the 
+probability that the model does not misclassify a dangerous event as safe. 
+This is a fundamental aspect to consider when evaluating the performance of 
+a model on unbalanced datasets. Moreover, we want to weight more false negatives 
+than false positives, as the consequences of missing a dangerous event are more 
+severe than misclassifying a safe event. Therefore, the \ac{auc} is a good metric 
+to evaluate the performance of a model in this context, defining dangerous events 
+as the positive class.
+
 \end{appendices}
