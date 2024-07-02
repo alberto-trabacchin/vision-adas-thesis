@@ -228,26 +228,6 @@ While this approach outperforms 3D CNNs in terms of effectiveness, it comes with
 increased computational costs for training. Additionally, it is required to 
 tune numerous hyperparameters.
 
-\section{Semi-Supervised Learning}
-Semi-supervised learning (SSL) is a category of machine learning techniques 
-that aims to train models using both labeled and unlabeled data. This approach 
-is particularly useful when labeled data is scarce and there is a consistent 
-amount of unlabeled data available.
-To keep the focus on the main topic of this work, we will overview only most 
-important self-trianing methods. On the other hand, Engelen et al. 
-\cite{ssl_survey} 
-provided an up-to-date overview of the field, proposing a complete 
-scheme for categorizing semi-supervised learning methods with a complete 
-taxonomy.
-
-Self-training is an effective semi-supervised learning method where a model is 
-trained to extend labels on unlabeled data, depending on the prior knowledge on 
-the labeled dataset. The basic idea is to train a model on the labeled dataset, 
-then use it to predict labels on the unlabeled dataset. The predicted labels with 
-high confidence are then added to the labeled dataset, and the model is retrained 
-on the extended dataset. This process is repeated iteratively until the model 
-converges.
-
 \section{\acl{vad}}
 \ac{vad} is a challenging task that aims to 
 identify patterns in data that do not conform to expected results. It is a 
@@ -256,7 +236,14 @@ medical imaging, surveillance systems, and industrial quality control.
 However, many of these techniques are cross-domain, meaning they can be applied and 
 adapted to various fields beyond their initial area of application.
 Generally, the two main aspects to focus on are the availability 
-of datasets and the development of effective models.
+of datasets and the development of effective models. In the following subsections
+we will list some of the most common datasets and models used in the field of 
+\ac{vad}. We also distinguish training methods, supervised, unsupervised and 
+semi-supervised, to accomplish different tasks.
+
+However, \ac{vad} is usually performed in an unsupervised mode due to the 
+scarcity of data. Therefore, when necessary, we will also include some works 
+related to \ac{var} that can be adapted to \ac{vad}.
 
 \subsection{Existing \ac{vad} Datasets}
 Considering the common techniques used in \ac{vad}, and the initial focus 
@@ -318,7 +305,7 @@ including collision with other vehicles in different directions and out-of-contr
 situations. Moreover, they double the classes, splitting each category to 
 ego-involved and non-ego-involved accidents, resulting in 18 categories total.
 
-\subsection{State-of-the-Art \ac{vad} Models}
+\subsection{State-of-the-Art \ac{vad} and \ac{var} Models}
 \acl{vad} models for driving scenarios can be divide into three main categories, 
 depending on the available data and learning approach: 
 unsupervised, semi-supervised, and supervised mode.
@@ -356,6 +343,44 @@ unsupervised mode, they compare five different models described before:
 \ac{convae} \cite{hasan_convae}, \ac{convlstmae} \cite{luo_lstmconvae}, 
 AnoPred \cite{shanghaitech_dataset}, TAD \cite{a3d}, 
 
-\subsubsection{Semi-Supervised Learning}
-
 \subsubsection{Supervised Learning}
+\ac{vad} problems can be addressed through supervised learning in different ways.
+On one hand, the model can be trained to make a binary classification (anomaly 
+or not), or to detect the specific type of anomaly. The approach depends on the 
+availability of data and the specific problem to solve.
+
+A 3D \ac{cnn} architecture was proposed by 
+\cites{tran_3dconvnet}{carreira_3dconvnet}{diba_3dconvnet},
+for capturing spatio-temporal
+features from video sequences. For the action recognition task, they added a 
+linear layer on top of the network.
+
+Gao et al. \cite{gao_lstm_encoder} used a \ac{lstm} encoder-decoder architecture 
+to predict future frames in a video sequence, like in the unsupervised 
+approach. However, they also added a classification layer to predict the 
+future action, depending on the ouptut predicted in the decoder stage.
+
+Finally, Arnab et al. \cite{vivit} proposed a pure-transformer based model for 
+video classification. The model is called ViViT and it is able to capture 
+spatio-temporal features without sequential stages.
+Also Huang et al. \cite{vivit} used the same architecture, better analyzing how 
+quality of data source, data preprocessing and augmentation affect the results.
+
+\subsubsection{Semi-Supervised Learning}
+Semi-supervised learning uses a small amount of labelled data and a large 
+quanitty of unlabelled samples. However, there are different approaches to 
+manipulate unsupervised data to improve the model's performance.
+
+Shou et al. \cite{shou_gan} trained a 3D \ac{cnn} to detect starting windows 
+of specific actions. Moreover, they used a \ac{gan} to generate new frames 
+that are difficult to distinguish and they do not correspond to starting actions.
+Those frames are called \emph{hard negatives} by the authors.
+
+Xu et al. \cite{xu_pl_var} used a pseudo-labelling method to improve video 
+action recognition with a 3D \ac{cnn}. They introduced an auxiliary lightweight 
+model in addition to the backbone, to predict pseudo-labels for each other.
+
+Zeng et al. \cite{zenc_enc_dec_ssl} used an unique encoder-decoder architecture 
+to reconstruct both labelled and unlabelled video sequences.
+Moreover, for labelled data, there is a classification layer to predict the 
+action label.
