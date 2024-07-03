@@ -111,7 +111,7 @@ Continental (radar sensors), Sony (image sensors), Texas Instruments (radar chip
 and ON Semiconductor (image sensors for automotive cameras).
 
 
-\subsection{Key Components of \ac{adas}}
+\subsection{Key Components of \acs{adas}}
 \ac{adas} systems are composed of several key components that work together to 
 enhance vehicle safety and driving experience. These components include sensors, 
 control units, actuators, human-machine interface, and connectivity.
@@ -169,7 +169,7 @@ communication, which is crucial for advanced safety features like collision
 avoidance and traffic management.
 
 
-\subsection{Common \ac{adas} Features}
+\subsection{Common \acs{adas} Features}
 ADAS systems offer a wide range of features that enhance vehicle safety, 
 comfort, and efficiency. Some of the most common ADAS features include: 
 \ac*{acc}, \ac*{ldw}, \ac*{bsd}, \ac*{aeb}, \ac*{tsr}, \ac*{dms}, parking assistance,
@@ -245,3 +245,60 @@ caused by driver fatigue or distraction.
 
 \section{Thesis Organization}
 \label{sec:organization}
+The remainder of this thesis is organized as follows: 
+\begin{itemize}
+    \item \textbf{Chapter \ref{chpt:related_work}} provides an overview of the 
+    state-of-the-art methods and models for object tracking, image and video 
+    classification. It discusses how model complexities and relative computational 
+    costs increased in the last decade, comparing their performance on benchmark 
+    datasets. It also compares available datasets containing driving scenarios 
+    for different tasks. Finally, it goes deep into existing model architectures 
+    and datasets for anomaly detection in driving scenarios, which is closely 
+    connected to our work.
+    \item \textbf{Chapter \ref{chpt:background}} presents main algorithms and 
+    architectures used for developing the project. It is mainly divided into 
+    two sections: traditional computer vision and deep learning-based techniques.
+    The former includes explanations of the SIFT algorithm \cite{lowe_sift} and 
+    estimation of the homography matrix. The latter includes the Meta Pseudo-Labels 
+    algorithm \cite{pham2021meta} and the vision transformer architecture \cite{vit},
+    with a focus on all stages involving the multi-head self-attention mechanism.
+    \item \textbf{Chapter \ref{chpt:methods}} describes all the methodologies 
+    and hypothesis for making the experiments; it is also divided in traditional 
+    computer vision and deep learning-based techniques.
+    The former includes a general scheme of the driver's attention model, 
+    a description of how data is structured and processed, a brief comparison of 
+    possible methodologies for estimating the depth, and an explanation of how 
+    introducing spatial information of scenes is beneficial.
+    The latter includes a general scheme for representing the task to be solved, 
+    the training pipeline for making experiments with the DR(eye)VE dataset, and 
+    data pre-processing for both DR(eye)VE \cite{dreyeve} and BDD100K 
+    \cite{bdd100k} datasets. 
+    \item \textbf{Chapter \ref{chpt:experiments}} shows results obtained from 
+    the experiments made with the traditional computer vision and deep learning 
+    approaches. For the former case, it includes projection of the gaze, 
+    data distribution of the DR(eye)VE dataset, interaction between the 
+    driver's gaze and vulnerable road users, accuracy of the monocular depth 
+    estimation of MiDaS \cite{midas}, and tracking errors with ByteTrack \cite{bytetrack}. 
+    It also discusses limitations of this method 
+    and motivations for moving to deep learning-based techniques.
+    For the latter case, there are experiments comparing supervised and 
+    semi-supervised learning on the DR(eye)VE and BDD100K dataset. There is also 
+    a further experiment of few-shots learning with the GPT-4o model on the 
+    BDD100K dataset, to demonstrate potential performances of pre-trained large 
+    models having the same architecture.
+
+    \item \textbf{Chapter \ref{chpt:conclusion}} concludes the thesis by summarizing 
+    the key contributions, discussing possible problems and limitations that 
+    affected the experiments, and outlining potential directions for future work.
+    There is also a consideration of how driver's gaze data can be combined with 
+    deep learning-based techniques to warn the driver about potential hazards, 
+    considering realtime constraints and the need for a reliable system.
+    \item \textbf{Appendix \ref{appendix:training_algorithms}} lists main custom 
+    algorithms used for the experiments, including data pre-processing and the 
+    training pipeline for updating the quantity of labelled samples in datasets.
+    \item \textbf{Appendix \ref{appendix:auc_probabilistic}} provides a more 
+    formal and detailed explanation of the \acs{auc}-\acs{roc} from a probabilistic
+    perspective. It is an helpful appendix to better interpret results on 
+    experiments with unbalanced datasets and to understand strenghts and 
+    limitations of available evaluation metrics.
+\end{itemize}
