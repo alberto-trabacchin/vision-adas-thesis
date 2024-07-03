@@ -518,15 +518,17 @@ to augment the training set is based on the model's predictions. In particular,
 we used the object detector as a \emph{validator} to correct wrong predictions.
 In summary, the training pipeline can be described in the following way:
 %
-\begin{enumerate}
-    \addtolength\itemsep{-2mm}
-    \item Prepare training, validation and test sets.
-    \item Train the model and stop when reaching maximum validation accuracy.
-    \item Pick new samples from the unlabeled set and predict the labels.
-    \item Use RetinaNet to determine ground-truth labels on the picked samples.
-    \item Update the training set with wrong samples.
-    \item Go to point 2.
-\end{enumerate}
+\begin{algorithm}
+    \nextfloat{\caption{Iterative training on the DR(eye)VE dataset}
+    \label{alg:train_pipeline_dreyeve}}
+    \vspace{0.2cm}
+    \DontPrintSemicolon
+    \text{Initialize training, validation and test sets} (\textbf{Algorithm \ref{alg:preprocessing}})\;
+    \While{True}{
+        \text{Train model in supervised or semi-supervised mode} (\textbf{Algorithm \ref{alg:pseudo_labelling}})\;
+        \text{Update training set with $N$ wrong predictions} (\textbf{Algorithm \ref{alg:dataset_update}})\;
+        }
+\end{algorithm}
 In particular, when increasing the training set, we compensate the unbalance 
 between dangerous and safe cases by picking the same number of wrong predictions 
 between the two classes. This is particularly useful to avoid the model to 

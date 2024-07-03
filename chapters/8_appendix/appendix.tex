@@ -1,7 +1,7 @@
 \begin{appendices}
     \chapter{Training Algorithms}
     \label{appendix:training_algorithms}
-    \section{Pre-processing of DR(eye)VE dataset}
+    \section{Pre-processing of the DR(eye)VE dataset}
     Algorithm \ref{alg:preprocessing} describes how the DR(eye)VE dataset is 
     pre-processed before training the model. The dataset is split into training, 
     validation, test, and unlabelled sets. The \textbf{Dreyeve} data structure 
@@ -13,7 +13,7 @@
     depending on the objects detected by the validator. Finally, all the sets are 
     saved to disk for further training.
     \begin{algorithm}
-        \nextfloat{\caption{Preprocessing of DR(eye)VE dataset}\label{alg:preprocessing}}
+        \nextfloat{\caption{Pre-processing of the DR(eye)VE dataset}\label{alg:preprocessing}}
         \vspace{0.2cm}
         \DontPrintSemicolon
         \textit{trainSet, valSet, testSet, ulSet} $\gets$ \textbf{Dreyeve}(\textit{splitIdxs, resolution, fps})\;
@@ -77,7 +77,7 @@
     the algorithm stops after iterating over the unlabelled set. Therefore, an 
     unbalanced quantity of new labels is added to the training set.
     \begin{algorithm}
-        \nextfloat{\caption{Update training set with $N$ wrong predictions}
+        \nextfloat{\caption{Update of training set with wrong predictions}
         \label{alg:dataset_update}}
         \vspace{0.2cm}
         \DontPrintSemicolon
