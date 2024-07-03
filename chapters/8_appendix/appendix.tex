@@ -1,8 +1,19 @@
 \begin{appendices}
     \chapter{Training Algorithms}
     \label{appendix:training_algorithms}
+    \section{Pre-processing of DR(eye)VE dataset}
+    Algorithm \ref{alg:preprocessing} describes how the DR(eye)VE dataset is 
+    pre-processed before training the model. The dataset is split into training, 
+    validation, test, and unlabelled sets. The \textbf{Dreyeve} data structure 
+    accepts the split indexes, resolution, and frames per second as input parameters, 
+    where split indexes are used to divide the dataset into the sets.
+
+    A validator model is used to label the training, validation, and test sets. 
+    The validator is a pre-trained \textbf{RetinaNet} model. Labels are generated 
+    depending on the objects detected by the validator. Finally, all the sets are 
+    saved to disk for further training.
     \begin{algorithm}
-        \nextfloat{\caption{Preprocessing of DR(eye)VE dataset}}
+        \nextfloat{\caption{Preprocessing of DR(eye)VE dataset}\label{alg:preprocessing}}
         \vspace{0.2cm}
         \DontPrintSemicolon
         \textit{trainSet, valSet, testSet, ulSet} $\gets$ \textbf{Dreyeve}(\textit{splitIdxs, resolution, fps})\;
@@ -13,8 +24,25 @@
         }
         \textbf{save} \textit{trainSet, valSet, testSet, ulSet}\;
     \end{algorithm}
+    \section{Pseudo-Labelling}
+    Algorithm \ref{alg:pseudo_labelling} describes the semi-supervised training 
+    with Meta-Pseudo Labels \cite{pham2021meta}.
+    Splits of the dataset are loaded, and two models are initialized: a teacher 
+    and a student. The models are based on a vision transformer architecture, 
+    represented by the \textbf{ViT} model. Most important hyperparameters that 
+    need to be defined are the patch size, depth of the model, embedding size, 
+    dimension of the multi-layer perceptron layer, and number of attention heads.
+
+    The training loop is executed until convergence of the validation accuracy 
+    of the student model. In each iteration, in order, the teacher generates 
+    pseudo-labels on the unlabelled set, and the student is trained with the 
+    pseudo-labels on the unlabelled set. Then, both the student and teacher 
+    are trained on the training set. The student model, that is supposed to 
+    perform better than the teacher, is saved if the validation accuracy is 
+    increased.
     \begin{algorithm}
-        \nextfloat{\caption{Semi-supervised training with Meta-Pseudo Labels}}
+        \nextfloat{\caption{Semi-supervised training with Meta-Pseudo Labels}
+        \label{alg:pseudo_labelling}}
         \vspace{0.2cm}
         \DontPrintSemicolon
         \textit{trainSet, valSet, testSet, ulSet} $\gets$ \textbf{load} data\;
@@ -32,8 +60,25 @@
             }
         }
     \end{algorithm}
+    \section{Correction with Wrong Predictions}
+    Algorithm \ref{alg:dataset_update} describes the process of updating the 
+    training set of DR(eye)VE to correct the model on the wrong predictions.
+    The training set and the trained model are loaded, and a validator model 
+    \textbf{RetinaNet} is initialized. 
+    
+    The algorithm iterates over the unlabelled 
+    set, and compares the predictions of the model with the labels provided by 
+    the validator. If the prediction is wrong, the sample is added to the training 
+    set and the respective counter is increased. The process is repeated until 
+    the maximum number of wrong predictions is reached for each class.
+
+    This process also helps to rebalance the dataset during training. 
+    However, if the there are not enough wrong predictions to update the dataset, 
+    the algorithm stops after iterating over the unlabelled set. Therefore, an 
+    unbalanced quantity of new labels is added to the training set.
     \begin{algorithm}
-        \nextfloat{\caption{Update training set with $N$ wrong predictions}}
+        \nextfloat{\caption{Update training set with $N$ wrong predictions}
+        \label{alg:dataset_update}}
         \vspace{0.2cm}
         \DontPrintSemicolon
         \textit{trainSet} $\gets$ \textbf{load} \text{training set}\;
@@ -65,7 +110,7 @@
         \textbf{save} \textit{trainSet}\;
     \end{algorithm}
 
-\chapter{Probabilistic Perspective of \ac{auc}}
+\chapter{Probabilistic Perspective of \acs{auc}}
 \label{appendix:auc_probabilistic}
 In this appendix, we provide a more formal and detailed explanation of the \ac{auc}-\ac{roc}
 from a probabilistic perspective. It is fundamental to better interpret results on 
