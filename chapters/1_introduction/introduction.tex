@@ -217,31 +217,43 @@ caused by driver fatigue or distraction.
 %
 \section{Focus of this work}
 \label{sec:focus}
-%
-% In the field of modern automotive technology, \ac{adas} are playing a keyrole at augmenting driver safety, comfort, and overall driving experience.
-% These systems, leveraging advancements in computer vision, sensor technologies, and artificial intelligence, are reshaping the automotive industry introducing semi-autonomous and autonomous driving capabilities.
+This thesis delves deep into the development of a computer vision-based system 
+to warn drivers about potential hazards on the road. The first part is more 
+focused on monitoring the driver's behavior and attention through its gaze, and 
+outside-world interactions with vulnerable road users. During this phase, 
+an initial scheme to analyze the driver's gaze and its interaction with the 
+environment is proposed. In particular, the model is based on extracting indirect 
+features from sensors, location of vulnerable users during the time, projection 
+of the driver's gaze to the scene, and estimation of the depth of the scene.
+However, we also highlight the limitations of this approach, mainly due to the 
+complexity of the task, and the unreliability of some algorithms used for 
+extracting features from the scene.
 
-% According to the \ac{who} road traffic injuries are among the leading causes of death worldwide, with an estimated 1.19 million fatalities annually.
-% With the aim of contributing to this transformative field, in this thesis various computer vision algorithms are implemented and evaluated, analyzing their strengths and weaknesses in addressing specific driving tasks.
-% From tracking of vulnerable users, such as pedestrians and cyclists, to the comprehension of dynamic driving environments, this research highlights advantages and limitations of each approach in real-world scenarios.
-% Further considerations are made on the trade-offs between complexity of the tasks and available data to train the models. 
+In the second part, we move to a deep learning-based approach to solve the 
+problem of detecting potential hazards on the road. The idea is to have a model 
+that can approximate human-like decision making adding some biases to the 
+training data.
+We focus on training a model 
+able to capture the spatial information of the scene, and to predict the presence 
+of anomalies in the driving environment. We also explore the possibility of 
+leveraging the large quantity of unlabelled data to increase the performance 
+of predictions through semi-supervised learning techniques.
+At the end, we also explore the potential of few-shots learning with large 
+pre-trained models, making some experiments with GPT-4o. This is to demonstrate 
+how the model's architecture is suitable for the required tasks with enough 
+prior knowledge. It is also interesting to see how the model can adapt to 
+the specific domain without changing its parameters and only thanks to the 
+attention mechanism.
 
-% By scrutinizing the performance of these algorithms in real-world scenarios and carefully assessing their respective advantages and limitations, this thesis aims to provide valuable insights into their applicability and efficacy within the domain of \ac{adas}. 
-% Through this rigorous evaluation process, a nuanced understanding of the suitability of different computer vision techniques for specific driving tasks is achieved, paving the way for informed decision-making and future advancements in automotive safety and technology.
+In the second part we also deeply discuss the training pipeline, which consists 
+of data selection and pre-processing, model architecture, and evaluation metrics.
+In particular, we analyze how common evaluation metrics can be misleading 
+when dealing with unbalanced datasets, and how \ac{roc} and \ac{auc} are 
+more reliable metrics for evaluating the performance of the model.
+Therefore, we also provide a training method to deal with this type of datasets,
+that are prevalent in the field of anomaly detection in driving scenarios.
 
-% In the pursuit of contributing to this transformative field, this thesis endeavors to explore and implement a computer vision-based approach for \ac{adas} systems. 
-% Specifically, the focus is on devising methodologies to enhance perception and decision-making capabilities within the realm of \ac{adas} through the lens of computer vision.
 
-% This thesis is divided into two main approaches, each addressing distinct facets of \ac{adas} functionality.
-% The first approach revolves around a traditional computer vision methodology, leveraging principles of multiple view geometry and object tracking. 
-% By harnessing the fundamentals of geometric and visual analysis, this approach aims to provide robust and reliable solutions for tasks such as lane detection, object recognition, and tracking within the \ac{adas} framework.
-
-% The second approach represents a departure from conventional techniques, delving into the realm of deep learning and vision transformers. 
-% Here, the emphasis shifts towards a more generalized approach to video-frame classification, leveraging the power of deep neural networks and semi-supervised learning techniques. 
-% By harnessing the capacity of vision transformers to capture intricate spatial and temporal features from raw video data, this approach seeks to push the boundaries of \ac{adas} capabilities, particularly in scenarios involving complex and dynamic environments.
-
-% Through the amalgamation of these two distinct approaches, this thesis endeavors to contribute to the ongoing evolution of \ac{adas} systems, striving towards the realization of safer, more efficient, and ultimately autonomous driving experiences. 
-% By exploring the synergy between traditional computer vision methodologies and cutting-edge deep learning techniques, this work aims to unlock new directions for innovation and advancement within the realm of automotive technology.
 
 \section{Thesis Organization}
 \label{sec:organization}
