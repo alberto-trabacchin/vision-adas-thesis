@@ -592,8 +592,8 @@ training with Meta Pseudo Labels.
         \hline
         \end{tabular}\\
         \vspace{2.5cm}
-        \caption[Definition of ViT models for training on the Dr(eye)ve dataset.]
-        {Definition of ViT models.}
+        \caption[ViTs details for the training on DR(eye)VE.]
+        {ViTs details for the training on DR(eye)VE.}
         \label{tab:models_dreyeve}
         \begin{tabular}{l*{6}{l}r}
             \hline
@@ -664,25 +664,114 @@ ROC curve of the trained model.
 
 \subsection{Training on BDD100k}
 In this section we show the results after training two standard vision transformers 
-on the BDD100k dataset.
+on the BDD100k dataset. The models, ViT-B/32 and ViT-L/32, are standard and 
+also used for classification tasks in common benchmark datasets.
+Hyperparameters' details are reported in Table \ref{tab:training_results}.
+The comparison was made to understand how models with different complexities 
+perform on the BDD-100K dataset in supervised and semi-supervised learning mode.
+After each epoch, the model is evaluated on the validation set, and the model 
+is saved if the validation loss is the lowest reached until that epoch.
+
+Due to the complexity of the dataset, we reduced the learning rate to $\num{1e-6}$,
+with a cosine scheduler that reduces the learning rate to $\num{1e-7}$ in 100 
+epochs. We noticed that using a larger learning rate, as in the DR(eye)VE 
+dataset, the model tends to find a local minimum without reducing the training 
+loss to zero. 
+\begin{table}[h]
+    \vspace{0.5cm}
+    \centering
+    \begin{tabular}{lll}
+    \hline
+    \textbf{Hyperpar.} & \textbf{ViT-B/32} & \textbf{ViT-L/32} \\
+    \hline
+    Patch size & 32 & 32 \\
+    \hline
+    Emb.size & 768 & 1024 \\
+    \hline
+    Depth & 12 & 24 \\
+    \hline
+    Heads & 12 & 16 \\
+    \hline
+    MLP size & 3072 & 4096 \\
+    \hline
+    \end{tabular}
+    \caption{ViTs details for the training on BDD-100K.}
+    \label{tab:training_results}
+\end{table}
 
 \subsubsection{Training Setups}
+The training was performed on two different setups, as for the DR(eye)VE dataset.
+In the first case, we used two NVIDIA Tesla A100 of 40GB each, and in the second 
+case we used one NVIDIA RTX 3080 of 10GB. The first setup was used for the larger 
+model, ViT-L/32, in semi-supervised and supervised learning. On the other hand, 
+the second setup was used for the smaller model, ViT-B/32, also in semi-supervised 
+and supervised learning mode.
+
+This decision helps to maximize the usage of the resources, considering that 
+a slower CPU with many cores is used for the first setup, and a faster CPU with
+the second setup. In this way, there is no bottleneck for loading and unloading 
+data from the disk to the GPU, and training is faster.
 
 \subsubsection{Training Results}
-This is a test example.
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.75\textwidth]{images/bdd100k/training/cost.pdf}
-    \caption[Cost function with 100,000 unlabelled frames.]
-    {Cost function with 100,000 unlabelled frames.}
-    \label{fig:cost_100k_ul}
-\end{figure}
+After training the models in supervised and semi-supervised mode, we evaluated 
+quality of predictions through the ROC curve. However, the operation point in 
+the ROC curve is not uniquely determined. Therefore, we decided to define a 
+custom cost function that takes into account false positives and false negatives 
+in the predictions. In particular, it weights hundred times more the false 
+negatives than the false positives. This is because it is more important that 
+the model does not miss actual dangerous frames, even though this implies an 
+increase of false positives. The cost function is defined in Equation 
+\ref{eq:cost_100k}.
 \begin{equation}
-\centering
-\mathcal{C} = \frac{FP + 100 \, FN}{N}
+    \centering
+    \mathcal{C} = \frac{FP + 100 \, FN}{N}
+    \label{eq:cost_100k}
 \end{equation}
 
-\subsubsection{Models Description}
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{images/bdd100k/training/ViT-B32/roc-auc.pdf}
+\caption[ROC curve of ViT-B/32 on the BDD-100K dataset]
+{ROC curve of ViT-B/32 on the BDD-100K dataset. There is a slight improvement 
+for FPR values lower than 0.2. Yellow area represents constraints on the working 
+points, considering FPR values lower than 0.4, to avoid having too many false 
+positives.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{images/bdd100k/training/ViT-L32/roc-auc.pdf}
+    \caption[ROC curve of ViT-L/32 on the BDD-100K dataset.]
+    {ROC curve of ViT-L/32 on BDD100k dataset. The model trained in supervised 
+    mode always underperforms the semi-supervised model.
+    The yellow area represents constraints on the working points, considering 
+    FPR values lower than 0.4, to avoid having too many false positives.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/bdd100k/training/mcc_comp.pdf}
+    \caption{MCC comparison between ViT-B/32 and ViT-L/32.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/bdd100k/training/confusion-matrix_comp.pdf}
+    \caption{Confusion matrices at maximum MCC for ViT-B/32 and ViT-L/32.}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/bdd100k/training/cost.pdf}
+    \caption{Cost comparison between ViT-B/32 and ViT-L/32.}
+    \label{fig:cost_100k_ul}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/bdd100k/training/confusion-matrix_min_cost.pdf}
+    \caption{Confusion matrices at minimum cost for ViT-B/32 and ViT-L/32.}
+\end{figure}
 
 \subsubsection{Possible Problems}
 
@@ -704,7 +793,7 @@ in which group it belongs.
 Other experiments in the two groups were done, including asking the model which 
 common targets are present in each group.
 
-\subsubsection{Data Selections}
+\subsubsection{Data Selection}
 \setlength{\subfigwidth}{45mm}
 \setlength{\horspace}{.3\textwidth}
 \begin{figure}
