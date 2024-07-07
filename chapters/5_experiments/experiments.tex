@@ -714,7 +714,12 @@ data from the disk to the GPU, and training is faster.
 
 \subsubsection{Training Results}
 After training the models in supervised and semi-supervised mode, we evaluated 
-quality of predictions through the ROC curve. However, the operation point in 
+quality of predictions through the ROC curve. 
+In Figure \ref{fig:roc_vitb32} and Figure \ref{fig:roc_vitl32} we show, respectively, 
+the ROC curve of ViT-B/32 and ViT-L/32 on the BDD-100K dataset. 
+
+
+However, the operation point in 
 the ROC curve is not uniquely determined. Therefore, we decided to define a 
 custom cost function that takes into account false positives and false negatives 
 in the predictions. In particular, it weights hundred times more the false 
@@ -736,6 +741,7 @@ increase of false positives. The cost function is defined in Equation
 for FPR values lower than 0.2. Yellow area represents constraints on the working 
 points, considering FPR values lower than 0.4, to avoid having too many false 
 positives.}
+\label{fig:roc_vitb32}
 \end{figure}
 
 \begin{figure}
@@ -746,31 +752,35 @@ positives.}
     mode always underperforms the semi-supervised model.
     The yellow area represents constraints on the working points, considering 
     FPR values lower than 0.4, to avoid having too many false positives.}
+    \label{fig:roc_vitl32}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.8\textwidth]{images/bdd100k/training/mcc_comp.pdf}
     \caption{MCC comparison between ViT-B/32 and ViT-L/32.}
+    \label{fig:mcc}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.75\textwidth]{images/bdd100k/training/confusion-matrix_comp.pdf}
     \caption{Confusion matrices at maximum MCC for ViT-B/32 and ViT-L/32.}
+    \label{fig:confusion_matrix_max_mcc}
 \end{figure}
 
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\textwidth]{images/bdd100k/training/cost.pdf}
     \caption{Cost comparison between ViT-B/32 and ViT-L/32.}
-    \label{fig:cost_100k_ul}
+    \label{fig:cost_roc}
 \end{figure}
 
 \begin{figure}
     \centering
     \includegraphics[width=0.75\textwidth]{images/bdd100k/training/confusion-matrix_min_cost.pdf}
     \caption{Confusion matrices at minimum cost for ViT-B/32 and ViT-L/32.}
+    \label{fig:confusion_matrix_min_cost}
 \end{figure}
 
 \subsubsection{Possible Problems}
