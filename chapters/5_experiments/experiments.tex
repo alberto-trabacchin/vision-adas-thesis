@@ -937,72 +937,55 @@ in which group it belongs.
 
 Other experiments in the two groups were done, including asking the model which 
 common targets are present in each group.
-
-\subsubsection{Data Selection}
-\setlength{\subfigwidth}{45mm}
-\setlength{\horspace}{.3\textwidth}
+\newlength{\subfigurewidth}
+\setlength{\subfigurewidth}{4cm}
+\newlength{\subfigurehspacing}
+\newlength{\subfigurevspacing}
+\setlength{\subfigurevspacing}{0.2cm}
+\setlength{\subfigurehspacing}{0.05cm}
 \begin{figure}
     \centering
-    \begin{tabular}{p{\horspace} p{\horspace} p{\horspace}}
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/s1.jpg}
-    \end{subfigure}
-    \hfill &
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/s2.jpg}
-    \end{subfigure} 
-    \hfill &
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/s3.jpg}
-    \end{subfigure} \\
-    %
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/s4.jpg}
-    \end{subfigure}
-    \hfill &
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/s5.jpg}
-    \end{subfigure} 
-    \hfill &
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/s6.jpg}
-    \end{subfigure}
-\end{tabular}
-\caption[Group of safe images for common features' extraction.]
-{Group of safe images, there are no people in all the images.}
-\label{fig:safe_group}
+    % First row
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/s1.jpg}}
+    \hspace{\subfigurehspacing}
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/s2.jpg}}
+    \hspace{\subfigurehspacing}
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/s3.jpg}} 
+    \\
+    \vspace{\subfigurevspacing}
+    % Second row
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/s4.jpg}}
+    \hspace{\subfigurehspacing}
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/s5.jpg}}
+    \hspace{\subfigurehspacing}
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/s6.jpg}}
+    \vspace{0.1cm}
+    \caption[Group of safe images for the features extraction task]
+    {Group of safe images for the features extraction task. There are no 
+    people in all the images.}
+    \label{fig:safe_group}
 \end{figure}
-%
 \begin{figure}
     \centering
-    \begin{tabular}{p{\horspace} p{\horspace} p{\horspace}}
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/d1.jpg}
-    \end{subfigure}
-    \hfill &
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/d2.jpg}
-    \end{subfigure} 
-    \hfill &
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/d3.jpg}
-    \end{subfigure} \\
-    %
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/d4.jpg}
-    \end{subfigure}
-    \hfill &
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/d5.jpg}
-    \end{subfigure} 
-    \hfill &
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/d6.jpg}
-    \end{subfigure}
-\end{tabular}
-\caption[Group of dangerous images for common features' extraction.]
-{Group of dangerous images, there are some people in each image.}
-\label{fig:dangerous_group}
+    % First row
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/d1.jpg}}
+    \hspace{\subfigurehspacing}
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/d2.jpg}}
+    \hspace{\subfigurehspacing}
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/d3.jpg}} 
+    \\
+    \vspace{\subfigurevspacing}
+    % Second row
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/d4.jpg}}
+    \hspace{\subfigurehspacing}
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/d5.jpg}}
+    \hspace{\subfigurehspacing}
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/d6.jpg}}
+    \vspace{0.1cm}
+    \caption[Group of dangerous images for the features extraction task]
+    {Group of dangerous images for the features extraction task. 
+    There is at least one person in each image.}
+    \label{fig:dangerous_group}
 \end{figure}
 The first group of images is shown in Figure \ref{fig:safe_group}. It consists 
 of six images that do not contain any person. In particular, in the first image 
@@ -1080,62 +1063,50 @@ for specific tasks, like driving scenarios, with much less parameters, could
 still lead to good results.
 
 \subsubsection{Grouping and Classification}
-\setlength{\subfigwidth}{45mm}
-\setlength{\horspace}{.3\textwidth}
+\setlength{\subfigurewidth}{4.5cm}
+\setlength{\subfigurevspacing}{0.2cm}
+\setlength{\subfigurehspacing}{0.05cm}
 \begin{figure}
     \centering
-    \begin{tabular}{p{\horspace} p{\horspace}}
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/s1.jpg}
-    \end{subfigure}
-    \hfill &
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/s2.jpg}
-    \end{subfigure} \\
-    %
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/s3.jpg}
-    \end{subfigure}
-    \hfill &
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/s5.jpg}
-    \end{subfigure}
-\end{tabular}
-\caption[Group of safe images for image classification.]
-{Group of safe images, there are no people in all the images.}
-\label{fig:sub_dangerous_group}
+    % First row
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/s1.jpg}}
+    \hspace{\subfigurehspacing}
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/s2.jpg}}
+    \\
+    \vspace{\subfigurevspacing}
+    % Second row
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/s3.jpg}}
+    \hspace{\subfigurehspacing}
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/s5.jpg}}
+    \vspace{0.1cm}
+    \caption[Group of safe images for The classification task]
+    {Group of safe images for The classification task. There are no people in all the images.}
+    \label{fig:sub_dangerous_group}
 \end{figure}
-%
 \begin{figure}
     \centering
-    \begin{tabular}{p{\horspace} p{\horspace}}
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/d2.jpg}
-    \end{subfigure}
-    \hfill &
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/d5.jpg}
-    \end{subfigure} \\
-    %
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/d7.jpg}
-    \end{subfigure}
-    \hfill &
-    \begin{subfigure}[b]{\subfigwidth}
-        \includegraphics[width=\subfigwidth]{images/gpt4/d6.jpg}
-    \end{subfigure}
-\end{tabular}
-\caption[Group of dangerous images for image classification.]
-{Group of dangerous images, there are some people in each image.}
-\label{fig:sub_safe_group}
+    % First row
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/d2.jpg}}
+    \hspace{\subfigurehspacing}
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/d5.jpg}}
+    \\
+    \vspace{\subfigurevspacing}
+    % Second row
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/d7.jpg}}
+    \hspace{\subfigurehspacing}
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/d6.jpg}}
+    \vspace{0.1cm}
+    \caption[Group of dangerous images for the classification task]
+    {Group of dangerous images for the classification task. There is at least one
+    person in each image.}
+    \label{fig:sub_safe_group}
 \end{figure}
 \begin{figure}
-\centering
-\includegraphics[width=\subfigwidth]{images/gpt4/d1.jpg}
-\caption[Test image]{Classification test image.}
-\label{fig:test_image}
+    \centering
+    \tcbox[myimagebox]{\includegraphics[width=\subfigurewidth]{images/gpt4/d1.jpg}}
+    \caption[Test image]{Test image for the classification task.}
+    \label{fig:test_image}
 \end{figure}
-
 In this experiment we only showed the model the two groups of images, without 
 asking to extract common targets. Then we show a new image and ask the model 
 to classify it in the right group. The question-answer pairs are shown below:
