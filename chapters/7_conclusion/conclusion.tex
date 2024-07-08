@@ -1,8 +1,49 @@
 \chapter{Conclusions}
 \label{chpt:conclusion}
 
+In this thesis we studied and discussed different approaches that are suitable 
+for the scene understanding task in driving scenarios. 
+We started by discussing how traditional 
+computer vision-based approaches can be used, with a driver-attention model to 
+combine the main perception algorithms, but also how they poorly perform in complex 
+driving scenarios.
+We then discussed how deep learning-based approaches can be considered a more 
+robust solution, and how they can be used to fit human-decision biases.
+However, the solution we developed is not optimal; there are many improvements 
+that can be made, considering all the problems we faced during the development.
+
+Therefore, we conclude the thesis with three sections: the first one 
+summarizes the main points of experiments based on the traditional computer 
+vision-based approach, the second one highlights important aspects for 
+the deep learning-based approach. Finally, the last section discusses 
+possible future work and improvements that can be made to the solution 
+developed in this thesis. It also considers how the two methods can be 
+combined, integrating the driver-attention state with the outside-world 
+attention map.
+
 \section{Traditional Computer Vision-based Approach}
+Within the traditional computer vision-based approach, we have seen that 
+homography is a robust method to project driver's gaze on the roof top camera 
+to have a better view of the scene. However, estimating the homography matrix 
+requires high computational power, and it is not always accurate when 
+environmental conditions are not optimal.
+
+We showed that using specific states of observation and detection can help to 
+analyze the interaction between the driver and vulnerable road users. However, 
+many parts of the proposed model generate some noise that affects the results. 
+In fact, we found that the tracking algorithm based on ByteTrack \cite{bytetrack}
+is not always accurate, leading to tracking mismatches and loss of information.
+
+Finally, we compared monocular depth estimation provided by the MiDaS model 
+\cite{midas} with the ground truth depth map provided by LiDAR sensors on the 
+NuScenes dataset \cite{nuscenes}. We found that the model is not accurate, 
+especially for mid-long range distances, and it is not suitable for the 
+proposed driver-attention model. This is probably because the model is trained 
+on large general datasets, and it is not fine-tuned for specific tasks.
+The same problem is found in the object detection model, YOLOv8 \cite{yolo}, that 
+could be fine-tuned for detecting vulnerable users on driving datasets.
 
 \section{Deep Learning-based Approach}
+
 
 \section{Future Work}
