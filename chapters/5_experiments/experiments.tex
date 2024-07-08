@@ -310,7 +310,7 @@ downtowns to highways, with different weather conditions, etc.
 We decided to use the NuScenes dataset \cite{nuscenes}, that provides both 
 LiDAR and camera data.
 
-\subsubsection{Evaluation on NuScenes}
+\subsubsection*{Evaluation on NuScenes}
 In Figure \ref{fig:mde} we show the results of the monocular depth estimation 
 for an entire scene of the NuScenes dataset. The left image is an heatmap of 
 the relative inverse depth estimated by MiDaS, and compared with the ground-truth 
@@ -355,7 +355,7 @@ less visible in the image, and the model is not able to estimate them correctly.
 Moreover, there are some close pointclouds that are estimated far from the ego-vehicle,
 and it adds a consistent error for the evaluation.
 
-\subsubsection{Relative Evaluation Metrics}
+\subsubsection*{Relative Evaluation Metrics}
 Considering the problems to evaluate the accuracy of the model with respect to 
 the ground-truth data, we decided to report two error metrics: the root mean 
 squared error (RMSE) and the relative root mean squared error (RRMSE). 
@@ -525,7 +525,7 @@ This process takes many more Biters than the supervised learning, as it is
 possible to notice in the last column of Table \ref{tab:dreyeve_training}.
 However, a validation accuracy of 0.77 is reached with just 180,000 Biters.
 
-\subsubsection{Models Description}
+\subsubsection{Description of Models}
 The patch size is kept at 6 pixels, considering that the dataset is based on 
 images with a resolution of 300x300 pixels. This means that each image is 
 divided in 50x50 patches; this seems a good compromise to both have a general 
@@ -886,6 +886,39 @@ without negative impacts, when considering the specific problem to solve.
 \end{figure}
 
 \subsubsection{Possible Problems}
+In the training pipeline there are various assumptions that were made. 
+In particular, the first regards data pre-processing: for the experiments we 
+used a resolution of 600x600 pixels, that is a good compromise between the 
+quality of the images and the computational cost. However, considering that 
+we chose to use the BDD-100K dataset to have human annotations, it is possible 
+that the resizing could have lost some important information for the model. 
+To partially mitigare this problem, we used a minimum threshold area of 7,000 
+pixels to consider the objects in the scene. This means that small objects 
+are discarded from the analysis, but it is complicated to find the right 
+trade-off between these two aspects.
+
+Another problem is related to the unbalanced dataset. In fact, even though the 
+problem is partially solved by adjusting the classification threshold, 
+there is much variation of informaiton in the labelled dataset. This is because 
+human-labelled frames consist of the tenth second of each video, and each 
+video is recorded in different areas and conditions. Therefore, even though 
+\acl{mpl} can slightly help to reduce the overfitting, it is still complicated 
+to satify all the hypothesis to utilize semi-supervised learning techniques.
+
+A further consideration regards the definition of the models. In fact, especially 
+for the vision transformer, there are many hyperparameters to tune. In this case, 
+to simplify this step we chose two standard models, with the largest patch size,
+already used in other benchmark datasets. However, the task to accomplish is 
+different than the common classification tasks, and it is complicated to understand 
+how the model learns the features of the dataset. therefore, it is possible 
+that different configurations of the models could lead to better results.
+
+Finally, to simplify the data preparation, we did not use any human bias to 
+classify the images. Using the artificial bias, on one hand, helps to obtain 
+many dangerous frames without any particula effort. On the other hand, the problem 
+is reduced to the presence of small targets in the scene, and there is no spatial 
+relation between them and sorrounding sub-areas. Thi means that information 
+characterizing the problem is drastically reduced.
 
 \subsection{Few-Shots Inference of GPT4-o}
 In May 2024, OpenAI released GPT4-o, their multilingual, multimodal generative 

@@ -454,7 +454,7 @@ computing of GPUs.
 The \ac{sift} algorithm is based on the following steps: scale-space peak
 selection, keypoints detection, and assignment of descriptors to the keypoints.
 
-\subsubsection{Scale-Space Peak Selection}
+\subsubsection*{Scale-Space Peak Selection}
 To make the algorithm robust and scale-invariant, the first step is to analyze 
 the image at different scales, applying a Gaussian filter with different 
 standard deviations. Given an image $I(x, y)$, the scale-space representation 
@@ -484,7 +484,7 @@ previous and next images (26 in total). If the pixel is a local maxima or minima
 considered a keypoint. To be a maxima or minima, the candidate pixel must be 
 greater or smaller than all the neighbors, respectively.
 
-\subsubsection{Keypoints Localization}
+\subsubsection*{Keypoints Localization}
 The scale-space peak selection produces many keypoints, but not all of them are 
 stable under changes in illumination, rotation, and scale. Therefore, the 
 keypoints are filtered by applying the Taylor expansion to the DoG function 
@@ -534,7 +534,7 @@ It is possible to notice that the evaluation function in Equation
 (\ref{eq:edge_threshold}) has a minimum when the two eigenvalues are equal, 
 and it grows when the ratio between the two eigenvalues increases.
 
-\subsubsection{Keypoint Orientation}
+\subsubsection*{Keypoint Orientation}
 To make the keypoints invariant to rotation of the image, the orientation with 
 respect to the neighbor pixels is computed. The orientation is computed through 
 two terms, the magnitude and the orientation of the gradient of the 
@@ -547,7 +547,7 @@ The angle $\theta$ is computed in the range $[0, 2\pi]$, and it is quantized
 in a histogram with 36 bins. The assigned orientation consists of the peak of 
 the histogram, and all the other peaks that are greater than 80\% of the maximum.
 
-\subsubsection{Keypoint Descriptor}
+\subsubsection*{Keypoint Descriptor}
 After having assigned the orientation to the keypoints, the final step is to 
 assign a unique descriptor to each keypoint. 
 A grid of 16x16 pixels is considered around the keypoint, and it goruped into 
@@ -560,7 +560,7 @@ is subtracted from each gradient orientation.
 Moreover, to make the descriptor invariant to illumination changes, each 
 magnitude is truncated to a maximum thrashold, and then normalized.
 
-\subsubsection{Matching Keypoints}
+\subsubsection*{Matching Keypoints}
 To match similar keypoints in two different images, the Euclidean distance 
 between the descriptors can be computed. However, considering a descriptor, 
 there could be more than one similar match on the other image (i.e. the second 
@@ -629,7 +629,7 @@ can be rewritten as follows:
     \label{fig:homography_scheme}
 \end{figure}
 
-\subsubsection{Homography Estimation}
+\subsubsection*{Homography Estimation}
 Given the $i$-th correspondance between two images, defined by the set 
 $\{(x_i, y_i), (x_i', y_i')\}$, constraints described in Equation \ref{eq:homography_matrix}
 are:

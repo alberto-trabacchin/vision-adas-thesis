@@ -351,7 +351,7 @@ ImageNet, therefore many highlighted areas correspond to the presence of
 people and cars. However, in the fifht head the model extracts more general 
 features to combine with the desired targets.
 
-\subsubsection{Artificial Bias}
+\subsubsection*{Artificial Bias}
 Labelling an entire dataset with dangerous situations is a very challenging 
 task. On one hand, it is not always possible to have a clear definition of what 
 is a dangerous situation. In fact, it is highly dependent on the context, the 
@@ -594,7 +594,7 @@ false positives, or balance these factors through a combined score.
 By considering these metrics, we can better understand 
 and mitigate the biases inherent in models trained on unbalanced datasets.
 
-\subsubsection{Evaluation Metrics}
+\subsubsection*{Evaluation Metrics}
 In the context of unbalanced datasets like Dr(eye)ve and BDD100k, traditional 
 accuracy, which simply measures the proportion of total correct predictions 
 relative to the total dataset size, can be misleading. For instance, in BDD100k 
@@ -641,7 +641,7 @@ evaluate the model's performance. However, we also considered recall as an
 important metric to evaluate the model's ability to find all the relevant cases 
 within the dataset, even though it could lead to more false positives.
 
-\subsubsection{\ac{roc} Curve}
+\subsubsection*{\ac{roc} Curve}
 The Receiver Operating Characteristic (\ac{roc}) curve is a crucial tool for 
 evaluating binary classification models, particularly in scenarios like detecting 
 dangerous scenes in driving datasets, where the data is highly unbalanced. 
@@ -689,7 +689,7 @@ function could be constructed such that the cost of missing a dangerous scene
 (false positive). By minimizing this cost function across possible thresholds, 
 we can determine the most cost-effective operation point on the ROC curve.
 
-\subsubsection{\ac{mcc}}
+\subsubsection*{\ac{mcc}}
 The Matthews Correlation Coefficient (\ac{mcc}) is a metric used to evaluate the 
 quality of binary classifications. It is especially useful in scenarios where 
 the dataset is unbalanced. The MCC takes into account true and false positives 

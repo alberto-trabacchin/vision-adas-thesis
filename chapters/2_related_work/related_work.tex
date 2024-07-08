@@ -252,7 +252,7 @@ on surveillance systems, many more datasets have been released in this field
 compared to driving scenarios. Therefore, we divide the datasets into 
 two categories: surveillance and driving-related datasets.
 
-\subsubsection{Surveillance Datasets}
+\subsubsection*{Surveillance Datasets}
 Li et al. proposed UCSD Ped1/Ped2 \cite{ucsd}, 
 a dataset of densely 
 crowded pedestrian walkways to detect abnormal movements and prohibited objects.
@@ -270,7 +270,7 @@ for training and 107 for testing) with 130 abnormal events and a total of
 Finally, the UCF-Crime dataset \cite{ucf_crime} is composed of 1900 videos 
 with 13 anomalies including robberies, accidents, and thefts.
 
-\subsubsection{Driving Datasets}
+\subsubsection*{Driving Datasets}
 Chan et al. introduced a new dataset with 678 dashcam accident videos taken from 
 the web \cite{anticip_accident_dashcam}; in each video, the last 10 frames are 
 labelled as anomalous.
@@ -320,7 +320,7 @@ Another imoprtant division is related to what features to extract: some models
 consider a single frame to analyze, while others take a sequence through a 
 sliding time window. 
 
-\subsubsection{Unsupervised Learning}
+\subsubsection*{Unsupervised Learning}
 Hasan et al. \cite{hasan_convae} proposed a \ac{convae} model for reconstructing 
 some stacked frames. Then anomalies were identified by comparing the 
 reconstruction error. They fonud out that anomalies were better detected with 
@@ -344,7 +344,7 @@ unsupervised mode, they compare five different models described before:
 \ac{convae} \cite{hasan_convae}, \ac{convlstmae} \cite{luo_lstmconvae}, 
 AnoPred \cite{shanghaitech_dataset}, TAD \cite{a3d}, 
 
-\subsubsection{Supervised Learning}
+\subsubsection*{Supervised Learning}
 \ac{vad} problems can be addressed through supervised learning in different ways.
 On one hand, the model can be trained to make a binary classification (anomaly 
 or not), or to detect the specific type of anomaly. The approach depends on the 
@@ -367,7 +367,7 @@ spatio-temporal features without sequential stages.
 Also Huang et al. \cite{vivit} used the same architecture, better analyzing how 
 quality of data source, data preprocessing and augmentation affect the results.
 
-\subsubsection{Semi-Supervised Learning}
+\subsubsection*{Semi-Supervised Learning}
 Semi-supervised learning uses a small amount of labelled data and a large 
 quanitty of unlabelled samples. However, there are different approaches to 
 manipulate unsupervised data to improve the model's performance.
