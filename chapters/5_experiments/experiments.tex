@@ -937,6 +937,47 @@ in which group it belongs.
 
 Other experiments in the two groups were done, including asking the model which 
 common targets are present in each group.
+The first group of images is shown in Figure \ref{fig:safe_group}. It consists
+of six images that do not contain any person. In particular, in the first image 
+on the top left there is the ego-vehicle in a highway with some other vehicles 
+on the front. The second on the top-center represents a downtown scenario with 
+some vehicles on the front. In the third image on top-right there is a vehicle 
+on the front and many vehicles parked on both sides of the road. The fourth 
+image on bottom-left represents the ego-vehicle driving on a road with a traffic 
+divider and some cars parked on the right side. In the fifth image on the 
+bottom-center there is a straight road with some vehicles on the front and tall 
+buildings on the sides. The last image on the bottom-right represents a 
+downtown scenario with some vehicles, including cars and a bus. There is 
+actually an occluded person in the image, but it is almost not visible.
+
+The second group of images is shown in Figure \ref{fig:dangerous_group}. 
+In the first image on the top-left there are two cars in fron of the ego-vehicle, 
+some cars parked on both sides and a pedestrian standing on the right side. There 
+are also some other pedestrians far away on sidewalks, not much visible in the 
+image.
+The second image on the top-center represents a downtown scenario where some 
+pedestrians are crossing the road. There is also a car partially visible on the 
+right of the ego-vehicle. The environment is characterized by tall buildings.
+The third image on the top-right represents a downtown scenario with some 
+empty crosswalks but many pedestrians on sidewalks. There are also some cars 
+driving on the main road.
+The fourth image on the bottom-left represents a night downtown scenario with a 
+taxi in front of the ego-vehicle and group of pedestrians on the left sidewalk 
+and far away, where there are crosswalks and red traffic lights.
+In the fifth image, bottom-center, there is a line of cars in front of the 
+ego-vehicle, some cars parked on the left side, and a pedestrian standing on the 
+left sidewalk.
+The last image on the bottom-right represents a main road with some vehicles 
+parked on both sides, some others driving, and a person standing on the right 
+side of the road.
+
+Considering the dangerous scenarios, some specific cases were carefully selected,
+especially with people partially visible, in the corners of the images, and 
+on the background. On the other hand, in both groups there are many vehicles, both 
+in foreground and background, that contribute to add noise to the data to 
+classify.
+This decision represents a further challenge for the model to 
+isolate the right group of pixels.
 \newlength{\subfigurewidth}
 \setlength{\subfigurewidth}{4cm}
 \newlength{\subfigurehspacing}
@@ -987,47 +1028,6 @@ common targets are present in each group.
     There is at least one person in each image.}
     \label{fig:dangerous_group}
 \end{figure}
-The first group of images is shown in Figure \ref{fig:safe_group}. It consists 
-of six images that do not contain any person. In particular, in the first image 
-on the top left there is the ego-vehicle in a highway with some other vehicles 
-on the front. The second on the top-center represents a downtown scenario with 
-some vehicles on the front. In the third image on top-right there is a vehicle 
-on the front and many vehicles parked on both sides of the road. The fourth 
-image on bottom-left represents the ego-vehicle driving on a road with a traffic 
-divider and some cars parked on the right side. In the fifth image on the 
-bottom-center there is a straight road with some vehicles on the front and tall 
-buildings on the sides. The last image on the bottom-right represents a 
-downtown scenario with some vehicles, including cars and a bus. There is 
-actually an occluded person in the image, but it is almost not visible.
-
-The second group of images is shown in Figure \ref{fig:dangerous_group}. 
-In the first image on the top-left there are two cars in fron of the ego-vehicle, 
-some cars parked on both sides and a pedestrian standing on the right side. There 
-are also some other pedestrians far away on sidewalks, not much visible in the 
-image.
-The second image on the top-center represents a downtown scenario where some 
-pedestrians are crossing the road. There is also a car partially visible on the 
-right of the ego-vehicle. The environment is characterized by tall buildings.
-The third image on the top-right represents a downtown scenario with some 
-empty crosswalks but many pedestrians on sidewalks. There are also some cars 
-driving on the main road.
-The fourth image on the bottom-left represents a night downtown scenario with a 
-taxi in front of the ego-vehicle and group of pedestrians on the left sidewalk 
-and far away, where there are crosswalks and red traffic lights.
-In the fifth image, bottom-center, there is a line of cars in front of the 
-ego-vehicle, some cars parked on the left side, and a pedestrian standing on the 
-left sidewalk.
-The last image on the bottom-right represents a main road with some vehicles 
-parked on both sides, some others driving, and a person standing on the right 
-side of the road.
-
-Considering the dangerous scenarios, some specific cases were carefully selected,
-especially with people partially visible, in the corners of the images, and 
-on the background. On the other hand, in both groups there are many vehicles, both 
-in foreground and background, that contribute to add noise to the data to 
-classify.
-This decision represents a further challenge for the model to 
-isolate the right group of pixels.
 
 \subsubsection{Common Features Extraction}
 The first experiment consists of showing the model the two groups of images, 
@@ -1061,7 +1061,6 @@ However, it has over 174 billion parameters, and that is why it is capable to
 generalize in many different contexts. Using a vision transformer architecture 
 for specific tasks, like driving scenarios, with much less parameters, could 
 still lead to good results.
-
 \subsubsection{Grouping and Classification}
 \setlength{\subfigurewidth}{4.5cm}
 \setlength{\subfigurevspacing}{0.2cm}
@@ -1135,8 +1134,7 @@ to classify it in the right group. The question-answer pairs are shown below:
     roads in more open, less densely populated areas or showing less urban 
     characteristics. 
     Therefore, \hl{the test image belongs to the second group}.
-\end{description}
-}
+\end{description}}
 Also in this experiment the model is able to correctly classify the test image 
 in the right group. The model is able to give a detailed explanation of the 
 features that are common in the test image and in the second group of images.
