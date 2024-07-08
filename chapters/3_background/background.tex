@@ -116,7 +116,7 @@ repeated until the student model converges reaching a better performance
 with respect to the teacher. Therefore, the teacher model is updated to 
 maximize the performance of the student.
 
-In a more formal way, Pseudo Labels aims to optimize the student's 
+In a more formal way, \acl{mpl} aims to optimize the student's 
 loss function $CE(T(x_u, \theta_T), S(x_u, \theta_S))$, with the pseudo-labels 
 generated from the teacher on the unlabeled data:
 \begin{align}
