@@ -5,7 +5,7 @@ In this thesis we studied and discussed different approaches that are suitable
 for the scene understanding task in driving scenarios. 
 We started by discussing how traditional 
 computer vision-based approaches can be used, with a driver-attention model to 
-combine the main perception algorithms, but also how they poorly perform in complex 
+combine main perception algorithms, but also how they poorly perform in complex 
 driving scenarios.
 We then discussed how deep learning-based approaches can be considered a more 
 robust solution, and how they can be used to fit human-decision biases.
@@ -44,6 +44,84 @@ The same problem is found in the object detection model, YOLOv8 \cite{yolo}, tha
 could be fine-tuned for detecting vulnerable users on driving datasets.
 
 \section{Deep Learning-based Approach}
+Through the deep learning-based approach, we used a vision transformer model
+\cite{vit} 
+to extract information related to human-decision biases. To simplify the problem 
+at the beginning, we used an artificial bias to classify dangerous situations 
+depending on the presence of some targets in the image. First experiments on 
+the DR(eye)VE dataset \cite{dreyeve} showed advantages in using \acl{mpl} 
+\cite{pham2021meta}, but we found that data was not completely independent on 
+the training and validation sets. Moreover, when using RetinaNet \cite{retinanet}
+as the object detection model, we found difficulties in configuring the detector 
+without an appropriate fine-tuning. Also the quantity of data was not enough to 
+evaluate semi-supervised learning techniques.
 
+That is why we decided to move to the BDD-100K dataset \cite{bdd100k}, a large 
+dataset with 80,000 manually annotated images and 100,000 unlabelled videos 
+suitable for semi-supervised learning. We used standard vision transformer 
+architectures with large patch sizes to avoid problems related to the choice 
+of the right hyperparameters. We found that the model trained with \acl{mpl} 
+slightly outperformed the model trained with supervised learning, but the 
+difference was not significant except for the working point with highest 
+correlation. After making more experiments increasing complexity of 
+the model, we found that it leads to a significant deterioration of correlation in the predictions 
+in supervised learning. \acl{mpl} helped to improve the metric, reaching 
+similar results to the smaller model. However, defining the optimal working 
+point depending on the optimization of a custom cost function, we found that 
+the best performance was achieved by the larger model in semi-supervised learning.
+
+Finally, we analyzed the attention mechanism of a recent pre-trained multi-modal 
+transformer, GPT-4o. In particular we found that it has exceptional capabilities 
+of contextualizing complex driving scenarios and it is able to extract common 
+features from few images. Therefore, we used the model in few-shots inference 
+mode, showing it some dangerous and safe samples, without explicitly providing 
+information about the artificial bias. We found that the model is able to 
+capture the relations and generalize the bias to new test samples.
+This promising result suggests that large pre-trained models can be used to 
+transfer task-specific knowledge to smaller models through knowledge distillation 
+\cite{yu_knowledge_distillation} in few-shots inference mode.
 
 \section{Future Work}
+In this thesis, we focused both on the model architecture and the right data 
+to use for accomplishing the scene understanding task in driving scenarios. 
+However, data is a crucial aspect in the development of deep learning models, 
+and it is fundamental that it carries the right information to explain the 
+problem to solve. For simplicity we used an artificial bias, but it 
+drastically simplifies the problem, casusing an important loss of information 
+for the model. Moreover, reducing the task to the presence of some targets, 
+we are not considering spatial relations of patches in the image.
+
+Therefore, as future improvements, we suggest to use some annotations related 
+to actual driving dangerous situations to train the model. There are recent works
+\cite{bdd_a} that provide this type of annotations for the BDD-100K dataset.
+In this way, it is still possible to leverage the large amount of unlabelled 
+data to train the model in a semi-supervised learning setting, but with 
+high-quality annotations that can provide more information to the model.
+
+Another possible method that can help with the labelling process is the use of 
+knowledge distillation with large-pretrained models. Showing the large model 
+some dangerous and safe samples, can also help to generate higher-quality 
+pseudo-labels. The mechanism is in the middle between semi-supervised learning 
+and transfer learning: the teacher model is not trained at all, used in inference 
+mode, but from its pretrained knowledge and the attention mechanism, it is able 
+to adapt the output to our task-specific problem. Therefore, it can be used to 
+significantly increase the labelled set. Through this process, it is possible to 
+analyze how the quality of the labels change depending on how many samples are 
+shown to the teacher model. Knowledge distillation is a relatively new field 
+also used in other applictions, and deserves further investigation.
+    
+It is also possible to combine the driver's gaze with an attention map 
+extracted from the attention heads of the vision transformer. In fact, the model, 
+through the attention mechanism, is able to extract a score map that weights 
+the importance of each patch in the image. This map can be compared with the 
+gaze of the driver during the time, to understand if the driver is aware of 
+the dangerous situation. However, further considerations are needed to understand 
+the temporal dependencies of these signals.
+
+Finally, we suggest also to investigate the branch of unsupervised learning. 
+In fact, if the problem is only related to anomaly detection in the scene, 
+there are recent works that try to address it in driving scenarios, typically 
+with the use of convolutional autoencoders. However, the use of vision transformers 
+in unsupervised learning is still an open field, and it is possible to investigate 
+how the attention mechanism can help to extract the most important features 
+from the scene.
