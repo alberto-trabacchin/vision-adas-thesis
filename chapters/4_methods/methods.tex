@@ -61,7 +61,7 @@ signals of the previous stages.
 \end{figure}
 
 \subsection{Homography Data Structure}
-The Dr(eye)ve dataset is composed of 74 sequences of five minutes each. 
+The DR(eye)VE dataset is composed of 74 sequences of five minutes each. 
 Moreover, the two cameras are not synchronized. 
 The ETG camera has a frame rate of 30 fps, while the roof top camera has a 
 frame rate of 25 fps. It is also important to notice that there are some videos 
@@ -107,11 +107,11 @@ small compared to the average depth of the keypoints.
 
 In this way, it is not necessary to know intrinsic and extrinsic parameters of 
 the cameras, such as focal length, resolution, and distortion coefficients. 
-This approach is also proposed in the Dr(eye)ve paper \cite{dreyeve}.
+This approach is also proposed in the DR(eye)VE paper \cite{dreyeve}.
 
 
 \subsection{Targets Data Structure}
-From the Dr(eye)ve dataset, we extracted the bounding boxes of the vulnerable 
+From the DR(eye)VE dataset, we extracted the bounding boxes of the vulnerable 
 road users, such as pedestrians and cyclists.
 Moreover, through ByteTrack \cite{bytetrack}, we tracked the targets to have a 
 spatio-temporal representation of the scene. Then, we compare the projected gaze 
@@ -311,8 +311,8 @@ That is why it is better to let a model learn important features automatically, 
 some classification biases used to label a dataset. We decided to use a vision 
 transformer model to learn the self-attention map of the scene to detect 
 potential threats.
-Four main experiments were made: supervised and semi-supervised training on Dr(eye)ve, 
-supervised and semi-supervised training on BDD100k.
+Four main experiments were made: supervised and semi-supervised training on DR(eye)VE, 
+supervised and semi-supervised training on BDD-100K.
 The general scheme is shown in Figure \ref{fig:dl_approach_scheme}; as it is 
 possible to notice, the scheme does not consists of some blocks to extract 
 indirect features from the scene, but it is mainly focused on the deep learning 
@@ -361,16 +361,16 @@ very time consuming and expensive to label a large dataset.
 
 Therefore, we decided to start using an \emph{artificial bias} to classify 
 dangerous situations. In particular, we used two different criterias to label 
-Dr(eye)ve and BDD100k datasets. In Dr(eye)ve, we used the following criteria:
+DR(eye)VE and BDD-100K datasets. In DR(eye)VE, we used the following criteria:
 a driving scene is considered dangerous if there is at least one vulnerable 
 road user (e.g. pedestrian, cyclist) or one car; the scene is condidered safe 
 otherwise.
 
-In BDD100k, on the other hand, we used the following criteria: a driving scene 
+In BDD-100K, on the other hand, we used the following criteria: a driving scene 
 is considered dangerous if there is at least one vulnerable user (e.g. pedestrian, 
 cyclist) or a bicycle; the scene is considered safe otherwise.
 
-The main motivation for the change from Dr(eye)ve to BDD100k is that the former 
+The main motivation for the change from DR(eye)VE to BDD-100K is that the former 
 dataset does not have any human annotations regarding location of targets. 
 Therefore an object detector was used to accomplish the task. However, the 
 quality of the detection is not always perfect, and there are some false 
@@ -382,8 +382,8 @@ a driving video. This is particularly useful to leverage semi-supervised learnin
 techniques, like Meta Pseudo Labels \cite{pham2021meta}.
 
 Finally, we used two different labelling rules and two different datasets because 
-Dr(eye)ve has many more frames with no other vehicles in the scene (recordings 
-during night, in the countryside, etc.), while BDD100k has a high percentage of 
+DR(eye)VE has many more frames with no other vehicles in the scene (recordings 
+during night, in the countryside, etc.), while BDD-100K has a high percentage of 
 frames containing other vehicles. Therefore, the second labelling method is to 
 have a less skewed dataset.
 However, the two methods should not affect the model training, since we are 
@@ -489,8 +489,8 @@ find out from the training set.
 \end{tabular}
 \end{figure}
 
-\subsection{Data Preprocessing of Dr(eye)ve}
-The Dr(eye)ve dataset is composed of 74 video sequences of five minutes each.
+\subsection{Data Preprocessing of DR(eye)VE}
+The DR(eye)VE dataset is composed of 74 video sequences of five minutes each.
 To reduce redundancy of images it was downsampled at 4 fps and resized and 
 stretched to 300x300 pixels. Then RetinaNet \cite{retinanet} was used to detect 
 the desired targets, 
@@ -512,7 +512,7 @@ cases (around 63\% of safe cases and 37\% of dangerous cases).
 A further training set with 40000 labels was also made to better understand the 
 model's behavior with a large amount of labelled data.
 
-\subsection{Training Pipeline on Dr(eye)ve}
+\subsection{Training Pipeline on DR(eye)VE}
 Starting from the smallest training set, when increasing labels after each 
 experiment, we still use RetinaNet to classify new images. However, the criteria 
 to augment the training set is based on the model's predictions. In particular, 
@@ -542,12 +542,12 @@ this case the unlabeled set is both used to train the model and to pick new
 samples to label. Moreover, we stopped the training when reaching the maximum 
 validation accuracy of the student. 
 
-\subsection{Data Preprocessing of BDD100k}
-The BDD100K dataset is a large and diverse driving video database designed for 
+\subsection{Data Preprocessing of BDD-100K}
+The BDD-100K dataset is a large and diverse driving video database designed for 
 the development and evaluation of automated driving technologies. It includes 
 100,000 videos captured from various geographic, environmental, and weather 
 conditions.
-Each video in the BDD100K dataset is typically about 40 seconds long, recorded 
+Each video in the BDD-100K dataset is typically about 40 seconds long, recorded 
 at 30 frames per second, resulting in approximately 1,200 frames per video. 
 However, only 100,000 frames are completely labelled by humans, and each frame 
 corresponds to the tenth second of a video.
@@ -582,7 +582,7 @@ correctly identify instances of the less frequent class.
 The complexity arises because the usual evaluation metric, accuracy, does not 
 reflect the model's performance on the minority class effectively. 
 This misrepresentation can lead to misleading conclusions about the model's true 
-effectiveness, especially in the BDD100k dataset, where there is a proportion 
+effectiveness, especially in the BDD-100K dataset, where there is a proportion 
 of 90\% of safe cases and 10\% of dangerous cases.
 
 To address these challenges, it's crucial to employ a suite of metrics that 
@@ -596,9 +596,9 @@ By considering these metrics, we can better understand
 and mitigate the biases inherent in models trained on unbalanced datasets.
 
 \subsubsection*{Evaluation Metrics}
-In the context of unbalanced datasets like Dr(eye)ve and BDD100k, traditional 
+In the context of unbalanced datasets like DR(eye)VE and BDD-100K, traditional 
 accuracy, which simply measures the proportion of total correct predictions 
-relative to the total dataset size, can be misleading. For instance, in BDD100k 
+relative to the total dataset size, can be misleading. For instance, in BDD-100K 
 dataset, where 90\% of the data are of one class, a naive model predicting only 
 that class would achieve 90\% accuracy, despite not having learned to identify 
 the rarer class effectively.
@@ -630,13 +630,13 @@ false positives and false negatives into account, providing a more realistic
 measure of a model’s performance, especially when the classes are unevenly 
 distributed.
 
-In case of Dr(eye)ve this problem does not affect the validation set because it 
+In case of DR(eye)VE this problem does not affect the validation set because it 
 is forced to be balanced. However, the training set is unbalanced, and the model 
 could overfit on the majority class, even though we also weighted the loss 
 function. In this case, we used the F1-score as the main metric to evaluate the 
 model's performance.
 
-In case of BDD100k, on the other hand, the problem affects both the training 
+In case of BDD-100K, on the other hand, the problem affects both the training 
 and validation sets. In this case, we used the F1-score as the main metric to 
 evaluate the model's performance. However, we also considered recall as an 
 important metric to evaluate the model's ability to find all the relevant cases 
@@ -719,6 +719,6 @@ considers all four confusion matrix categories, making it more reliable in
 assessing the performance of classifiers on unbalanced datasets.
 
 Therefore, when evaluating the performance of supervised and semi-supervised 
-learning on BDD100K, we combine multiple metrics, including \ac{roc} curve, 
+learning on BDD-100K, we combine multiple metrics, including \ac{roc} curve, 
 \ac{auc}, F1-score and \ac{mcc}, to provide a comprehensive view of the model's 
 effectiveness in detecting dangerous driving scenarios.

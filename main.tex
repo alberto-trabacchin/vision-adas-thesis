@@ -8,6 +8,26 @@
             footskip=.5in]{geometry}
 \usepackage{lipsum}
 \usepackage[toc,page]{appendix}
+%
+% Redefine \appendixpage to remove page number and change name to "Appendices"
+\makeatletter
+\def\appendixpage{
+    \clearpage
+    \thispagestyle{empty} % Remove page number
+    \noindent
+    \vspace*{\stretch{1}}
+    \begin{center}
+        {\huge\bfseries Appendices} % Change name to "Appendices"
+    \end{center}
+    \vspace*{\stretch{3}}
+    \clearpage % Clear page after "Appendices"
+    \thispagestyle{empty}
+}
+\makeatother
+\let\origdoublepage\cleardoublepage
+\newcommand{\clearemptydoublepage}{\clearpage{\pagestyle{empty}\origdoublepage}}
+\let\cleardoublepage\clearemptydoublepage
+%
 \usepackage{afterpage}
 \usepackage{bm}
 \usepackage{graphicx}
