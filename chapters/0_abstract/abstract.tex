@@ -2,12 +2,14 @@
 \section*{Abstract}
 \vspace{0.5cm}
 This thesis presents a comprehensive study on the development of a computer 
-vision-based system for Advanced Driver Assistance Systems (ADAS). The research 
+vision-based system for \acf{adas}. The research 
 initially explored a classical computer vision approach, which involved 
-employing detection and tracking algorithms to perceive the external 
-environment and utilizing gaze projection techniques to monitor the driver’s 
-gaze. The primary objective was to enhance road safety by comparing the 
-driver’s gaze with the locations of vulnerable road users, thereby proposing 
+employing detection and tracking algorithms and monocular depth estimation
+to perceive the external environment. Moreover, the study focused on 
+integrating the driver’s attention state through its gaze projected from a pair 
+of eye-tracking glasses onto the external scene, through a roof-mounted camera.
+The primary objective was analyze the driver's behavior by comparing the 
+its gaze with the locations of vulnerable road users, thereby proposing 
 an initial safety scheme.
 
 Despite the promising conceptual framework, it was observed that many of the 
@@ -16,27 +18,29 @@ robust in real-world driving scenarios. These methods struggled particularly
 under varying light conditions and during critical situations, highlighting 
 significant limitations. In response to these challenges, the research 
 transitioned to a deep learning-based approach. The core investigation centered 
-on the capabilities of a Vision Transformer in extracting human decision-making 
-biases inherent in driving tasks. This approach was further augmented by 
+on the capabilities of a \acf{vit} in extracting human decision-making 
+biases inherent in detecting dangerous driving situations.
+This approach was further augmented by 
 employing semi-supervised learning techniques, which enabled the effective 
 utilization of vast amounts of easily accessible unlabeled data, thus 
 addressing the challenges associated with the expensive and labor-intensive 
 labeling process.
 
-The outcomes of this research illustrate the substantial potential of deep 
-learning models, particularly Vision Transformers, in enhancing the robustness 
-and reliability of ADAS. The study also opens up new avenues for future 
+The outcomes of this research illustrate the substantial potential of 
+the attention mechanism, on which vision transformers are based, in enhancing 
+the robustness 
+and reliability of \acs{adas}. The study also opens up new avenues for future 
 research by identifying and addressing the challenges encountered during the 
 development process. These findings underscore the critical role of computer 
-vision in the advancement of ADAS, emphasizing its significance in improving 
+vision in the advancement of \acs{adas}, emphasizing its significance in improving 
 driver assistance systems through more accurate and dependable perception 
 mechanisms.
 
 In conclusion, this thesis contributes to the field of ADAS by demonstrating 
 how modern computer vision techniques can be effectively integrated into driver 
-assistance systems. It highlights the transformative potential of deep 
+assistance systems. It highlights the potential of deep 
 learning, especially in overcoming the limitations of traditional methods, and 
-paves the way for future innovations aimed at achieving safer and more 
+points to future innovations aimed at achieving safer and more 
 efficient driving experiences.
 
 \afterpage{\blankpage}
