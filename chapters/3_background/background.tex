@@ -502,14 +502,12 @@ Minima, or maxima, $\boldsymbol{\hat{x}}$ is detected by solving the equation:
     \boldsymbol{\hat{x}} = \arg \min_{\boldsymbol{x}} D(\boldsymbol{x})
     = \arg \{ \nabla_{\boldsymbol{x}} D(\boldsymbol{x}) = \boldsymbol{0} \}
 \end{equation}
-
 Keypoints with low intensity are filtered out, depending on a threshold. Therefore, 
 the more accurate keypoint $\boldsymbol{\hat{x}}$ is discarded if:
 \begin{equation}
     D(\boldsymbol{\hat{x}}) < \text{threshold}
 \label{eq:contrast_threshold}
 \end{equation}
-
 To remove the keypoints that are located on edges, on the other hand, the ratio 
 between the principal curvatures of the DoG function is computed. 
 If the ration is greater than a threshold, it means that there is a high variation 
