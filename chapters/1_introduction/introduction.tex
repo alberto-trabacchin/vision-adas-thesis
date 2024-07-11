@@ -126,8 +126,12 @@ control units, actuators, human-machine interface, and connectivity.
 
 \subsubsection*{Sensors}
 Sensors help the vehicle perceive its environment by collecting data on the 
-surrounding objects and road conditions. The main types of sensors used in ADAS 
-systems are:
+surrounding objects and road conditions. An example of installed sensors on the 
+2024 Tesla Model 3 is illustrated in Figure \ref{fig:adas_components}; it is 
+possible to notice how also industry is moving towards a fully-computer-vision-based
+systems. In fact, Tesla started the transition removing radar sensors in 2021 and 
+ultrasonic sensors in 2022, relying only on cameras sensors.
+In general, the main types of sensors used in ADAS systems are:
 
 \begin{itemize}
     \item \textbf{Radar Sensors}: These sensors use radio waves to detect the 
@@ -154,6 +158,11 @@ Control units are responsible for processing the data from sensors and cameras,
 making real-time decisions, and sending commands to the vehicle's actuators.
 Decision making algorithms are implemented in these units to interpret sensor 
 data and determine the appropriate response to different driving scenarios.
+In the case of Tesla vehicles, the Full Self-Driving (FSD) computer board 
+was introduced in 2019, and it is illustrated in Figure \ref{fig:adas_fsd}.
+In particular, it is shown the computer board, the chip architecture, and the 
+\acf{npu} architecture. The latter is responsible for processing the data 
+from the cameras and making real-time decisions based on the input.
 
 \subsubsection*{Actuators}
 Actuators are the components that control the vehicle's braking, steering, and 
@@ -176,6 +185,18 @@ remote assistance. It also enables vehicle-to-vehicle and vehicle-to-infrastruct
 communication, which is crucial for advanced safety features like collision 
 avoidance and traffic management.
 
+\begin{figure}
+    \centering
+    \includegraphics[width=\textwidth]{images/introduction/tesla_fsd.png}
+    \caption[Tesla \acs{fsd} computer board and chip architecture]
+    {Tesla \acf{fsd} components.
+    \textbf{Left}: Tesla \acs{fsd} computer board.
+    \textbf{Center}: Tesla \acs{fsd} chip architecture.
+    \textbf{Right}: Tesla \acs{fsd} \acf{npu} architecture.
+    Modified images sources: 
+    \cites{wikichip_2024_tesla_fsd_computer_board}{wikichip_2024_tesla_fsd_chip}{wikichip_2024_tesla_fsd_npu}.}
+    \label{fig:adas_fsd}
+\end{figure}
 
 \subsection{Common \acs{adas} Features}
 ADAS systems offer a wide range of features that enhance vehicle safety, 
