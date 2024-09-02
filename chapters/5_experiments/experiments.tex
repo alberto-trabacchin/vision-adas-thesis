@@ -868,6 +868,26 @@ helps both to reduce false positives from 3,232 to 3,060 and false negatives
 from 281 to 238. Therefore, despite the slight improvement, it is interesting to 
 notice how \acl{mpl} helps to increase the generalization of the larger model 
 without negative impacts, when considering the specific problem to solve.
+
+In Table \ref{tab:mcc_metrics} we show the evaluation metrics of the models at 
+the maximum \acs{mcc} value.
+
+\begin{table}[h]
+    \vspace{0.3cm}
+    \centering
+    \begin{tabular}{rcccc}
+    \hline
+    \textbf{Experiment} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} \\ \hline\hline
+    ViT-B/32-SL & 0.809 & 0.299 & 0.546 & 0.386 \\\hline
+    ViT-L/32-SL & 0.789 & 0.260 & 0.495 & 0.341 \\\hline
+    ViT-B/32-MPL & 0.778 & 0.278 & 0.632 & 0.386 \\\hline
+    ViT-L/32-MPL & 0.822 & 0.313 & 0.514 & 0.389 \\\hline
+    \end{tabular}
+    \caption[Evaluation metrics of ViTs at maximum MCC.]
+    {Evaluation metrics of ViTs at maximum MCC.}
+    \label{tab:mcc_metrics}
+\end{table}
+
 \begin{figure}[p]
     \centering
     \includegraphics[width=0.8\textwidth]{images/bdd100k/training/cost.pdf}
@@ -917,8 +937,27 @@ Finally, to simplify the data preparation, we did not use any human bias to
 classify the images. Using the artificial bias, on one hand, helps to obtain 
 many dangerous frames without any particula effort. On the other hand, the problem 
 is reduced to the presence of small targets in the scene, and there is no spatial 
-relation between them and sorrounding sub-areas. Thi means that information 
+relation between them and sorrounding sub-areas. This means that information 
 characterizing the problem is drastically reduced.
+
+In Table \ref{tab:cost_metrics} we show the evaluation metrics of the models at 
+the minimum cost.
+
+\begin{table}[h]
+    \vspace{0.3cm}
+    \centering
+    \begin{tabular}{rcccc}
+    \hline
+    \textbf{Experiment} & \textbf{Accuracy} & \textbf{Precision} & \textbf{Recall} & \textbf{F1-Score} \\ \hline\hline
+    ViT-B/32-SL & 0.638 & 0.208 & 0.808 & 0.331 \\\hline
+    ViT-L/32-SL & 0.649 & 0.203 & 0.746 & 0.319 \\\hline
+    ViT-B/32-MPL & 0.686 & 0.226 & 0.759 & 0.348 \\\hline
+    ViT-L/32-MPL & 0.670 & 0.221 & 0.785 & 0.345 \\\hline
+    \end{tabular}
+    \caption[Evaluation metrics of ViTs at minimum cost.]
+    {Evaluation metrics of ViTs at minimum cost.}
+    \label{tab:cost_metrics}
+\end{table}
 
 \subsection{Few-Shots Inference of GPT4-o}
 In May 2024, OpenAI released GPT4-o, their multilingual, multimodal generative 
