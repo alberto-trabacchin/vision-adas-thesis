@@ -17,9 +17,20 @@ conventional methods for extracting indirect features were not sufficiently
 robust in real-world driving scenarios. These methods struggled particularly 
 under varying light conditions and during critical situations, highlighting 
 significant limitations. In response to these challenges, the research 
-transitioned to a deep learning-based approach. The core investigation centered 
-on the capabilities of a \acf{vit} in extracting human decision-making 
+transitioned to a fully deep learning-based approach. The core investigation centered 
+on the capabilities of a Vision Transformer (ViT) in extracting human decision-making 
 biases inherent in detecting dangerous driving situations.
+The general idea is that humans classify dangerous situations based on their 
+experience, knowledge and many other factors, which lead to different 
+perspectives. Therefore, combining many of these perspectives, through labeled 
+data, can help the model to learn a more general, and common, representation of 
+the problem at hand. However, considering that labeled data is scarce in the 
+literature and expensive to collect, the study started introducing an artificial 
+bias. This bias is based on human labels of road scenes' objects; in particular, 
+a scene was classified as dangerous if it contained a vulnerable road user, 
+including pedestrians, cyclists, and motorcyclists. 
+However, during training, the models were not informed about the bias, 
+and they were expected to learn it by themselves.
 This approach was further improved by 
 employing semi-supervised learning techniques, which leverage the 
 vast amounts of easily accessible unlabeled data, thus 
